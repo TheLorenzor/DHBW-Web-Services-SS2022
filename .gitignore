@@ -42,5 +42,11 @@
 /Frontend/typings
 
 # System Files
-.DS_Store
-Thumbs.db
+/Frontend/.DS_Store
+/Frontend/Thumbs.db
+
+# Default ignored files
+.idea/shelf/
+.idea/workspace.xml
+# Editor-based HTTP Client requests
+.idea/httpRequests/
