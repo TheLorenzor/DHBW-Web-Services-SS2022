@@ -7,7 +7,7 @@ import { HomeScreenComponent } from './screen/home/home-screen.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from "@angular/material/button";
-import { MatchComponent } from './components/match/match.component';
+import { MatchComponent } from './components/home/match/match.component';
 @NgModule({
   declarations: [
     AppComponent,

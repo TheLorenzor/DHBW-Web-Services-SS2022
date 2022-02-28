@@ -1,0 +1,39 @@
+@import "../../../../assets/theme/dark-theme";
+
+.match-box {
+  background: $background-w50;
+  width: 50%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.match {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  width: 100%;
+}
+.vs-space {
+  width: 10px;
+}
+.counterscore {
+  color: $theme-primary;
+  font: 50px "Dosis bold";
+  height: 95%;
+  margin-top: 2px;
+  margin-right: 2px;
+  width: 75px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: $background-w100;
+  span {
+    display: flex;
+    justify-content: center;
+  }
+}
+img {
+  margin-top: 25px;
+  width: 40px;
+}

@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Dosis normal";
+  src: url("./../Fonts/Dosis/static/Dosis-Medium.ttf");
+}
+@font-face {
+  font-family: "Dosis bold";
+  src: url("./../Fonts/Dosis/static/Dosis-Bold.ttf");
+}
+
 
 $background-w100: #646464;
 $background-w75: #4f4f4f;
@@ -11,3 +20,10 @@ $background-b100: #050505;
 
 
 $font-color:white;
+
+$theme-primary:#00A0Fe;
+$theme-error:#F61732;
+$theme-success: #169A13;
+$theme-warning: #FDB10E;
+$theme-secondary: #5D3c81;
+

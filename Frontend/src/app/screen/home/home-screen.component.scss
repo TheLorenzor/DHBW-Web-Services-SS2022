@@ -1,2 +1,21 @@
+@import "src/assets/theme/dark-theme.scss";
 .home-screen {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+}
+h1 {
+  color: $font-color;
+}
+hr {
+  width: 100%;
+}
+.row {
+  width: 90%;
+  margin-left: 5%;
+}
+app-match {
+  color: white;
 }
