@@ -1,3 +1,5 @@
+@import './../assets/theme/dark-theme.scss';
+
 button {
   margin-left: 20px;
 }
@@ -5,4 +7,6 @@ mat-toolbar {
   display: flex;
   flex-direction: row;
   justify-content: left;
+  background: $background-b25;
+  color: $font-color;
 }
