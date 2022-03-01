@@ -3,7 +3,7 @@
 .match-box {
   background: $background-w50;
   width: 50%;
-  height: 100px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -36,4 +36,27 @@
 img {
   margin-top: 25px;
   width: 40px;
+}
+.match-detail {
+  margin: 10px;
+  width: 200px;
+  .club-name {
+    font-size: 20px;
+    font-family: "Dosis bold";
+    letter-spacing: 2px;
+  }
+  ul{
+    list-style: none;
+    position: relative;
+    font-size: 10px;
+    color: $font-color-b25;
+  }
+
+}
+.right {
+  ul li{
+    text-align: left;
+    right: 1rem;
+  }
+  text-align: right;
 }

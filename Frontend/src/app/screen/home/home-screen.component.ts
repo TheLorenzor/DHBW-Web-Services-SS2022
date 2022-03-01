@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home-screen',
@@ -6,8 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-screen.component.scss']
 })
 export class HomeScreenComponent implements OnInit {
-
-  constructor() { }
+  private router:Router;
+  constructor(private route:Router) {
+    this.router = route;
+  }
   currentDate:string = ""
 
   ngOnInit(): void {
@@ -39,6 +42,10 @@ export class HomeScreenComponent implements OnInit {
 
     }
     this.currentDate = tag
+  }
+
+  moveToDetailedScreen(matchId:string):void {
+    this.router.navigateByUrl('match')
   }
 
 }
