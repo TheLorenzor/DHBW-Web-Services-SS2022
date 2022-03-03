@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-match-detail-screen',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./match-detail-screen.component.scss']
 })
 export class MatchDetailScreenComponent implements OnInit {
-
-  constructor() { }
+  match:string="";
+  constructor(private router:Router) {
+    let state =this.router.getCurrentNavigation()?.extras.state;
+    if (state != undefined&&state.hasOwnProperty("data")) {
+      this.match = state.data
+    }
+  }
 
   ngOnInit(): void {
+
   }
 
 }

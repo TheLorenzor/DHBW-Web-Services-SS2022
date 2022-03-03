@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {RouterMatchDetail} from "../../../assets/Interface/Router";
 
 @Component({
   selector: 'app-home-screen',
@@ -45,7 +46,10 @@ export class HomeScreenComponent implements OnInit {
   }
 
   moveToDetailedScreen(matchId:string):void {
-    this.router.navigateByUrl('match')
+    const t:RouterMatchDetail = {
+      data:"test"
+    }
+    this.router.navigateByUrl('match',{state:t});
   }
 
 }

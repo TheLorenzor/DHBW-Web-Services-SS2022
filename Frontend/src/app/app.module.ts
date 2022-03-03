@@ -10,20 +10,24 @@ import {MatButtonModule} from "@angular/material/button";
 import { MatchComponent } from './components/home/match/match.component';
 import { MatchDetailScreenComponent } from './screen/match-detail-screen/match-detail-screen.component';
 import {Router, RouterModule} from "@angular/router";
+import {MatCardModule} from "@angular/material/card";
+import { AllMatchesComponent } from './screen/all-matches/all-matches.component';
 @NgModule({
   declarations: [
     AppComponent,
     HomeScreenComponent,
     MatchComponent,
-    MatchDetailScreenComponent
+    MatchDetailScreenComponent,
+    AllMatchesComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatCardModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
