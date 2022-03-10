@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-all-matches',
@@ -6,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./all-matches.component.scss']
 })
 export class AllMatchesComponent implements OnInit {
+  typeMatch:string="";
 
-  constructor() { }
+  constructor(private route:ActivatedRoute, private router:Router) {
+    this.typeMatch = route.snapshot.data['typeSport'];
+    console.log(this.typeMatch)
+  }
 
   ngOnInit(): void {
   }
