@@ -6,10 +6,15 @@ button {
 mat-toolbar {
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: space-between;
   background: $background-b25;
   color: $font-color;
 }
 .logo:hover {
   cursor:pointer ;
+}
+button, mat-icon {
+  background: none;
+  color: white;
+  border: none;
 }

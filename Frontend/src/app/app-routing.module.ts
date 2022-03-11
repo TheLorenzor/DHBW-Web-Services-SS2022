@@ -7,7 +7,6 @@ import {AllMatchesComponent} from "./screen/all-matches/all-matches.component";
 const routes: Routes = [
   {path:'',component:HomeScreenComponent},
   {path:'match',component:MatchDetailScreenComponent, data:{}},
-  {path:'football',component:AllMatchesComponent,data:{typeSport:"football"}},
   {path:'basketball',component:AllMatchesComponent,data:{typeSport:"basketball"}},
 ];
 

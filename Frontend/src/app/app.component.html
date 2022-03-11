@@ -1,6 +1,16 @@
 <mat-toolbar >
-  <span class="logo" routerLink="/">Sports-Ticker</span>
-  <button routerLink="football" mat-icon-button>Fußball</button>
-  <button routerLink="basketball" mat-icon-button>Basketball</button>
+  <div class="right">
+    <span class="logo" routerLink="/">Sports-Ticker</span>
+    <button routerLink="football" mat-icon-button>Fußball</button>
+  </div>
+  
+  <div class="left">
+    <button>
+      <mat-icon aria-hidden="false">paid</mat-icon>
+    </button>
+    <button>
+      <mat-icon aria-hidden="false">person</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
 <router-outlet></router-outlet>
