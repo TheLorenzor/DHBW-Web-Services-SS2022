@@ -17,4 +17,8 @@ button, mat-icon {
   background: none;
   color: white;
   border: none;
+
+}
+button:hover {
+  cursor: pointer;
 }

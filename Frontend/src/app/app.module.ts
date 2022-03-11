@@ -12,13 +12,18 @@ import { MatchDetailScreenComponent } from './screen/match-detail-screen/match-d
 import {Router, RouterModule} from "@angular/router";
 import {MatCardModule} from "@angular/material/card";
 import { AllMatchesComponent } from './screen/all-matches/all-matches.component';
+import { LoginRegisterComponent } from './screen/login-register/login-register.component';
+import {MatFormFieldModule} from '@angular/material/form-field'; 
+import { FormsModule } from '@angular/forms';
+import {MatInputModule} from '@angular/material/input'; 
 @NgModule({
   declarations: [
     AppComponent,
     HomeScreenComponent,
     MatchComponent,
     MatchDetailScreenComponent,
-    AllMatchesComponent
+    AllMatchesComponent,
+    LoginRegisterComponent
   ],
     imports: [
         BrowserModule,
@@ -27,7 +32,10 @@ import { AllMatchesComponent } from './screen/all-matches/all-matches.component'
         MatToolbarModule,
         MatButtonModule,
         MatCardModule,
-        MatIconModule
+        MatIconModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatInputModule
     ],
   providers: [],
   bootstrap: [AppComponent]
