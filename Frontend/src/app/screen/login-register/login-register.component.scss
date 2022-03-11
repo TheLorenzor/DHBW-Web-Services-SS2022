@@ -6,7 +6,7 @@
     justify-content: center;
 }
 mat-card {
-    width: 40%;
+    width: 30%;
     color: $font-color;
     background-color: $background-w50;
 }
@@ -15,9 +15,18 @@ mat-card-content {
     flex-direction: column;
     mat-form-field {
         color: $font-color;
-        width: 80%;
+        margin-top: 1rem;
     }
     mat-label {
         color: $font-color-b25;
     }
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        button {
+            background-color: $background-w100;
+        }
+    }
+    
 }
