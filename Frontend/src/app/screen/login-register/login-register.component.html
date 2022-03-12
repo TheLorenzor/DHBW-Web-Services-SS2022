@@ -1,7 +1,9 @@
 <div class="ground">
     <mat-card>
-        <mat-card-title>Login</mat-card-title>
+        <mat-card-title *ngIf="!isregister">Login</mat-card-title>
+        <mat-card-title *ngIf="isregister">Register</mat-card-title>
         <mat-card-content>
+            <div>
             <mat-form-field appearance="fill">
                 <mat-label>Benutzername</mat-label>
                 <input matInput type="text">
@@ -15,10 +17,11 @@
               </mat-form-field>
               <div>
                 <span>
-                    <a href="www.google.com">Hier</a><span> neu registrieren</span>
+                    <a [routerLink]="['/login']" (click)="isregister = !isregister">Hier</a><span> neu registrieren</span>
                 </span>
                 <button mat-button>Login</button>
               </div>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>

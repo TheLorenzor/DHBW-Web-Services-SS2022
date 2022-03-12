@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-register',
@@ -7,11 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginRegisterComponent implements OnInit {
   hide:boolean;
-  constructor() { 
+  isregister:boolean=false;
+  constructor(private route:Router,private aRouter:ActivatedRoute) { 
     this.hide = true;
   }
   
   ngOnInit(): void {
+    console.log(this.aRouter.snapshot.queryParams)
   }
 
 }

@@ -11,6 +11,7 @@ mat-card {
     background-color: $background-w50;
 }
 mat-card-content {
+    div {
     display: flex;
     flex-direction: column;
     mat-form-field {
@@ -28,5 +29,5 @@ mat-card-content {
             background-color: $background-w100;
         }
     }
-    
+}
 }
