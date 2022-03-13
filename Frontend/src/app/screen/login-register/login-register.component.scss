@@ -10,24 +10,33 @@ mat-card {
     color: $font-color;
     background-color: $background-w50;
 }
+mat-card-title {
+    display: flex;
+    justify-content: space-between;
+    button,span {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
 mat-card-content {
     div {
     display: flex;
     flex-direction: column;
-    mat-form-field {
-        color: $font-color;
-        margin-top: 1rem;
-    }
-    mat-label {
-        color: $font-color-b25;
-    }
-    div {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        button {
-            background-color: $background-w100;
+        mat-form-field {
+            color: $font-color;
+            margin-top: 1rem;
+        }
+        mat-label {
+            color: $font-color-b25;
+        }
+        div {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
     }
 }
+.enterButton {
+    background-color: $background-w100;
 }

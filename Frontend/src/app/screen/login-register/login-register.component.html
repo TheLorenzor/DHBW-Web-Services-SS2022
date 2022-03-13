@@ -1,26 +1,49 @@
 <div class="ground">
     <mat-card>
         <mat-card-title *ngIf="!isregister">Login</mat-card-title>
-        <mat-card-title *ngIf="isregister">Register</mat-card-title>
+        <mat-card-title *ngIf="isregister">
+          <button mat-button (click)="isregister=!isregister">
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <span><span>Register</span></span>
+        </mat-card-title>
         <mat-card-content>
-            <div>
-            <mat-form-field appearance="fill">
-                <mat-label>Benutzername</mat-label>
+            <div *ngIf="!isregister">
+              <mat-form-field appearance="fill">
+                  <mat-label>E-Mail</mat-label>
+                  <input #eMail (keyup)="dataLogin.eMail=eMail.value" matInput type="text" >
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input #password (keyup)="dataLogin.password=password.value" matInput [type]="hide ? 'password' : 'text'">
+                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                </mat-form-field>
+                <div>
+                  <span>
+                      <a [routerLink]="['/login']" (click)="isregister = !isregister">Hier</a><span> neu registrieren</span>
+                  </span>
+                  <button (click)="login()" mat-button class="enterButton">Login</button>
+                </div>
+            </div>
+            <div *ngIf="isregister">
+              <mat-form-field appearance="fill">
+                <mat-label>E-Mail</mat-label>
                 <input matInput type="text">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
                 <mat-label>Password</mat-label>
                 <input matInput [type]="hide ? 'password' : 'text'">
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                   <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
               </mat-form-field>
-              <div>
-                <span>
-                    <a [routerLink]="['/login']" (click)="isregister = !isregister">Hier</a><span> neu registrieren</span>
-                </span>
-                <button mat-button>Login</button>
-              </div>
+              <mat-form-field appearance="fill">
+                <mat-label>Retype Password</mat-label>
+                <input matInput type="password">
+              </mat-form-field>
+              <button mat-button class="enterButton">Register</button>
             </div>
         </mat-card-content>
     </mat-card>
