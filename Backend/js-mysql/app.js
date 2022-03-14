@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
   host: process.env.MYSQL,
   user: process.env.MYSQL_USER,
   password: "",
-  database: process.env.MYSQL_DB,
+  database: "liga_db",
   port: 3308
 });
 
