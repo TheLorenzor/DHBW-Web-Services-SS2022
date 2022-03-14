@@ -29,3 +29,51 @@ button:hover {
   width: 10px;
   padding: 0;
 }
+.accountDetails {
+  position: absolute;
+  width: 150px;
+  height: 125px;
+  z-index: 1;
+  border-radius: 10px;
+  right: 16px;
+  top: 75px;
+  color: $font-color;
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+  }
+  .line {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    width: 100%;
+    mat-icon {
+      margin-right: 20px
+    }
+    span {
+      height: 24px;
+      display: flex;
+      flex-direction: column ;
+      justify-content: center;
+    }
+  }
+  hr {
+    margin-bottom: 20px;
+  }
+  button {
+    font-family: "Dosis bold";
+    margin: 0 0 10px;
+
+    span {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+}
+.overhead {
+  background: $background-w75;
+
+}
+

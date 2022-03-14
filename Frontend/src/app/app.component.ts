@@ -9,15 +9,21 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'Frontend';
   coins:number|undefined = undefined;
+  accountInfo = {
+    showScreen: true,
+    name:"Test"
+
+  }
   constructor(private route:Router) {
 
   }
   navigateToPerson() {
-    this.route.navigateByUrl('login');
+    this.accountInfo.showScreen = !this.accountInfo.showScreen
+    console.log(this.accountInfo.showScreen)
   }
   changeCoins() {
     if (localStorage.getItem('backendAPI')!=undefined) {
-
+      const l = localStorage.getItem('backendAPI')
     } else {
 
     }

@@ -7,11 +7,8 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./all-matches.component.scss']
 })
 export class AllMatchesComponent implements OnInit {
-  typeMatch:string="";
 
   constructor(private route:ActivatedRoute, private router:Router) {
-    this.typeMatch = route.snapshot.data['typeSport'];
-    console.log(this.typeMatch)
   }
 
   ngOnInit(): void {

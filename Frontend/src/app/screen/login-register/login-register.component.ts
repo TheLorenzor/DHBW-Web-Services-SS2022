@@ -8,7 +8,7 @@ import { loginRegisterData } from 'src/assets/Interface/login';
   styleUrls: ['./login-register.component.scss']
 })
 export class LoginRegisterComponent implements OnInit {
-  
+
   hide:boolean;
   isregister:boolean=false;
   dataLogin:loginRegisterData = {
@@ -16,14 +16,15 @@ export class LoginRegisterComponent implements OnInit {
     eMail:""
   }
 
-  constructor(private route:Router,private aRouter:ActivatedRoute) { 
+  constructor(private route:Router,private aRouter:ActivatedRoute) {
     this.hide = true;
   }
-  
+
   ngOnInit(): void {
   }
   login():void {
-    console.log(this.dataLogin);
+    localStorage.setItem('backendAPI','123456');
+    this.route.navigateByUrl('coin-market');
   }
 
 }

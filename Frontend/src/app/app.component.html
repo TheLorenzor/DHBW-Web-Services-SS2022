@@ -9,9 +9,27 @@
       <span>{{coins==undefined?'':coins}} </span>
       <mat-icon aria-hidden="false">paid</mat-icon>
     </button>
-    <button id="people" (click)="navigateToPerson()" mat-button>
+    <button id="people" [ngClass]="accountInfo.showScreen?'overhead':''" (click)="navigateToPerson()" mat-button>
       <mat-icon aria-hidden="false">person</mat-icon>
     </button>
+    <mat-card *ngIf="accountInfo.showScreen" class="overhead accountDetails">
+      <mat-card-content>
+        <div class="line">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{accountInfo.name}}</span>
+        </div>
+        <hr class="line">
+        <button class="line">
+          <mat-icon>home</mat-icon>
+          <span>Übersicht</span>
+        </button>
+        <button class="line">
+          <mat-icon>settings</mat-icon>
+          <span>Einstellungen</span>
+        </button>
+
+      </mat-card-content>
+    </mat-card>
   </div>
 </mat-toolbar>
 <router-outlet></router-outlet>

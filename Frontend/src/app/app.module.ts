@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {MatIconModule} from '@angular/material/icon'; 
+import {MatIconModule} from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeScreenComponent } from './screen/home/home-screen.component';
@@ -13,9 +13,10 @@ import {Router, RouterModule} from "@angular/router";
 import {MatCardModule} from "@angular/material/card";
 import { AllMatchesComponent } from './screen/all-matches/all-matches.component';
 import { LoginRegisterComponent } from './screen/login-register/login-register.component';
-import {MatFormFieldModule} from '@angular/material/form-field'; 
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input'; 
+import {MatInputModule} from '@angular/material/input';
+import { CoinMarketComponent } from './screen/coin-market/coin-market.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {MatInputModule} from '@angular/material/input';
     MatchComponent,
     MatchDetailScreenComponent,
     AllMatchesComponent,
-    LoginRegisterComponent
+    LoginRegisterComponent,
+    CoinMarketComponent
   ],
     imports: [
         BrowserModule,
