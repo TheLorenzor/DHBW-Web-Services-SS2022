@@ -3,12 +3,13 @@
     <span class="logo" routerLink="/">Sports-Ticker</span>
     <button routerLink="football" mat-icon-button>Fußball</button>
   </div>
-  
+
   <div class="left">
-    <button>
+    <button mat-button (click)="changeCoins()">
+      <span>{{coins==undefined?'':coins}} </span>
       <mat-icon aria-hidden="false">paid</mat-icon>
     </button>
-    <button (click)="navigateToPerson()">
+    <button id="people" (click)="navigateToPerson()" mat-button>
       <mat-icon aria-hidden="false">person</mat-icon>
     </button>
   </div>

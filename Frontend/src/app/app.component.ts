@@ -8,10 +8,18 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'Frontend';
+  coins:number|undefined = undefined;
   constructor(private route:Router) {
 
   }
   navigateToPerson() {
     this.route.navigateByUrl('login');
+  }
+  changeCoins() {
+    if (localStorage.getItem('backendAPI')!=undefined) {
+
+    } else {
+
+    }
   }
 }
