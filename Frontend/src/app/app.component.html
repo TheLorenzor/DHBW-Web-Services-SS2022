@@ -5,13 +5,14 @@
   </div>
 
   <div class="left">
-    <button mat-button (click)="changeCoins()">
+    <button *ngIf="coins!=undefined" mat-button (click)="changeCoins()">
       <span>{{coins==undefined?'':coins}} </span>
       <mat-icon aria-hidden="false">paid</mat-icon>
     </button>
     <button id="people" [ngClass]="accountInfo.showScreen?'overhead':''" (click)="navigateToPerson()" mat-button>
       <mat-icon aria-hidden="false">person</mat-icon>
     </button>
+
     <mat-card *ngIf="accountInfo.showScreen" class="overhead accountDetails">
       <mat-card-content>
         <div class="line">
@@ -26,6 +27,10 @@
         <button class="line">
           <mat-icon>settings</mat-icon>
           <span>Einstellungen</span>
+        </button>
+        <button class="line" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Abmelden</span>
         </button>
 
       </mat-card-content>
