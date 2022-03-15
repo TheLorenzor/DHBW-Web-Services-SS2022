@@ -3,12 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import {HomeScreenComponent} from "./screen/home/home-screen.component";
 import {MatchDetailScreenComponent} from "./screen/match-detail-screen/match-detail-screen.component";
 import {AllMatchesComponent} from "./screen/all-matches/all-matches.component";
+import { LoginRegisterComponent } from './screen/login-register/login-register.component';
+import {CoinMarketComponent} from "./screen/coin-market/coin-market.component";
 
 const routes: Routes = [
   {path:'',component:HomeScreenComponent},
   {path:'match',component:MatchDetailScreenComponent, data:{}},
   {path:'football',component:AllMatchesComponent,data:{typeSport:"football"}},
-  {path:'basketball',component:AllMatchesComponent,data:{typeSport:"basketball"}},
+  {path:'login',component:LoginRegisterComponent},
+  {path:'coin-market',component:CoinMarketComponent}
 ];
 
 @NgModule({

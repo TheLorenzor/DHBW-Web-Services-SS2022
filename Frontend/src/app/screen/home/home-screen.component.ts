@@ -44,12 +44,4 @@ export class HomeScreenComponent implements OnInit {
     }
     this.currentDate = tag
   }
-
-  moveToDetailedScreen(matchId:string):void {
-    const t:RouterMatchDetail = {
-      data:"test"
-    }
-    this.router.navigateByUrl('match',{state:t});
-  }
-
 }

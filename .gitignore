@@ -40,7 +40,7 @@
 /Frontend/yarn-error.log
 /Frontend/testem.log
 /Frontend/typings
-
+/Frontend/.angular
 # System Files
 /Frontend/.DS_Store
 /Frontend/Thumbs.db
@@ -50,3 +50,6 @@
 .idea/workspace.xml
 # Editor-based HTTP Client requests
 .idea/httpRequests/
+
+
+Backend/js-mysql/node_modules/

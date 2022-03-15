@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import { Router } from '@angular/router';
+import { RouterMatchDetail } from 'src/assets/Interface/Router';
 import {MatchOverview} from "../../../../assets/Interface/match";
 
 @Component({
@@ -8,9 +10,18 @@ import {MatchOverview} from "../../../../assets/Interface/match";
 })
 export class MatchComponent implements OnInit {
   @Input() matchData:MatchOverview|undefined;
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
+  }
+
+  moveTo(matchId:string) {
+    const t:RouterMatchDetail = {
+      data:matchId
+    }
+
+    this.router.navigateByUrl('match',{state:t});
+
   }
 
 }

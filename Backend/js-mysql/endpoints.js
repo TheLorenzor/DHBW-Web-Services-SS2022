@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "",
   database: "liga_db",
-  port: 3308
+  port: 3306
 });
 
 // Make the connection
@@ -50,7 +50,7 @@ app.get('/home', (req, res) => {
       results: results
     })
   }
-  }); 
+  });
 });
 
 //2. BPMN: Ein Match anschauen
@@ -94,7 +94,7 @@ app.get('/football/:liga_id', (req, res) => {
     const ligaid = req.params.liga_id;
     if(isNaN(ligaid)) {
       res.status(400).send({ message: 'League ID is not viable!' })
-    } else { 
+    } else {
       const sql = "SELECT spiel.heimverein_id, spiel.gastverein_id, spiel.saison, spiel.spieltag, spiel.startzeitpunkt FROM spiel WHERE spiel.zustand = 'Steht noch an' AND liga_id = " + ligaid;
       connection.query(sql, function (err, results, fields) {
       if (err) throw err;

@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "",
   database: "liga_db",
-  port: 3308
+  port: 3306
 });
 
 // Make the connection
@@ -37,10 +37,10 @@ function fetchBundesligaSaison() {
           let string = zeit.split("T");
           let zustand = res[i].MatchIsFinished ? "Beendet" : "Steht noch an";
           let spieltag = res[i].Group.GroupOrderID;
-        
+
             console.log("(" + matchId + ", 1, " + heimverein_id + ", " + gastverein_id + ", '" + zustand + "', " + spieltag + ", '" + string[0] + " " + string[1] + "'),");
-          
-          
+
+
         }
     })
 }

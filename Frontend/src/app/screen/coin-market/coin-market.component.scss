@@ -1,0 +1,16 @@
+@import "src/assets/theme/dark-theme.scss";
+.base {
+  color: $font-color;
+}
+mat-toolbar {
+  background: $background-w75;
+  color: $font-color;
+  display: flex;
+  justify-content: space-around;
+  mat-icon {
+    font-size: 40px;
+  }
+  app-exchange-purse {
+    color: $font-color;
+  }
+}
