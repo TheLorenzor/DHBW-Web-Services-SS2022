@@ -9,7 +9,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from "@angular/material/button";
 import { MatchComponent } from './components/home/match/match.component';
 import { MatchDetailScreenComponent } from './screen/match-detail-screen/match-detail-screen.component';
-import {Router, RouterModule} from "@angular/router";
+import { RouterModule } from '@angular/router';
 import {MatCardModule} from "@angular/material/card";
 import { AllMatchesComponent } from './screen/all-matches/all-matches.component';
 import { LoginRegisterComponent } from './screen/login-register/login-register.component';
@@ -17,6 +17,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import { CoinMarketComponent } from './screen/coin-market/coin-market.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { CoinMarketComponent } from './screen/coin-market/coin-market.component'
     MatchDetailScreenComponent,
     AllMatchesComponent,
     LoginRegisterComponent,
-    CoinMarketComponent
+    CoinMarketComponent,
+
   ],
     imports: [
         BrowserModule,
@@ -38,7 +41,10 @@ import { CoinMarketComponent } from './screen/coin-market/coin-market.component'
         MatIconModule,
         MatFormFieldModule,
         FormsModule,
-        MatInputModule
+        MatInputModule,
+        RouterModule,
+        StoreModule.forRoot({}, {}),
+        EffectsModule.forRoot([])
     ],
   providers: [],
   bootstrap: [AppComponent]

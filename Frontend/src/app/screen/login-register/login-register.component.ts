@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { loginRegisterData } from 'src/assets/Interface/login';
+import { LoginRegisterData } from 'src/assets/Interface/login';
 
 @Component({
   selector: 'app-login-register',
@@ -11,7 +11,7 @@ export class LoginRegisterComponent implements OnInit {
 
   hide:boolean;
   isregister:boolean=false;
-  dataLogin:loginRegisterData = {
+  dataLogin:LoginRegisterData = {
     password: "",
     eMail:""
   }
