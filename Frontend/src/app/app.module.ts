@@ -19,6 +19,7 @@ import {MatInputModule} from '@angular/material/input';
 import { CoinMarketComponent } from './screen/coin-market/coin-market.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { ExchangePurseComponent } from './components/exchange-purse/exchange-purse.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { EffectsModule } from '@ngrx/effects';
     AllMatchesComponent,
     LoginRegisterComponent,
     CoinMarketComponent,
+    ExchangePurseComponent,
 
   ],
     imports: [

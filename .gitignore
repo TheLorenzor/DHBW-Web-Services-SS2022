@@ -50,3 +50,6 @@
 .idea/workspace.xml
 # Editor-based HTTP Client requests
 .idea/httpRequests/
+
+
+/Backend/js-mysql/node_modules
