@@ -40,7 +40,7 @@
 /Frontend/yarn-error.log
 /Frontend/testem.log
 /Frontend/typings
-
+/Frontend/.angular
 # System Files
 /Frontend/.DS_Store
 /Frontend/Thumbs.db
