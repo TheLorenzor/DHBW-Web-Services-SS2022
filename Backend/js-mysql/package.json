@@ -1,6 +1,7 @@
 {
   "name": "js-mysql",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -12,9 +13,11 @@
   "dependencies": {
     "dotenv": "^16.0.0",
     "mariadb": "^3.0.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-fetch": "^3.2.3"
   },
   "devDependencies": {
+    "express": "^4.17.3",
     "nodemon": "^2.0.15"
   }
 }
