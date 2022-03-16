@@ -22,6 +22,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { ExchangePurseComponent } from './components/exchange-purse/exchange-purse.component';
 import {HttpClientModule} from "@angular/common/http";
 import { SellMarketComponent } from './components/sell-market/sell-market.component';
+import { LoginHomeComponent } from './screen/login-home/login-home.component';
+import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { SellMarketComponent } from './components/sell-market/sell-market.compon
     CoinMarketComponent,
     ExchangePurseComponent,
     SellMarketComponent,
+    LoginHomeComponent,
+    LoginSettingsComponent,
 
   ],
     imports: [

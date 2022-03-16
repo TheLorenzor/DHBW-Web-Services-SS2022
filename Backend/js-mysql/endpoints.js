@@ -149,4 +149,4 @@ app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
                     })
                   }
              })
-}
+})
