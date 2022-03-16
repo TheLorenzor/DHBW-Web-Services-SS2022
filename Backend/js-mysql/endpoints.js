@@ -118,8 +118,8 @@ app.get('/football/:liga_id', (req, res) => {
 app.get('/football/')
 
 
-//6: BPMN: Odds für ein kommendes Spiel
-app.get('/football/:match:id', (req, res) => {
+//16: BPMN: Odds für ein kommendes Spiel
+app.get('/football/:match_id', (req, res) => {
     const hometeamID = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
           connection.query(sql, function (err, results, fields) {
           if (err) throw err;
@@ -133,3 +133,19 @@ app.get('/football/:match:id', (req, res) => {
              }
         })
 })
+
+//19: BPMS Wetten eintragen
+app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
+         const hometeamID = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";
+               connection.query(sql, function (err, results, fields) {
+               if (err) throw err;
+               console.log("new bet created", results);
+               if(results.length === 0) {
+                  res.status(204).send({ message: 'error!' })
+                  } else {
+                  res.status(200).send({
+                    message: 'new bet created'
+                    })
+                  }
+             })
+}
