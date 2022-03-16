@@ -1,15 +1,21 @@
 import fetch from 'node-fetch'
 globalThis.fetch = fetch
+import 'dotenv/config'
 
 import mysql from "mysql";
 
+const HOST = process.env.MYSQL_HOST;
+const USER = process.env.MYSQL_USER;
+const PASSWORD = process.env.MYSQL_PASSWORD;
+const DB = process.env.MYSQL_DB;
+
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "",
-  database: "liga_db",
-  port: 3306
+  host: HOST,
+  user: USER,
+  password: PASSWORD,
+  database: DB,
+  port: 3308 
 });
 
 // Make the connection

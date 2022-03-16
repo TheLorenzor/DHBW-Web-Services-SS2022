@@ -51,5 +51,7 @@
 # Editor-based HTTP Client requests
 .idea/httpRequests/
 
+# Environment Variables
+.env
 
 Backend/js-mysql/node_modules/
