@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: DB,
-  port: 3308 
+  port: 3306
 });
 
 // Make the connection
@@ -116,3 +116,20 @@ app.get('/football/:liga_id', (req, res) => {
 
 //5. BPMN: Liga vergangene Matches im Zeitraum sehen
 app.get('/football/')
+
+
+//6: BPMN: Odds für ein kommendes Spiel
+app.get('/football/:match:id', (req, res) => {
+    const hometeamID = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
+          connection.query(sql, function (err, results, fields) {
+          if (err) throw err;
+          console.log("these are youre Odds", results);
+          if(results.length === 0) {
+             res.status(204).send({ message: 'error!' })
+             } else {
+             res.status(200).send({
+               results: results
+               })
+             }
+        })
+})

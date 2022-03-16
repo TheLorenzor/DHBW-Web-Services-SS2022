@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server Version:               10.4.18-MariaDB - mariadb.org binary distribution
+-- Server Version:               10.4.22-MariaDB - mariadb.org binary distribution
 -- Server Betriebssystem:        Win64
 -- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `land` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.land: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.land: ~1 rows (ungefähr)
 DELETE FROM `land`;
 /*!40000 ALTER TABLE `land` DISABLE KEYS */;
 INSERT INTO `land` (`id`, `name`) VALUES
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `liga` (
   CONSTRAINT `FK_land_id` FOREIGN KEY (`land_id`) REFERENCES `land` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.liga: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.liga: ~1 rows (ungefähr)
 DELETE FROM `liga`;
 /*!40000 ALTER TABLE `liga` DISABLE KEYS */;
 INSERT INTO `liga` (`id`, `land_id`, `name`) VALUES
@@ -65,6 +65,23 @@ DELETE FROM `matchdetails`;
 /*!40000 ALTER TABLE `matchdetails` DISABLE KEYS */;
 /*!40000 ALTER TABLE `matchdetails` ENABLE KEYS */;
 
+-- Exportiere Struktur von Tabelle liga_db.matchodds
+DROP TABLE IF EXISTS `matchodds`;
+CREATE TABLE IF NOT EXISTS `matchodds` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Spiel_Id` int(11) NOT NULL,
+  `oddhome` float NOT NULL,
+  `oddsDraw` float NOT NULL,
+  `oddGuest` float NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_spiel_id` (`Spiel_Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Exportiere Daten aus Tabelle liga_db.matchodds: ~0 rows (ungefähr)
+DELETE FROM `matchodds`;
+/*!40000 ALTER TABLE `matchodds` DISABLE KEYS */;
+/*!40000 ALTER TABLE `matchodds` ENABLE KEYS */;
+
 -- Exportiere Struktur von Tabelle liga_db.saison
 DROP TABLE IF EXISTS `saison`;
 CREATE TABLE IF NOT EXISTS `saison` (
@@ -76,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `saison` (
   CONSTRAINT `FK_liga_id` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.saison: ~6 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.saison: ~7 rows (ungefähr)
 DELETE FROM `saison`;
 /*!40000 ALTER TABLE `saison` DISABLE KEYS */;
 INSERT INTO `saison` (`id`, `liga_id`, `jahr`) VALUES
@@ -2289,6 +2306,7 @@ CREATE TABLE IF NOT EXISTS `verein` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `liga_id` int(11) NOT NULL DEFAULT 0,
   `name` varchar(50) NOT NULL DEFAULT '0',
+  `altName` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_liga_id-` (`liga_id`),
   CONSTRAINT `FK_liga_id-` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -2297,34 +2315,34 @@ CREATE TABLE IF NOT EXISTS `verein` (
 -- Exportiere Daten aus Tabelle liga_db.verein: ~27 rows (ungefähr)
 DELETE FROM `verein`;
 /*!40000 ALTER TABLE `verein` DISABLE KEYS */;
-INSERT INTO `verein` (`id`, `liga_id`, `name`) VALUES
-	(6, 1, 'Bayer Leverkusen'),
-	(7, 1, 'Borussia Dortmund'),
-	(9, 1, 'FC Schalke 04'),
-	(16, 1, 'VfB Stuttgart'),
-	(31, 1, 'SC Paderborn 07'),
-	(40, 1, 'FC Bayern München'),
-	(54, 1, 'Hertha BSC'),
-	(55, 1, 'Hannover 96'),
-	(65, 1, '1. FC Köln'),
-	(79, 1, '1. FC Nürnberg'),
-	(80, 1, '1. FC Union Berlin'),
-	(81, 1, '1. FSV Mainz 05'),
-	(83, 1, 'Arminia Bielefeld'),
-	(87, 1, 'Borussia Mönchengladbach'),
-	(91, 1, 'Eintracht Frankfurt'),
-	(95, 1, 'FC Augsburg'),
-	(100, 1, 'Hamburger SV'),
-	(112, 1, 'SC Freiburg'),
-	(115, 1, 'SpVgg Greuther Fürth'),
-	(118, 1, 'SV Darmstadt 98'),
-	(129, 1, 'VfL Bochum'),
-	(131, 1, 'VfL Wolfsburg'),
-	(134, 1, 'Werder Bremen'),
-	(171, 1, 'FC Ingolstadt 04'),
-	(175, 1, 'TSG 1899 Hoffenheim'),
-	(185, 1, 'Fortuna Düsseldorf'),
-	(1635, 1, 'RB Leipzig');
+INSERT INTO `verein` (`id`, `liga_id`, `name`, `altName`) VALUES
+	(6, 1, 'Bayer Leverkusen', 'Bayer Leverkusen'),
+	(7, 1, 'Borussia Dortmund', 'Borussia Dortmund'),
+	(9, 1, 'FC Schalke 04', ''),
+	(16, 1, 'VfB Stuttgart', 'VfB Stuttgart'),
+	(31, 1, 'SC Paderborn 07', ''),
+	(40, 1, 'FC Bayern München', 'Bayern Munich'),
+	(54, 1, 'Hertha BSC', 'Hertha Berlin'),
+	(55, 1, 'Hannover 96', ''),
+	(65, 1, '1. FC Köln', 'FC Koln'),
+	(79, 1, '1. FC Nürnberg', ''),
+	(80, 1, '1. FC Union Berlin', 'Union Berlin'),
+	(81, 1, '1. FSV Mainz 05', 'FSV Mainz 05'),
+	(83, 1, 'Arminia Bielefeld', 'Arminia Bielefeld'),
+	(87, 1, 'Borussia Mönchengladbach', 'Borussia Monchengladbach'),
+	(91, 1, 'Eintracht Frankfurt', 'Eintracht Frankfurt'),
+	(95, 1, 'FC Augsburg', 'Augsburg'),
+	(100, 1, 'Hamburger SV', ''),
+	(112, 1, 'SC Freiburg', 'SC Freiburg'),
+	(115, 1, 'SpVgg Greuther Fürth', 'Greuther Fürth'),
+	(118, 1, 'SV Darmstadt 98', ''),
+	(129, 1, 'VfL Bochum', 'VfL Bochum'),
+	(131, 1, 'VfL Wolfsburg', 'VfL Wolfsburg'),
+	(134, 1, 'Werder Bremen', ''),
+	(171, 1, 'FC Ingolstadt 04', ''),
+	(175, 1, 'TSG 1899 Hoffenheim', 'TSG Hoffenheim'),
+	(185, 1, 'Fortuna Düsseldorf', ''),
+	(1635, 1, 'RB Leipzig', 'RB Leipzig');
 /*!40000 ALTER TABLE `verein` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

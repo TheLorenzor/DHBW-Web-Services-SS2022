@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: DB,
-  port: 3308 
+  port: 3306
 });
 
 // Make the connection
@@ -45,13 +45,54 @@ function fetchBundesligaSaison() {
           let spieltag = res[i].Group.GroupOrderID;
 
             console.log("(" + matchId + ", 1, " + heimverein_id + ", " + gastverein_id + ", '" + zustand + "', " + spieltag + ", '" + string[0] + " " + string[1] + "'),");
-
-
         }
     })
 }
 
+function fetchNewOdds() {
+  //fetch data
+    fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58')
+        .then(res => res.json())
+        .then(res => {
+            for(let i=0; i<res.length; i++) {
+               //sort data
+                let heimverein_altName = res[i].home_team;
+                let gastverein_altName = res[i].away_team;
+                let oddGuest = res[i].bookmakers["onexbet"].markets["h2h"].outcomes.[0]price;
+                let oddhome = res[i].bookmakers[1].markets[0].outcomes.[1].price;
+                let oddsDraw = res[i].bookmakers[1].markets[0].outcomes.[2].price;
+
+                console.log("(" + heimverein_altName +" "+gastverein_altName + " " + oddGuest + ", " + oddhome + ", '" + oddsDraw "'),");
+            }
+        })
+}
+
+function getVereinID(string altName){
+   return new Promise((resolve, reject) => {
+           const sql = "SELECT id FROM `verein` WHERE verein.altName =?";
+           connection.query(sql,[altName], function (err, results, fields) {
+               if (err) {
+                   return reject(err);
+               }
+               return resolve(results);
+           });
+       });
+   }
+
+
+function getMatchID(int heimverein_id , int gastverein_id){
+   return new Promise((resolve, reject) => {
+           const sql = "SELECT id FROM `spiel` WHERE spiel.gastverein.id  = ? and spiel.gastverein.id = ?";
+           connection.query(sql, [heimverein_id] , [gastverein_id], function (err, results, fields) {
+               if (err) {
+                   return reject(err);
+               }
+               return resolve(results);
+           });
+       });
+   }
 
 fetchBundesligaSaison();
+fetchNewOdds();
 
 connection.end();
