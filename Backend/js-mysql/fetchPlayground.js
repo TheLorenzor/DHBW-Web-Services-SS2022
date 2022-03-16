@@ -58,7 +58,7 @@ function fetchNewOdds() {
                //sort data
                 let heimverein_altName = res[i].home_team;
                 let gastverein_altName = res[i].away_team;
-                let oddGuest = res[i].bookmakers["onexbet"].markets["h2h"].outcomes.[0]price;
+                let oddGuest = res[i].bookmakers[1].markets[0].outcomes.[0]price;
                 let oddhome = res[i].bookmakers[1].markets[0].outcomes.[1].price;
                 let oddsDraw = res[i].bookmakers[1].markets[0].outcomes.[2].price;
 
