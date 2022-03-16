@@ -18,3 +18,14 @@ export interface Goaler {
   minute:number;
   points:number|null;
 }
+
+export interface externMatch {
+  heimverein_id:number,
+  gastverein_id:number,
+  heimverein:string,
+  gastverein:string,
+  ergebnis:string|null,
+  saison:string,
+  spieltag:number,
+  startzeitpunkt:Date
+}

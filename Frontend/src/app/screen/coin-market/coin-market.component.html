@@ -1,11 +1,12 @@
 <div class="base">
   <mat-toolbar class="tool-bar">
-    <div>
+    <div [ngClass]="turnIn?'selected':''" (click)="turnIn=!turnIn">
       <mat-icon>currency_exchange</mat-icon>
     </div>
-    <div>
+    <div [ngClass]="!turnIn?'selected':''" (click)="turnIn=!turnIn">
       <mat-icon>account_balance</mat-icon>
     </div>
   </mat-toolbar>
-  <app-exchange-purse></app-exchange-purse>
+  <app-exchange-purse *ngIf="turnIn"></app-exchange-purse>
+  <app-sell-market *ngIf="!turnIn"></app-sell-market>
 </div>

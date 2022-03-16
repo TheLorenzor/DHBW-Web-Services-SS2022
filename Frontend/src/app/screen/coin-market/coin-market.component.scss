@@ -5,12 +5,23 @@
 mat-toolbar {
   background: $background-w75;
   color: $font-color;
-  display: flex;
-  justify-content: space-around;
+  padding: 0;
   mat-icon {
     font-size: 40px;
+    position: relative;
+    top: 12px;
   }
-  app-exchange-purse {
-    color: $font-color;
+  mat-icon:hover {
+    cursor: pointer;
   }
+  div {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+  }
+
+}
+.selected {
+  background: $background-w25;
 }

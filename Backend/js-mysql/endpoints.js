@@ -8,6 +8,7 @@ const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
 const DB = process.env.MYSQL_DB;
+const PORT_MYSQL = process.env.MYSQL_PORT;
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
@@ -15,7 +16,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: DB,
-  port: 3308 
+  port: PORT_MYSQL
 });
 
 // Make the connection
@@ -70,7 +71,7 @@ app.get('/football/match/:id', (req, res) => {
           res.status(204).send({ message: 'Something went wrong. Do you have the right ID? Maybe try again.' })
         } else {
           res.status(200).send({
-            results: results 
+            results: results
           })
         }
       })

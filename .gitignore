@@ -52,6 +52,6 @@
 .idea/httpRequests/
 
 # Environment Variables
-.env
+Backend/js-mysql/.env
 
 Backend/js-mysql/node_modules/

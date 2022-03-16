@@ -1,0 +1,21 @@
+<div class="base">
+  <div class="line">
+    <mat-card>
+      <mat-card-title>Auszahlung</mat-card-title>
+      <mat-card-content>
+        <p>minimaler Auszahlungsbetrag 250</p>
+        <mat-form-field>
+          <mat-label>Auszuzahlen</mat-label>
+          <input  matInput #output [formControl]="euroForm" type="number">
+          <mat-icon matSuffix>paid</mat-icon>
+
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput disabled value="{{inEuros}}">
+          <mat-icon matSuffix>euro_symbol</mat-icon>
+        </mat-form-field>
+        <button mat-button>Auszahlen</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

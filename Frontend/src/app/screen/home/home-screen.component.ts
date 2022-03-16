@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {RouterMatchDetail} from "../../../assets/Interface/Router";
+import {MatchService} from "../../service/match.service";
 
 @Component({
   selector: 'app-home-screen',
@@ -9,7 +10,7 @@ import {RouterMatchDetail} from "../../../assets/Interface/Router";
 })
 export class HomeScreenComponent implements OnInit {
   private router:Router;
-  constructor(private route:Router) {
+  constructor(private route:Router,private service:MatchService) {
     this.router = route;
   }
   currentDate:string = ""
@@ -43,5 +44,6 @@ export class HomeScreenComponent implements OnInit {
 
     }
     this.currentDate = tag
+    this.service.getHomeMatched().subscribe();
   }
 }
