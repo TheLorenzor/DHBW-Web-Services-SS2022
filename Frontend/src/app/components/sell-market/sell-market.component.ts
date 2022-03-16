@@ -19,7 +19,6 @@ export class SellMarketComponent implements OnInit {
 
   ngOnInit(): void {
      this.euroForm.valueChanges.subscribe(res=>{
-       console.log(res)
        if (res && !isNaN(res)) {
          this.inEuros=res/2;
        } else {

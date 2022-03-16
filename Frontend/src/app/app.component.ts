@@ -32,9 +32,12 @@ export class AppComponent {
 
   }
   logout() {
-    localStorage.removeItem('backendAPI')
+    localStorage.removeItem('backendAPI');
     this.accountInfo.showScreen=false;
     this.coins=undefined;
-    this.route.navigateByUrl('')
+    this.route.navigateByUrl('');
+  }
+  navigateSettings(){
+      this.route.navigateByUrl('settings');
   }
 }
