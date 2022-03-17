@@ -1,6 +1,8 @@
 import express from "express"
 import 'dotenv/config'
 import mysql from "mysql";
+import cors from 'cors'
+
 
 const app = express();
 const PORT = process.env.PORT
@@ -31,6 +33,7 @@ connection.connect(function (err) {
   console.log(`connected to database`);
 });
 
+app.use(cors());
 app.listen(
   PORT,
 )
