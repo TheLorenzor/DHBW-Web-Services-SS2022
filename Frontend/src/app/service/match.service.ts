@@ -26,7 +26,7 @@ export class MatchService {
       let finalArray:MatchOverview[] = [];
       for (let i=0;i<arr.length;++i) {
         finalArray.push({
-          id:i,
+          id:arr[i].id,
           start: arr[i].startzeitpunkt,
           inorderId:i,
           spieltag: arr[i].spieltag,
@@ -34,15 +34,15 @@ export class MatchService {
             goals: null,
             name:arr[i].heimverein,
             id:arr[i].heimverein_id,
-            logoURL:null,
-            points:null
+            logoURL:arr[i].heimlogo,
+            points:arr[i].heim_points
           },
             club2: {
               goals: null,
               id:arr[i].gastverein_id,
               name:arr[i].gastverein,
-              logoURL:null,
-              points:null
+              logoURL:arr[i].gastlogo,
+              points:arr[i].gast_points
             }
         } as MatchOverview);
       }
@@ -58,7 +58,7 @@ export class MatchService {
       return list.map(liga=>{
         return {
           name:liga.name,
-          id:-1
+          id:liga.id
         } as Liga;
       })
     }));

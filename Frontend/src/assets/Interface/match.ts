@@ -29,7 +29,11 @@ export interface externMatch {
   gastverein_id:number,
   heimverein:string,
   gastverein:string,
-  ergebnis:string|null,
+  id:number;
+  heim_points:number,
+  gast_points:number,
+  gastlogo:string,
+  heimlogo:string,
   saison:string,
   spieltag:number,
   startzeitpunkt:Date
@@ -41,4 +45,5 @@ export interface Liga {
 }
 export interface LigaExtern {
   name:string;
+  id:number;
 }
