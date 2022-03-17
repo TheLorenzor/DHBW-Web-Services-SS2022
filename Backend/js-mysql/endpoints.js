@@ -131,7 +131,7 @@ app.get('/football/:email,passwordHash,vorname,nachname', (req, res) => {{
                  res.status(204).send({ message: 'bereits ein User mit dieser Email' })
                  }
               })
-    const sql = " SELECT passwort FROM `users` WHERE email = "+req.params.email+";";
+    const sql = " SELECT id FROM `users` WHERE email = "+req.params.email+";";
               connection.query(sql, function (err, results, fields) {
               if (err) throw err;
               res.status(200).send({
