@@ -1,8 +1,6 @@
 import express from "express"
 import 'dotenv/config'
 import mysql from "mysql";
-import cors from 'cors'
-
 
 const app = express();
 const PORT = process.env.PORT
@@ -10,7 +8,6 @@ const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
 const DB = process.env.MYSQL_DB;
-const PORT_MYSQL = process.env.MYSQL_PORT;
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
@@ -18,7 +15,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: DB,
-  port: PORT_MYSQL
+  port: 3306
 });
 
 // Make the connection
@@ -33,7 +30,6 @@ connection.connect(function (err) {
   console.log(`connected to database`);
 });
 
-app.use(cors());
 app.listen(
   PORT,
 )
@@ -74,7 +70,7 @@ app.get('/football/match/:id', (req, res) => {
           res.status(204).send({ message: 'Something went wrong. Do you have the right ID? Maybe try again.' })
         } else {
           res.status(200).send({
-            results: results
+            results: results 
           })
         }
       })
@@ -124,7 +120,7 @@ app.get('/football/')
 
 //16: BPMN: Odds für ein kommendes Spiel
 app.get('/football/:match_id', (req, res) => {
-    const hometeamID = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
+    const sql = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
           connection.query(sql, function (err, results, fields) {
           if (err) throw err;
           console.log("these are youre Odds", results);
@@ -138,9 +134,39 @@ app.get('/football/:match_id', (req, res) => {
         })
 })
 
+//17:BPMS echtgeld zu Coins
+app.patch('/football/:value,userID', (req, res) => {
+    const sql = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+req.params.value+" WHERE `users`.`id` = "+userID+";";
+                  connection.query(sql, function (err, results, fields) {
+                  if (err) throw err;
+                  if(results.length === 0) {
+                     res.status(204).send({ message: 'error!' })
+                     } else {
+                     res.status(200).send({
+                       message: 'you have money'
+                       })
+                     }
+                })
+}
+
+//18:BPMS coins zu echtgeld
+app.patch('/football/:value,userID', (req, res) => {
+
+    const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`-'"+req.params.value+"' WHERE `users`.`id` ="+userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
+                  connection.query(sql, function (err, results, fields) {
+                  if (err) throw err;
+                  if(results.length === 0) {
+                     res.status(204).send({ message: 'error!' })
+                     } else {
+                     res.status(200).send({
+                       message: 'you have money'
+                       })
+                     }
+                })
+}
 //19: BPMS Wetten eintragen
 app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
-         const hometeamID = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";
+         const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";
                connection.query(sql, function (err, results, fields) {
                if (err) throw err;
                console.log("new bet created", results);
@@ -152,4 +178,4 @@ app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
                     })
                   }
              })
-})
+}
