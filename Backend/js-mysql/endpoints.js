@@ -117,6 +117,62 @@ app.get('/football/:liga_id', (req, res) => {
 //5. BPMN: Liga vergangene Matches im Zeitraum sehen
 app.get('/football/')
 
+//9: BPMN registrieren
+app.post('/football/:email,passwordHash,vorname,nachname', (req, res) => {{
+     const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"';";
+              connection.query(sql, function (err, results, fields) {
+              if (err) throw err;
+              if(results.length === 0) {
+                  const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+rq.params.email"', '"+rq.params.passwordHash"', '"+rq.params.vorname"', '"+rq.params.nachname"', current_timestamp(), current_timestamp(), '0');";
+                               connection.query(sql, function (err, results, fields) {
+                               if (err) throw err;
+                               }
+                 } else{
+                 res.status(204).send({ message: 'bereits ein User mit dieser Email' })
+                 }
+              }
+
+}
+
+//12: BPMN Verify Login
+app.get('/football/:email,passwordHash', (req, res) => {
+    const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"';";
+          connection.query(sql, function (err, results, fields) {
+          if (err) throw err;
+          if(results.length === 0) {
+             res.status(204).send({ message: 'kein User mit dieser Email' })
+             } else {
+                const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"' AND passwort =" +req.params.passwordHash+";  ";
+                      connection.query(sql, function (err, results, fields) {
+                      if (err) throw err;
+                      if(results.length === 0) {
+                         res.status(204).send({ message: 'falsches Passwort' })
+                         } else {
+                         console.log("login erfolg");
+                         res.status(200).send({
+                           results: results
+                           })
+                         }
+                    })
+               })
+             }
+        })
+})
+
+//14: BPMN: change Logindata
+app.patch('/football/:newPwHash,userID', (req, res) => {
+    const sql = "UPDATE `users` SET `Passwort` = `newPwHash` WHERE `users`.`id` = "+userID+";";
+                  connection.query(sql, function (err, results, fields) {
+                  if (err) throw err;
+                  if(results.length === 0) {
+                     res.status(204).send({ message: 'error!' })
+                     } else {
+                     res.status(200).send({
+                       message: 'changed Password'
+                       })
+                     }
+                })
+}
 
 //16: BPMN: Odds für ein kommendes Spiel
 app.get('/football/:match_id', (req, res) => {
@@ -164,6 +220,7 @@ app.patch('/football/:value,userID', (req, res) => {
                      }
                 })
 }
+
 //19: BPMS Wetten eintragen
 app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
          const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";

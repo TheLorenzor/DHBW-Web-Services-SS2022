@@ -69,31 +69,6 @@ function fetchNewOdds() {
         })
 }
 
-function getVereinID(altName){
-   return new Promise((resolve, reject) => {
-           const sql = "SELECT id FROM `verein` WHERE verein.altName =?";
-           connection.query(sql,[altName], function (err, results, fields) {
-               if (err) {
-                   return reject(err);
-               }
-               return resolve(results);
-           });
-       });
-   }
-
-
-function getMatchID(heimverein_id, gastverein_id){
-   return new Promise((resolve, reject) => {
-           const sql = "SELECT id FROM `spiel` WHERE spiel.gastverein.id  = ? and spiel.gastverein.id = ?";
-           connection.query(sql, [heimverein_id] , [gastverein_id], function (err, results, fields) {
-               if (err) {
-                   return reject(err);
-               }
-               return resolve(results);
-           });
-       });
-   }
-
 fetchBundesligaSaison();
 //fetchNewOdds();
 
