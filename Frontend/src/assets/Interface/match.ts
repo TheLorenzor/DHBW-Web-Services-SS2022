@@ -1,6 +1,8 @@
 export interface MatchOverview {
   id:number;
+  inorderId:number;
   start:Date;
+  spieltag:number;
   club1: {
     points:number|null;
     name:string;
@@ -31,4 +33,12 @@ export interface externMatch {
   saison:string,
   spieltag:number,
   startzeitpunkt:Date
+}
+
+export interface Liga {
+  name:string;
+  id:number;
+}
+export interface LigaExtern {
+  name:string;
 }

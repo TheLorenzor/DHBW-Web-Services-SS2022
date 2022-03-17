@@ -47,7 +47,7 @@ export class HomeScreenComponent implements OnInit {
 
     }
     this.currentDate = tag
-    this.service.getHomeMatched().subscribe(res => {
+    this.service.getMatches(-1).subscribe(res => {
       this.matches = res;
     });
   }

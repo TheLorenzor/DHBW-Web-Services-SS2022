@@ -25,6 +25,8 @@ import { SellMarketComponent } from './components/sell-market/sell-market.compon
 import { LoginHomeComponent } from './screen/login-home/login-home.component';
 import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     RouterModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

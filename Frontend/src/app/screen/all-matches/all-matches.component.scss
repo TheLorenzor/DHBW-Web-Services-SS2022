@@ -12,20 +12,49 @@
   width: 100%;
   hr {
     width: 100%;
+    margin-bottom: 3rem;
   }
   .sort-header {
+    width: 90%;
+    height: 45px;
+    display: flex;
+    align-self: center;
+    justify-content: space-between;
+    mat-icon,mat-datepicker-toggle {
+      color: $font-color;
+    }
+    .back {
+      display: flex;
+      justify-content: left;
+      flex-direction: row;
+      h2 {
+        position: relative;
+        top: 10px;
+      }
+    }
 
   }
   .list-data {
-    width: 100%;
+    width: 80%;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    span {
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      justify-content: left;
+    flex-direction: column;
+    justify-content: left;
+    align-self: center;
+    .block {
+      margin-bottom: 2rem;
     }
+  }
+}
+.tournament {
+  mat-card {
+    background: $background-w50;
+    color: $font-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100px;
+  }
+  mat-card:hover {
+    cursor: pointer;
   }
 }

@@ -1,13 +1,47 @@
 <div class="website">
-  <div class="list">
-    <div class="sort-header">
+  <div *ngIf="selectTurnament" class="tournament">
+    <mat-card *ngFor="let teil of liga" (click)="selectTorunament(teil.id)">
+      <mat-card-title>{{teil.name}}</mat-card-title>
+    </mat-card>
+  </div>
 
+
+  <div *ngIf="!selectTurnament" class="list">
+    <div class="sort-header">
+      <div class="back">
+        <button mat-button (click)="selectTurnament=true">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h2>Spiele:</h2>
+      </div>
+      <mat-form-field>
+        <mat-label matPrefix>Von:</mat-label>
+        <input matInput [matDatepicker]="from">
+        <mat-datepicker-toggle matSuffix [for]="from">
+          <mat-icon>event</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #from></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label matPrefix>Bis:</mat-label>
+        <input matInput [matDatepicker]="till">
+        <mat-datepicker-toggle matSuffix [for]="till">
+          <mat-icon>event</mat-icon>
+        </mat-datepicker-toggle>
+        <mat-datepicker #till></mat-datepicker>
+      </mat-form-field>
     </div>
+
     <hr>
+
     <div class="list-data">
-      <span>
-        <app-match></app-match>
-      </span>
+      <div class="block" *ngFor="let match of matches">
+        <div *ngIf="showDate(match).length>0">
+          <h4>{{showDate(match)}}</h4>
+          <hr>
+        </div>
+        <app-match [matchData]="match"></app-match>
+      </div>
     </div>
   </div>
 </div>
