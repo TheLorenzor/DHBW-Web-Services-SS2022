@@ -14,12 +14,16 @@ import {MatCardModule} from "@angular/material/card";
 import { AllMatchesComponent } from './screen/all-matches/all-matches.component';
 import { LoginRegisterComponent } from './screen/login-register/login-register.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import { CoinMarketComponent } from './screen/coin-market/coin-market.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { ExchangePurseComponent } from './components/exchange-purse/exchange-purse.component';
+import {HttpClientModule} from "@angular/common/http";
+import { SellMarketComponent } from './components/sell-market/sell-market.component';
+import { LoginHomeComponent } from './screen/login-home/login-home.component';
+import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,9 @@ import { ExchangePurseComponent } from './components/exchange-purse/exchange-pur
     LoginRegisterComponent,
     CoinMarketComponent,
     ExchangePurseComponent,
+    SellMarketComponent,
+    LoginHomeComponent,
+    LoginSettingsComponent,
 
   ],
     imports: [
@@ -41,7 +48,9 @@ import { ExchangePurseComponent } from './components/exchange-purse/exchange-pur
         MatButtonModule,
         MatCardModule,
         MatIconModule,
+        ReactiveFormsModule,
         MatFormFieldModule,
+        HttpClientModule,
         FormsModule,
         MatInputModule,
         RouterModule,

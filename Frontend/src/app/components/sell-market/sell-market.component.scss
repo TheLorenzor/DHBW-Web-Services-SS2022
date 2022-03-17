@@ -1,0 +1,36 @@
+@import "src/assets/theme/dark-theme.scss";
+.base {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+mat-card,input,mat-form-field {
+  color: $font-color;
+  background: $background;
+}
+mat-label,input:disabled {
+  color: $font-color-b25;
+}
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+button {
+  background: $theme-primary;
+}
