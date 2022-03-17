@@ -118,7 +118,7 @@ app.get('/football/:liga_id', (req, res) => {
 app.get('/football/')
 
 //9: BPMN registrieren
-app.get('/football/:email,passwordHash,vorname,nachname', (req, res) => {{
+app.get('/football/:email,passwordHash,vorname,nachname', (req, res) => {
      const sql = " SELECT passwort FROM `users` WHERE email = "+req.params.email+";";
               connection.query(sql, function (err, results, fields) {
               if (err) throw err;
@@ -131,13 +131,13 @@ app.get('/football/:email,passwordHash,vorname,nachname', (req, res) => {{
                  res.status(204).send({ message: 'bereits ein User mit dieser Email' })
                  }
               })
-    const sql = " SELECT id FROM `users` WHERE email = "+req.params.email+";";
-              connection.query(sql, function (err, results, fields) {
+    const sql2 = " SELECT id FROM `users` WHERE email = "+req.params.email+";";
+              connection.query(sql2, function (err, results, fields) {
               if (err) throw err;
               res.status(200).send({
                 results: results
               })
-}
+})
 
 //12: BPMN Verify Login
 app.get('/football/:email,passwordHash', (req, res) => {
