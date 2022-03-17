@@ -11,7 +11,11 @@ mat-toolbar {
   flex-direction: row;
   justify-content: space-between;
   background: $background-b50;
+  z-index: 3;
   color: $font-color;
+  position: fixed;
+  top: 0;
+  overflow-x: hidden;
 }
 .logo:hover {
   cursor:pointer ;
@@ -30,7 +34,7 @@ button:hover {
   padding: 0;
 }
 .accountDetails {
-  position: absolute;
+  position: fixed;
   width: 150px;
   min-height: 125px;
   z-index: 10;

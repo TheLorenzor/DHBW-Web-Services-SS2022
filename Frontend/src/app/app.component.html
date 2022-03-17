@@ -1,6 +1,6 @@
 <mat-toolbar >
   <div class="right">
-    <span class="logo" routerLink="/">Sports-Ticker</span>
+    <span class="logo" routerLink="/">Sports-WG</span>
     <button routerLink="football" mat-icon-button>Fußball</button>
   </div>
 
@@ -12,25 +12,20 @@
     <button id="people" [ngClass]="accountInfo.showScreen?'overhead':''" (click)="navigateToPerson()" mat-button>
       <mat-icon aria-hidden="false">person</mat-icon>
     </button>
-
-    <mat-card *ngIf="accountInfo.showScreen" class="overhead accountDetails">
-      <mat-card-content>
-        <div class="line">
-          <mat-icon>account_circle</mat-icon>
-          <span>{{accountInfo.name}}</span>
-        </div>
-        <hr class="line">
-        <button class="line" (click)="navigateSettings()">
-          <mat-icon>settings</mat-icon>
-          <span>Einstellungen</span>
-        </button>
-        <button class="line" (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Abmelden</span>
-        </button>
-
-      </mat-card-content>
-    </mat-card>
   </div>
 </mat-toolbar>
+<mat-card *ngIf="accountInfo.showScreen" class="overhead accountDetails">
+  <mat-card-content>
+    <div class="line" (click)="navigateSettings()">
+      <mat-icon>account_circle</mat-icon>
+      <span>{{accountInfo.name}}</span>
+    </div>
+    <hr class="line">
+    <button class="line" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Abmelden</span>
+    </button>
+
+  </mat-card-content>
+</mat-card>
 <router-outlet></router-outlet>
