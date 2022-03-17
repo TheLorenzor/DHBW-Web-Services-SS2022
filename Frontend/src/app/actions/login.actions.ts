@@ -1,5 +1,6 @@
 import {createAction, props} from "@ngrx/store";
-import {LoginDataInter, LoginRegisterData} from "../../assets/Interface/login";
+import { LoginRegisterData} from "../../assets/Interface/login";
+import {Login} from "../../assets/Interface/state";
 
 
 export const loadLoginData=createAction(
@@ -8,5 +9,5 @@ export const loadLoginData=createAction(
 );
 export const loadLoginDataSuccess = createAction(
   "[app component] loadLoginDataSuccess",
-  props<{loginData:LoginDataInter}>()
+  props<{loginData:Login}>()
 );

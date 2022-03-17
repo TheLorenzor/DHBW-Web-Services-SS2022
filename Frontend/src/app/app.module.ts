@@ -27,6 +27,7 @@ import { LoginSettingsComponent } from './screen/login-settings/login-settings.c
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
+import {accounts} from "./reducer/login.reducer";
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormsModule,
     MatInputModule,
     RouterModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({accounts}, {}),
     EffectsModule.forRoot([]),
     MatProgressBarModule,
     MatDatepickerModule,
