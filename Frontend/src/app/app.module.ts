@@ -7,7 +7,7 @@ import { HomeScreenComponent } from './screen/home/home-screen.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from "@angular/material/button";
-import { MatchComponent } from './components/home/match/match.component';
+import { MatchComponent } from './components/match/match.component';
 import { MatchDetailScreenComponent } from './screen/match-detail-screen/match-detail-screen.component';
 import { RouterModule } from '@angular/router';
 import {MatCardModule} from "@angular/material/card";
@@ -24,6 +24,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { SellMarketComponent } from './components/sell-market/sell-market.component';
 import { LoginHomeComponent } from './screen/login-home/login-home.component';
 import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -40,23 +41,24 @@ import { LoginSettingsComponent } from './screen/login-settings/login-settings.c
     LoginSettingsComponent,
 
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        HttpClientModule,
-        FormsModule,
-        MatInputModule,
-        RouterModule,
-        StoreModule.forRoot({}, {}),
-        EffectsModule.forRoot([])
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    HttpClientModule,
+    FormsModule,
+    MatInputModule,
+    RouterModule,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([]),
+    MatProgressBarModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

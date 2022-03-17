@@ -1,10 +1,8 @@
 <div class="home-screen">
   <div class="row">
-    <h1>Spieltag: {{currentDate}}</h1>
+    <h1>Die nächsten Spiele</h1>
     <hr>
-    <div>
-      <app-match></app-match>
-    </div>
+    <app-match *ngFor="let match of matches" [matchData]="match"></app-match>
   </div>
 </div>
 
