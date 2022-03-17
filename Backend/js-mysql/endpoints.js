@@ -119,30 +119,30 @@ app.get('/football/')
 
 //9: BPMN registrieren
 app.post('/football/:email,passwordHash,vorname,nachname', (req, res) => {{
-     const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"';";
+     const sql = " SELECT passwort FROM `users` WHERE email = "+req.params.email+";";
               connection.query(sql, function (err, results, fields) {
               if (err) throw err;
               if(results.length === 0) {
-                  const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+rq.params.email"', '"+rq.params.passwordHash"', '"+rq.params.vorname"', '"+rq.params.nachname"', current_timestamp(), current_timestamp(), '0');";
+                  const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+rq.params.email+"', '"+rq.params.passwordHash+"', '"+rq.params.vorname+"', '"+rq.params.nachname+"', current_timestamp(), current_timestamp(), '0');";
                                connection.query(sql, function (err, results, fields) {
                                if (err) throw err;
-                               }
+                               })
                  } else{
                  res.status(204).send({ message: 'bereits ein User mit dieser Email' })
                  }
-              }
+              })
 
 }
 
 //12: BPMN Verify Login
 app.get('/football/:email,passwordHash', (req, res) => {
-    const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"';";
+    const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email+"';";
           connection.query(sql, function (err, results, fields) {
           if (err) throw err;
           if(results.length === 0) {
              res.status(204).send({ message: 'kein User mit dieser Email' })
              } else {
-                const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email"' AND passwort =" +req.params.passwordHash+";  ";
+                const sql = " SELECT passwort FROM `users` WHERE email = '"+req.params.email+"' AND passwort =" +req.params.passwordHash+";  ";
                       connection.query(sql, function (err, results, fields) {
                       if (err) throw err;
                       if(results.length === 0) {
@@ -154,10 +154,9 @@ app.get('/football/:email,passwordHash', (req, res) => {
                            })
                          }
                     })
-               })
-             }
+               }
+             })
         })
-})
 
 //14: BPMN: change Logindata
 app.patch('/football/:newPwHash,userID', (req, res) => {
@@ -172,7 +171,7 @@ app.patch('/football/:newPwHash,userID', (req, res) => {
                        })
                      }
                 })
-}
+})
 
 //16: BPMN: Odds für ein kommendes Spiel
 app.get('/football/:match_id', (req, res) => {
@@ -203,7 +202,7 @@ app.patch('/football/:value,userID', (req, res) => {
                        })
                      }
                 })
-}
+})
 
 //18:BPMS coins zu echtgeld
 app.patch('/football/:value,userID', (req, res) => {
@@ -219,8 +218,8 @@ app.patch('/football/:value,userID', (req, res) => {
                        })
                      }
                 })
-}
-
+        })
+})
 //19: BPMS Wetten eintragen
 app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
          const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";
@@ -235,4 +234,4 @@ app.post('/football/:hgoal,ggoals,userID,spielID,value', (req, res) => {
                     })
                   }
              })
-}
+})
