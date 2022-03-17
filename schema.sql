@@ -2258,7 +2258,7 @@ CREATE TABLE IF NOT EXISTS `tore` (
   CONSTRAINT `FKtorschuetzeid` FOREIGN KEY (`torschuetze_id`) REFERENCES `torschuetze` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=93676 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.tore: ~13 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.tore: ~930 rows (ungefähr)
 DELETE FROM `tore`;
 /*!40000 ALTER TABLE `tore` DISABLE KEYS */;
 INSERT INTO `tore` (`id`, `spiel_id`, `torschuetze_id`, `minuteanzahl`, `isPenalty`, `isOvertime`, `isOwnGoal`, `zwischenstand`, `isHeimTor`) VALUES
@@ -3202,7 +3202,7 @@ CREATE TABLE IF NOT EXISTS `torschuetze` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40363 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.torschuetze: ~1.310 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.torschuetze: ~1.309 rows (ungefähr)
 DELETE FROM `torschuetze`;
 /*!40000 ALTER TABLE `torschuetze` DISABLE KEYS */;
 INSERT INTO `torschuetze` (`id`, `name`) VALUES
@@ -4514,8 +4514,7 @@ INSERT INTO `torschuetze` (`id`, `name`) VALUES
 	(19257, 'J. Wind'),
 	(19270, 'D. Burgzorg'),
 	(19272, 'N.-J. Sarenren-Bazee'),
-	(19284, 'Simakan'),
-	(40362, '');
+	(19284, 'Simakan');
 /*!40000 ALTER TABLE `torschuetze` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.users
@@ -4528,7 +4527,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `nachname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `Kontostand` float NOT NULL,
+  `bankaccount` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -4555,32 +4554,32 @@ CREATE TABLE IF NOT EXISTS `verein` (
 DELETE FROM `verein`;
 /*!40000 ALTER TABLE `verein` DISABLE KEYS */;
 INSERT INTO `verein` (`id`, `liga_id`, `name`, `altName`, `logourl`) VALUES
-	(6, 1, 'Bayer Leverkusen', 'Bayer Leverkusen', 'https://upload.wikimedia.org/wikipedia/de/thumb/f/'),
-	(7, 1, 'Borussia Dortmund', 'Borussia Dortmund', 'https://upload.wikimedia.org/wikipedia/commons/thu'),
-	(9, 1, 'FC Schalke 04', NULL, 'https://upload.wikimedia.org/wikipedia/commons/6/6'),
+	(6, 1, 'Bayer Leverkusen', 'Bayer Leverkusen', 'https://upload.wikimedia.org/wikipedia/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/1200px-Bayer_Leverkusen_Logo.svg.png'),
+	(7, 1, 'Borussia Dortmund', 'Borussia Dortmund', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png'),
+	(9, 1, 'FC Schalke 04', NULL, 'https://upload.wikimedia.org/wikipedia/commons/6/6d/FC_Schalke_04_Logo.svg'),
 	(16, 1, 'VfB Stuttgart', 'VfB Stuttgart', 'https://i.imgur.com/v0tkpNx.png'),
-	(31, 1, 'SC Paderborn 07', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e'),
+	(31, 1, 'SC Paderborn 07', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e3/SC_Paderborn_07_Logo.svg'),
 	(40, 1, 'FC Bayern München', 'Bayern Munich', 'https://i.imgur.com/jJEsJrj.png'),
 	(54, 1, 'Hertha BSC', 'Hertha Berlin', 'https://i.imgur.com/apFwbYZ.png'),
-	(55, 1, 'Hannover 96', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/c'),
-	(65, 1, '1. FC Köln', 'FC Koln', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/'),
-	(79, 1, '1. FC Nürnberg', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/f'),
-	(80, 1, '1. FC Union Berlin', 'Union Berlin', 'https://upload.wikimedia.org/wikipedia/commons/thu'),
-	(81, 1, '1. FSV Mainz 05', 'FSV Mainz 05', 'https://upload.wikimedia.org/wikipedia/commons/thu'),
-	(83, 1, 'Arminia Bielefeld', 'Arminia Bielefeld', 'https://upload.wikimedia.org/wikipedia/de/thumb/e/'),
+	(55, 1, 'Hannover 96', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Hannover_96_Logo.svg'),
+	(65, 1, '1. FC Köln', 'FC Koln', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/FC_Cologne_logo.svg/1200px-FC_Cologne_logo.svg.png'),
+	(79, 1, '1. FC Nürnberg', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/fa/1._FC_Nürnberg_logo.svg'),
+	(80, 1, '1. FC Union Berlin', 'Union Berlin', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/FCU_Standard_Logo.png/240px-FCU_Standard_Logo.png'),
+	(81, 1, '1. FSV Mainz 05', 'FSV Mainz 05', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/1200px-Logo_Mainz_05.svg.png'),
+	(83, 1, 'Arminia Bielefeld', 'Arminia Bielefeld', 'https://upload.wikimedia.org/wikipedia/de/thumb/e/e5/Logo_Arminia_Bielefeld.svg/2000px-Logo_Arminia_Bielefeld.svg.png'),
 	(87, 1, 'Borussia Mönchengladbach', 'Borussia Monchengladbach', 'https://i.imgur.com/KSIk0Eu.png'),
 	(91, 1, 'Eintracht Frankfurt', 'Eintracht Frankfurt', 'https://i.imgur.com/X8NFkOb.png'),
 	(95, 1, 'FC Augsburg', 'Augsburg', 'https://i.imgur.com/sdE62e2.png'),
-	(100, 1, 'Hamburger SV', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/f'),
+	(100, 1, 'Hamburger SV', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Hamburger_SV_logo.svg'),
 	(112, 1, 'SC Freiburg', 'SC Freiburg', 'https://i.imgur.com/r3mvi0h.png'),
 	(115, 1, 'SpVgg Greuther Fürth', 'Greuther Fürth', 'https://i.imgur.com/pwuVbKr.png'),
-	(118, 1, 'SV Darmstadt 98', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e'),
+	(118, 1, 'SV Darmstadt 98', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e5/SV_Darmstadt_98_Logo.svg'),
 	(129, 1, 'VfL Bochum', 'VfL Bochum', 'https://i.imgur.com/5jy3Gfr.png'),
 	(131, 1, 'VfL Wolfsburg', 'VfL Wolfsburg', 'https://i.imgur.com/ucqKV4B.png'),
-	(134, 1, 'Werder Bremen', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thu'),
-	(171, 1, 'FC Ingolstadt 04', NULL, 'https://upload.wikimedia.org/wikipedia/de/thumb/5/'),
+	(134, 1, 'Werder Bremen', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png'),
+	(171, 1, 'FC Ingolstadt 04', NULL, 'https://upload.wikimedia.org/wikipedia/de/thumb/5/55/FC-Ingolstadt_logo.svg/125px-FC-Ingolstadt_logo.svg.png'),
 	(175, 1, 'TSG 1899 Hoffenheim', 'TSG Hoffenheim', 'https://i.imgur.com/gF0PfEl.png'),
-	(185, 1, 'Fortuna Düsseldorf', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thu'),
+	(185, 1, 'Fortuna Düsseldorf', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Fortuna_D%C3%BCsseldorf.svg/150px-Fortuna_D%C3%BCsseldorf.svg.png'),
 	(1635, 1, 'RB Leipzig', 'RB Leipzig', 'https://i.imgur.com/Rpwsjz1.png');
 /*!40000 ALTER TABLE `verein` ENABLE KEYS */;
 
