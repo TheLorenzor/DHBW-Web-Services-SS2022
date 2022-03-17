@@ -118,12 +118,12 @@ app.get('/football/:liga_id', (req, res) => {
 app.get('/football/')
 
 //9: BPMN registrieren
-app.get('/football/:email,passwordHash,vorname,nachname', (req, res) => {
+app.get('/football/:email,passwordHash', (req, res) => {
      const sql = " SELECT passwort FROM `users` WHERE email = "+req.params.email+";";
               connection.query(sql, function (err, results, fields) {
               if (err) throw err;
               if(results.length === 0) {
-                  const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', '"+req.params.vorname+"', '"+req.params.nachname+"', current_timestamp(), current_timestamp(), '0');";
+                  const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
                                connection.query(sql, function (err, results, fields) {
                                if (err) throw err;
                                })
