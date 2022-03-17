@@ -1,0 +1,34 @@
+@import "src/assets/theme/dark-theme.scss";
+.base {
+  color: $font-color;
+  margin-top: 3rem;
+  margin-left: 2rem;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  justify-content: left;
+}
+hr {
+  width: 100%;
+
+}
+.line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+  .text {
+    display: flex;
+    flex-direction: column;
+  }
+  .email {
+    font-size: 10px;
+    color: $font-color-b25;
+    margin-left: 10px;
+  }
+  button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

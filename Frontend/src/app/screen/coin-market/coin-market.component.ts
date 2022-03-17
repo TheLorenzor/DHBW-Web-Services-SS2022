@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./coin-market.component.scss']
 })
 export class CoinMarketComponent implements OnInit {
-
+  turnIn = true;
   constructor() { }
 
   ngOnInit(): void {

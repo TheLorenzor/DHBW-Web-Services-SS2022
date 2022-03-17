@@ -5,5 +5,52 @@
   display: flex;
   flex-direction: column;
   justify-content: left;
+  .line {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+.offer {
+  background: linear-gradient(0, #545b65, #99a4a8);
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  margin: 50px;
+  button {
+    background: radial-gradient(circle at center,$theme-success 0, #90ce13 99%);
+    box-shadow: 2px 2px 4px rgba(#303338,0.6);
+    width: 75%;
+  }
+  .front {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 200px;
+    width: 200px;
+    z-index: 1;
+    position: relative;
+    top: -200px;
+    span {
+      color: black;
+      font-size: 30px;
+      font-family: "Dosis bold";
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    button {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      position: relative;
+      left: 25px;
 
+    }
+  }
+  img {
+    z-index: 0;
+    width: 200px;
+    height: 200px;
+  }
 }
