@@ -11,3 +11,13 @@ export const loadLoginDataSuccess = createAction(
   "[app component] loadLoginDataSuccess",
   props<{loginData:Login}>()
 );
+
+export const changeLoginData=createAction(
+  "[settings] changeLoginData",
+  props<{newLogin:LoginRegisterData}>()
+);
+
+export const changeLoginDataSuccess=createAction(
+  "[settings] changeLoginDataSuccess",
+  props<{loginData:Login}>()
+);
