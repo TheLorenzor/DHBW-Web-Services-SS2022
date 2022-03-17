@@ -1,22 +1,22 @@
 import express from "express"
 import 'dotenv/config'
 import mysql from "mysql";
+import cron from "node-cron";
+import fetch from 'node-fetch';
 
 const app = express();
 const PORT = process.env.PORT
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
-const DB = process.env.MYSQL_DB;
-
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: DB,
-  PORT: 3306
+  database: "liga_db",
+  port: 3308
 });
 
 // Make the connection
@@ -33,8 +33,145 @@ connection.connect(function (err) {
 
 app.listen(
   PORT,
-  () => console.log("its alive on http://localhost:"+PORT)
 )
+
+//1. BPMN: Übersicht bekommen
+app.get('/home', (req, res) => {
+  const sql1 = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.zustand = 'Steht noch an' AND DATEDIFF(s.startzeitpunkt, CURRENT_DATE) = 0 ORDER BY s.startzeitpunkt";
+  const sql2 = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.zustand = 'Steht noch an' AND DATEDIFF(s.startzeitpunkt, CURRENT_DATE) <= 3 ORDER BY s.startzeitpunkt";
+  connection.query(sql1, function (err, results, fields) {
+  if (err) throw err;
+  console.log("here are your results", results);
+  if(results.length === 0) {
+    connection.query(sql2, function (err, results2, fields) {
+      if (err) throw err;
+      console.log("here are your results", results2);
+      res.status(200).send({
+        results: results2
+      })
+    })
+  } else {
+    res.status(200).send({
+      results: results
+    })
+  }
+  });
+});
+
+//2. BPMN: Ein Match anschauen
+app.get('/football/match/:id', (req, res) => {
+    if(isNaN(req.params.id)) {
+      res.status(400).send({ message: 'Match ID is not viable!' })
+    } else {
+      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.id = " + req.params.id;
+      connection.query(sql, function (err, results, fields) {
+        if (err) throw err;
+        console.log("here are your results", results);
+        if(results.length === 0) {
+          res.status(204).send({ message: 'Something went wrong. Do you have the right ID? Maybe try again.' })
+        } else {
+          res.status(200).send({
+            results: results 
+          })
+        }
+      })
+    }
+});
+
+//3. BPMN: Fußball-Übersicht
+app.get('/football', (req, res) => {
+    const sql = "SELECT l.id, l.name FROM liga l";
+    connection.query(sql, function (err, results, fields) {
+      if (err) throw err;
+      console.log("here are your results", results);
+      if(results.length === 0) {
+        res.status(204).send({ message: 'Something went wrong. Seems like there are no Leagues available?' })
+      } else {
+        res.status(200).send({
+           results
+        })
+      }
+    })
+})
+
+//4. BPMN: Liga Matches sehen
+app.get('/football/:liga_id', (req, res) => {
+    const ligaid = req.params.liga_id;
+    if(isNaN(ligaid)) {
+      res.status(400).send({ message: 'League ID is not viable!' })
+    } else {
+      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.name AS heimverein, v2.name AS gastverein, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.zustand = 'Steht noch an' AND s.liga_id = " + ligaid + " ORDER BY s.startzeitpunkt";
+      connection.query(sql, function (err, results, fields) {
+      if (err) throw err;
+      console.log("here are your results", results);
+      if(results.length === 0) {
+        res.status(204).send({ message: 'No Matches that will be in that League in the near future!' })
+      } else {
+        res.status(200).send({
+           results: results
+        })
+      }
+    })
+    }
+})
+
+//5. BPMN: Liga vergangene Matches im Zeitraum sehen
+app.post('/football/:liga_id/:start/:end', (req, res) => {
+  
+})
+
+//8. BPMN: aktualisieren der Datensätze
+//Aktualisieren der Wetten
+cron.schedule("* * * * * *", function() {
+
+})
+
+//Aktualisieren der Spiele (Ergebnisse / Tore)
+cron.schedule("59 23 * * *", function() {
+  fetch('https://www.openligadb.de/api/getmatchdata/bl1/2021')
+  .then(res => res.json())
+  .then(res => {
+    for(let i=0; i<res.length; i++) {
+      let matchId = res[i].MatchID;
+      let zustand = res[i].MatchIsFinished ? "Beendet" : "Steht noch an";
+      if(zustand === "Steht noch an") {
+        let ergebnis = null;
+        let heimpoints = null;
+        let gastpoints = null;
+        updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints);
+      } else {
+        let ergebnis = res[i].MatchResults[0].PointsTeam1 + ":" + res[i].MatchResults[0].PointsTeam2;
+        let heimpoints = res[i].MatchResults[0].PointsTeam1;
+        let gastpoints = res[i].MatchResults[0].PointsTeam2;
+        updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints);
+      }
+    }
+  })
+});
+
+function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
+  console.log("fck");
+  const updateZustand = "UPDATE spiel s SET s.zustand = '" + zustand + "' WHERE s.id = " + matchId;
+          connection.query(updateZustand, function (err, results, fields) {
+          if (err) throw err;
+            console.log("here are your results", results);
+          })
+  const updateErgebnis = "UPDATE spiel s SET s.ergebnis = '" + ergebnis + "' WHERE s.id = " + matchId;
+          connection.query(updateErgebnis, function (err, results, fields) {
+          if (err) throw err;
+            console.log("here are your results", results);
+          })
+  const updateHeimpoints = "UPDATE spiel s SET s.heim_points = " + heimpoints + " WHERE s.id = " + matchId;
+          connection.query(updateHeimpoints, function (err, results, fields) {
+            if (err) throw err;
+              console.log("here are your results", results);
+            })
+  const updateGastpoints = "UPDATE spiel s SET s.gast_points = " + gastpoints + " WHERE s.id = " + matchId;
+          connection.query(updateGastpoints, function (err, results, fields) {
+            if (err) throw err;
+              console.log("here are your results", results);
+            })
+}
 
 //9: BPMN registrieren
 app.get('/register/:email', (req, res) => {
