@@ -35,9 +35,6 @@ app.listen(
   PORT,
   () => console.log("its alive on http://localhost:"+PORT)
 )
-app.get('/tshirt', (req, res) => {
-    res.status(200).send("1")
-});
 
 //9: BPMN registrieren
 app.get('/register/:email', (req, res) => {
