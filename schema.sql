@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS `matchodds` (
   `oddsDraw` float NOT NULL,
   `oddGuest` float NOT NULL,
   PRIMARY KEY (`ID`),
-  KEY `FK_spiel_id` (`Spiel_Id`) USING BTREE
+  KEY `FK_spiel_id` (`Spiel_Id`) USING BTREE,
+  CONSTRAINT `FKspielidd` FOREIGN KEY (`Spiel_Id`) REFERENCES `spiel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Exportiere Daten aus Tabelle liga_db.matchodds: ~0 rows (ungefähr)
@@ -2256,7 +2257,7 @@ CREATE TABLE IF NOT EXISTS `tore` (
   CONSTRAINT `FKtorschuetzeid` FOREIGN KEY (`torschuetze_id`) REFERENCES `torschuetze` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=93759 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.tore: ~8 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.tore: ~6.367 rows (ungefähr)
 DELETE FROM `tore`;
 /*!40000 ALTER TABLE `tore` DISABLE KEYS */;
 INSERT INTO `tore` (`id`, `spiel_id`, `torschuetze_id`, `minuteanzahl`, `isPenalty`, `isOvertime`, `isOwnGoal`) VALUES
@@ -8465,7 +8466,7 @@ CREATE TABLE IF NOT EXISTS `torschuetze` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40363 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.torschuetze: ~1.311 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.torschuetze: ~1.310 rows (ungefähr)
 DELETE FROM `torschuetze`;
 /*!40000 ALTER TABLE `torschuetze` DISABLE KEYS */;
 INSERT INTO `torschuetze` (`id`, `name`) VALUES
