@@ -106,6 +106,17 @@ app.patch('/changeLoginData/:newPwHash/:userID', (req, res) => {
 
 });
 
+//15: BPMN Data for Homescreen
+app.get('/homescreen/:userID', (req, res) => {
+    try {
+
+    }
+    catch(e){
+    res.status(204).send({ message: 'error!' })
+    }
+
+});
+
 //16: BPMN: Odds für ein kommendes Spiel
 app.get('/odds/:match_id', (req, res) => {
     try{
@@ -188,7 +199,28 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
 //19: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value', (req, res) => {
          try{
-            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+spielID+"','"+userID+"','"+hgoal+"','"+ggoal+"','"+value+"')";
+            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"')";
+                        connection.query(sql, function (err, results, fields) {
+                        if (err) throw err;
+                        if(results.length === 0) {
+                           res.status(204).send({ message: 'error!' })
+                           } else {
+                           res.status(200).send({
+                             message: 'new bet created'
+                             })
+                           }
+                      })
+         }
+         catch
+         {
+              res.status(204).send({ message: 'error!' })
+         }
+});
+
+//20: BPMS Wette löschen
+app.get('/deleteBet/:betID', (req, res) => {
+         try{
+            const sql = "DELETE FROM `wetten` WHERE `wetten`.`id` = '"+req.params.betID+"';";
                         connection.query(sql, function (err, results, fields) {
                         if (err) throw err;
                         console.log("new bet created", results);
@@ -196,8 +228,27 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value', (req, res) => {
                            res.status(204).send({ message: 'error!' })
                            } else {
                            res.status(200).send({
-                             message: 'new bet created'
+                             message: 'bet deleted'
                              })
+                           }
+                      })
+         }
+         catch
+         {
+              res.status(204).send({ message: 'error!' })
+         }
+});
+
+//21: BPMS Wetten einsehen
+app.get('/getBets/:userID', (req, res) => {
+         try{
+            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"';";
+                        connection.query(sql, function (err, results, fields) {
+                        if (err) throw err;
+                        if(results.length === 0) {
+                           res.status(204).send({ message: 'error!' })
+                           } else {
+                           res.status(200).send(results)
                            }
                       })
          }
