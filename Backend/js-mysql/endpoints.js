@@ -1,6 +1,8 @@
 import express from "express"
 import 'dotenv/config'
 import mysql from "mysql";
+import cron from "node-cron";
+import fetch from 'node-fetch';
 import cors from 'cors';
 
 const app = express();
@@ -8,16 +10,14 @@ const PORT = process.env.PORT
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
-const DB = process.env.MYSQL_DB;
-
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: DB,
-  PORT: 3306
+  database: "liga_db",
+  port: 3306
 });
 
 // Make the connection
@@ -35,7 +35,6 @@ connection.connect(function (err) {
 app.use(cors());
 app.listen(
   PORT,
-  () => console.log("its alive on http://localhost:"+PORT)
 )
 
 //1. BPMN: Übersicht bekommen
@@ -119,7 +118,62 @@ app.get('/football/:liga_id', (req, res) => {
 })
 
 //5. BPMN: Liga vergangene Matches im Zeitraum sehen
-app.get('/football/')
+app.post('/football/:liga_id/:start/:end', (req, res) => {
+
+})
+
+//8. BPMN: aktualisieren der Datensätze
+//Aktualisieren der Wetten
+cron.schedule("* * * * * *", function() {
+
+})
+
+//Aktualisieren der Spiele (Ergebnisse / Tore)
+cron.schedule("59 23 * * *", function() {
+  fetch('https://www.openligadb.de/api/getmatchdata/bl1/2021')
+  .then(res => res.json())
+  .then(res => {
+    for(let i=0; i<res.length; i++) {
+      let matchId = res[i].MatchID;
+      let zustand = res[i].MatchIsFinished ? "Beendet" : "Steht noch an";
+      if(zustand === "Steht noch an") {
+        let ergebnis = null;
+        let heimpoints = null;
+        let gastpoints = null;
+        updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints);
+      } else {
+        let ergebnis = res[i].MatchResults[0].PointsTeam1 + ":" + res[i].MatchResults[0].PointsTeam2;
+        let heimpoints = res[i].MatchResults[0].PointsTeam1;
+        let gastpoints = res[i].MatchResults[0].PointsTeam2;
+        updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints);
+      }
+    }
+  })
+});
+
+function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
+  console.log("fck");
+  const updateZustand = "UPDATE spiel s SET s.zustand = '" + zustand + "' WHERE s.id = " + matchId;
+          connection.query(updateZustand, function (err, results, fields) {
+          if (err) throw err;
+            console.log("here are your results", results);
+          })
+  const updateErgebnis = "UPDATE spiel s SET s.ergebnis = '" + ergebnis + "' WHERE s.id = " + matchId;
+          connection.query(updateErgebnis, function (err, results, fields) {
+          if (err) throw err;
+            console.log("here are your results", results);
+          })
+  const updateHeimpoints = "UPDATE spiel s SET s.heim_points = " + heimpoints + " WHERE s.id = " + matchId;
+          connection.query(updateHeimpoints, function (err, results, fields) {
+            if (err) throw err;
+              console.log("here are your results", results);
+            })
+  const updateGastpoints = "UPDATE spiel s SET s.gast_points = " + gastpoints + " WHERE s.id = " + matchId;
+          connection.query(updateGastpoints, function (err, results, fields) {
+            if (err) throw err;
+              console.log("here are your results", results);
+            })
+}
 
 //9: BPMN registrieren
 app.get('/register/:email', (req, res) => {
@@ -140,6 +194,7 @@ app.get('/register/:email', (req, res) => {
 
 });
 
+>>>>>>>>> Temporary merge branch 2
 
 //12: BPMN Verify Login
 //noch nicht richtige funktion
