@@ -14,7 +14,7 @@ export class GetDataService {
   constructor(private http:HttpClient) { }
 
   registerLogin(data:LoginRegisterData,type:string):Observable<Login|null> {
-    if (type=='register') {
+    if (type==='register') {
       return this.http.get(this.url+'register/email='+data.eMail+'&passwordHash='+data.password).pipe(map(res => {
         if ('insertId' in res) {
           const extData:ExtLoginRegister = res as ExtLoginRegister

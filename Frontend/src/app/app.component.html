@@ -5,8 +5,8 @@
   </div>
 
   <div class="left">
-    <button *ngIf="coins!=undefined" mat-button (click)="changeCoins()">
-      <span>{{coins==undefined?'':coins}} </span>
+    <button *ngIf="accountData" mat-button (click)="changeCoins()">
+      <span>{{accountData.coins}} </span>
       <mat-icon aria-hidden="false">paid</mat-icon>
     </button>
     <button id="people" [ngClass]="accountInfo.showScreen?'overhead':''" (click)="navigateToPerson()" mat-button>

@@ -40,7 +40,6 @@ export class LoginRegisterComponent implements OnInit {
         password: this.dataRegister.password,
         eMail:this.dataRegister.eMail
       }
-      console.log(data)
       this.store.dispatch(register({sentData:data}));
     }
   }

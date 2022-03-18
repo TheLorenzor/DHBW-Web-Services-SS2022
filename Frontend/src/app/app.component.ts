@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {select, Store} from "@ngrx/store";
-import {getNewLoginData} from "./selector/login.selector";
-import {map, Observable} from "rxjs";
 import {Login} from "../assets/Interface/state";
 
 @Component({
@@ -31,29 +29,26 @@ export class AppComponent implements OnInit{
     this.accountSubscription.subscribe(res=>{
       // @ts-ignore
       this.accountData = res['accounts']['loginUser']
-      console.log(this.accountData)
     })
   }
 
 
   navigateToPerson() {
-    if(localStorage.getItem('backendAPI')) {
-      console.log(localStorage.getItem('backendAPI'))
+    if(this.accountData) {
       this.accountInfo.showScreen = !this.accountInfo.showScreen
     } else {
       this.route.navigateByUrl('login')
     }
   }
   changeCoins() {
-    if (localStorage.getItem('backendAPI')) {
+    if (this.accountData) {
       this.route.navigateByUrl('coin-market')
     }
 
   }
   logout() {
-    localStorage.removeItem('backendAPI');
+    //TODO: logout finishing
     this.accountInfo.showScreen=false;
-    this.coins=undefined;
     this.route.navigateByUrl('');
   }
   navigateSettings(){

@@ -21,6 +21,7 @@
     background: radial-gradient(circle at center,$theme-success 0, #90ce13 99%);
     box-shadow: 2px 2px 4px rgba(#303338,0.6);
     width: 75%;
+    position: relative;
   }
   .front {
     display: flex;
