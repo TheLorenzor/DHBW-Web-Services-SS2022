@@ -52,6 +52,7 @@ button:hover {
     flex-direction: row;
     justify-content: left;
     width: 100%;
+    cursor: pointer;
     mat-icon {
       margin-right: 20px
     }
@@ -61,6 +62,9 @@ button:hover {
       flex-direction: column ;
       justify-content: center;
     }
+  .line:hover {
+    cursor: pointer;
+  }
   }
   hr {
     margin-bottom: 20px;

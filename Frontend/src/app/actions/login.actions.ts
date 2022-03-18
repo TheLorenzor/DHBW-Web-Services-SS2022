@@ -26,3 +26,6 @@ export const changeLoginDataSuccess=createAction(
   "[settings] changeLoginDataSuccess",
   props<{loginData:Login}>()
 );
+export const logout=createAction(
+  "[app component] logout"
+)

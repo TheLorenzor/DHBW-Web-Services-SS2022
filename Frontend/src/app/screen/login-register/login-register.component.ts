@@ -41,6 +41,7 @@ export class LoginRegisterComponent implements OnInit {
         eMail:this.dataRegister.eMail
       }
       this.store.dispatch(register({sentData:data}));
+      this.route.navigateByUrl('')
     }
   }
 

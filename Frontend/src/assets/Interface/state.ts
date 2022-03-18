@@ -1,5 +1,6 @@
 export interface StoreState {
   loginUser:Login|null;
+  error:number|null
 }
 
 export interface Login {

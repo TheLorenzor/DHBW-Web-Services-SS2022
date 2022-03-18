@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {select, Store} from "@ngrx/store";
 import {Login} from "../assets/Interface/state";
+import {logout} from "./actions/login.actions";
 
 @Component({
   selector: 'app-root',
@@ -46,8 +47,9 @@ export class AppComponent implements OnInit{
     }
 
   }
-  logout() {
+  logoutButton() {
     //TODO: logout finishing
+    this.store.dispatch(logout())
     this.accountInfo.showScreen=false;
     this.route.navigateByUrl('');
   }
