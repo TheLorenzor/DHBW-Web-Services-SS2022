@@ -37,7 +37,7 @@ app.listen(
 )
 
 //9: BPMN registrieren
-app.get('/register/:email', (req, res) => {
+app.get('/register/:email/:passwordHash', (req, res) => {
      const sql = " SELECT * FROM `users` WHERE email = '"+req.params.email+"';";
               connection.query(sql, function (err, results, fields) {
               if (err) throw err;
