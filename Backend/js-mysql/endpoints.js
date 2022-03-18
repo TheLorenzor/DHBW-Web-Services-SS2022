@@ -112,34 +112,48 @@ app.get('/odds/:match_id', (req, res) => {
 });
 
 //17:BPMS echtgeld zu Coins
-app.get('/sendMoney/:value/:userID', (req, res) => {
-    const sql = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+req.params.value+" WHERE `users`.`id` = "+req.params.userID+";";
+app.get('/sendMoney/:userID/:value', (req, res) => {
+    const sql = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+req.params.value+" WHERE `users`.`id` = '"+req.params.userID+"';";
                   connection.query(sql, function (err, results, fields) {
                   if (err) throw err;
                   if(results.length === 0) {
-                     res.status(204).send({ message: 'error!' })
+                     //res.status(204).send({ message: 'error!' })
                      } else {
-                     res.status(200).send({
-                       message: 'you have money'
-                       })
+                     //res.status(200).send(results)
                      }
                 })
+    const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+    connection.query(sql2, function (err, results, fields) {
+        if (err) throw err;
+        if(results.length === 0) {
+        res.status(204).send({ message: 'error!' })
+        } else {
+        res.status(200).send(results)
+        }
+    })
 });
 
 //18:BPMS coins zu echtgeld
-app.get('/receiveMoney/:value/:userID', (req, res) => {
+app.get('/receiveMoney/:userID/:value', (req, res) => {
 
     const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
-                  connection.query(sql, function (err, results, fields) {
-                  if (err) throw err;
-                  if(results.length === 0) {
-                     res.status(204).send({ message: 'error!' })
-                     } else {
-                     res.status(200).send({
-                       message: 'you have money'
-                       })
-                     }
-                })
+    connection.query(sql, function (err, results, fields) {
+        if (err) throw err;
+        if(results.length === 0) {
+            //res.status(204).send({ message: 'error!' })
+        } else {
+            //res.status(200).send(results)
+        }
+    })
+    const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+    connection.query(sql2, function (err, results, fields) {
+        if (err) throw err;
+        if(results.length === 0) {
+            res.status(204).send({ message: 'error!' })
+        } else {
+            res.status(200).send(results)
+        }
+    })
 });
 
 //19: BPMS Wetten eintragen
