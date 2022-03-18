@@ -11,7 +11,7 @@
             <div *ngIf="!isregister">
               <mat-form-field appearance="fill">
                   <mat-label>E-Mail</mat-label>
-                  <input #eMail (keyup)="dataLogin.eMail=eMail.value" matInput type="text" >
+                  <input #eMail (keyup)="dataLogin.eMail=eMail.value" matInput type="email" >
               </mat-form-field>
               <mat-form-field appearance="fill">
                   <mat-label>Passwort</mat-label>
@@ -27,23 +27,23 @@
                   <button (click)="login()" mat-button class="enterButton">Login</button>
                 </div>
             </div>
-            <div *ngIf="isregister">
+            <div *ngIf="isregister" >
               <mat-form-field appearance="fill">
                 <mat-label>E-Mail</mat-label>
-                <input matInput type="text">
+                <input #emailR matInput type="email"  (keyup)="dataRegister.eMail=emailR.value">
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Passwort</mat-label>
-                <input matInput [type]="hide ? 'password' : 'text'">
+                <input #passwordOne matInput [type]="hide ? 'password' : 'text'" (keyup)="dataRegister.password=passwordOne.value">
                 <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                   <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
               </mat-form-field>
               <mat-form-field appearance="fill">
                 <mat-label>Passwort neu eingeben</mat-label>
-                <input matInput type="password">
+                <input #passwordTwo matInput type="password" (keyup)="dataRegister.retypedPassword=passwordTwo.value">
               </mat-form-field>
-              <button mat-button class="enterButton">Registrieren</button>
+              <button mat-button class="enterButton" (click)="register()">Registrieren</button>
             </div>
         </mat-card-content>
     </mat-card>

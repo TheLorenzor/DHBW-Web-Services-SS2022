@@ -10,14 +10,17 @@ const PORT = process.env.PORT
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
+const SQL_PORT = process.env.MYSQL_PORT;
+const DB = process.env.MYSQL_DB;
+
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: "liga_db",
-  port: 3306
+  database: DB,
+  port: SQL_PORT
 });
 
 // Make the connection
@@ -193,8 +196,6 @@ app.get('/register/:email', (req, res) => {
               })
 
 });
-
->>>>>>>>> Temporary merge branch 2
 
 //12: BPMN Verify Login
 //noch nicht richtige funktion

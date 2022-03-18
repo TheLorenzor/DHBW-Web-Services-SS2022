@@ -3,14 +3,19 @@ import { LoginRegisterData} from "../../assets/Interface/login";
 import {Login} from "../../assets/Interface/state";
 
 
-export const loadLoginData=createAction(
-  "[app Compomnent] loadLoginData",
+export const register=createAction(
+  "[app Compomnent] register",
   props<{sentData:LoginRegisterData}>()
 );
-export const loadLoginDataSuccess = createAction(
-  "[app component] loadLoginDataSuccess",
+export const registerSuccess = createAction(
+  "[app component] registerSuccess",
   props<{loginData:Login}>()
 );
+export const registerFailure = createAction(
+  "[app component] registerFailure",
+);
+
+
 
 export const changeLoginData=createAction(
   "[settings] changeLoginData",

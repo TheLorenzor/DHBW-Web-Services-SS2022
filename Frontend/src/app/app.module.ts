@@ -22,7 +22,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { ExchangePurseComponent } from './components/exchange-purse/exchange-purse.component';
 import {HttpClientModule} from "@angular/common/http";
 import { SellMarketComponent } from './components/sell-market/sell-market.component';
-import { LoginHomeComponent } from './screen/login-home/login-home.component';
 import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -40,7 +39,6 @@ import {accounts} from "./reducer/login.reducer";
     CoinMarketComponent,
     ExchangePurseComponent,
     SellMarketComponent,
-    LoginHomeComponent,
     LoginSettingsComponent,
 
   ],
