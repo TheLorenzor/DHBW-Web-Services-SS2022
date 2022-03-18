@@ -52,7 +52,6 @@ app.get('/register/:email/:passwordHash', (req, res) => {
                  res.status(204).send({ message: 'bereits ein User mit dieser Email' })
                  }
               })
-
 });
 
 
@@ -65,7 +64,7 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
           if(results.length === 0) {
              res.status(204).send({ message: 'kein User mit dieser Email' })
           } else {
-                const sql = " SELECT email FROM `users` WHERE email = '"+req.params.email+"' AND passwort =" +req.params.passwordHash+";  ";
+                const sql = " SELECT id,Kontostand  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
                 connection.query(sql, function (err, results, fields) {
                 if (err) throw err;
                 if(results.length === 0) {
