@@ -1,0 +1,48 @@
+<div *ngIf="matchData">
+  <div  class="match" (click)="moveTo('test')">
+    <div class="match-box">
+      <div class="match-detail">
+        <span class="club-name">{{matchData.club1.name}}</span>
+        <ul *ngIf="matchData.club1.goals">
+          <li>
+            <span>Müller </span><span>62.</span>
+          </li>
+          <li>
+            <span>Neuer </span><span>62.</span>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="matchData.club1.logoURL">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg/1200px-FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg.png"
+          alt="Bayern München">
+      </div>
+      <div class="counterscore">
+        <span>{{matchData.club1.points == null ? '--' : matchData.club1.points}}</span>
+      </div>
+    </div>
+    <div class="vs-space"></div>
+    <div class="match-box">
+      <div class="counterscore">
+        <span>{{matchData.club2.points == null ? '--' : matchData.club2.points}}</span>
+      </div>
+      <div *ngIf="matchData.club2.logoURL">
+        <img src="https://upload.wikimedia.org/wikipedia/de/thumb/a/aa/Fc_barcelona.svg/1200px-Fc_barcelona.svg.png">
+      </div>
+      <div class="match-detail right">
+        <span class="club-name">{{matchData.club2.name}}</span>
+        <ul *ngIf="matchData.club2.goals" class="right">
+          <li>
+            <span>Müller </span><span>62.</span>
+          </li>
+          <li>
+            <span>Neuer </span><span>62.</span>
+          </li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+  <mat-progress-bar *ngIf="progress" value="{{progress}}"></mat-progress-bar>
+</div>

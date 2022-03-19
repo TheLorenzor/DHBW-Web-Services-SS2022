@@ -1,14 +1,15 @@
 export interface MatchOverview {
   id:number;
+  start:Date;
   club1: {
-    points:number;
+    points:number|null;
     name:string;
     id:number;
     logoURL:string|null;
     goals:Goaler[]|null;
   };
   club2: {
-    points:number;
+    points:number|null;
     name:string;
     id:number;
     logoURL:string|null;
