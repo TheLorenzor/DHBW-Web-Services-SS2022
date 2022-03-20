@@ -17,7 +17,7 @@ export class GetDataService {
   registerLogin(data: LoginRegisterData, type: string): Observable<Login | null> {
     if (type === 'register') {
       return this.http
-        .get(this.url + 'register/email=' + data.eMail + '&passwordHash=' + data.password)
+        .get(this.url + 'register/email=' + data.eMail + '/passwordHash=' + data.password)
         .pipe(
           map(res => {
             console.log(res )

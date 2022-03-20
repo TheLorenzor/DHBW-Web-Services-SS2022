@@ -83,7 +83,7 @@ app.get('/football/match/:id', (req, res) => {
           res.status(204).send({ message: 'Something went wrong. Do you have the right ID? Maybe try again.' })
         } else {
           res.status(200).send({
-            results: results 
+            results: results
           })
         }
       })
@@ -149,7 +149,7 @@ app.post('/football/:liga_id/:start/:end', (req, res) => {
   catch{
   res.status(204).send({ message: 'error!' })
   }
-  
+
 })
 
 //6. BPMN: Verschiedene Torstatistiken sehen
@@ -177,7 +177,7 @@ app.get('/goalstatistics', (req, res) => {
                 res.status(204).send({ message: 'There was an error retrieving the data.' })
               } else {
                 res.status(200).send({
-                  Elfer: results, 
+                  Elfer: results,
                   Nachspielzeit:  results2,
                   Eigentore:  results3,
                   ToreHz1: results4,
@@ -273,7 +273,7 @@ cron.schedule("59 23 * * *", function() {
             let isOvertime = res[i].Goals[k].IsOvertime;
             let isPenalty = res[i].Goals[k].IsPenalty;
             let isOwnGoal = res[i].Goals[k].IsOwnGoal;
-            let heimpoints =  res[i].Goals[k].ScoreTeam1; 
+            let heimpoints =  res[i].Goals[k].ScoreTeam1;
             let gastpoints =  res[i].Goals[k].ScoreTeam2;
             updateGoals(matchId, goalId, goalGetterId, minuteanzahl, isOvertime, isPenalty, isOwnGoal, heimpoints, gastpoints);
           }
@@ -575,7 +575,7 @@ app.get('/getBets/:userID', (req, res) => {
 });
 
 cron.schedule("58 23 * * *", function() {
-  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27)
+  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27')
         .then(res => res.json())
         .then(res => {
             for(let i=0; i<1; i++) {
@@ -610,12 +610,11 @@ function payoutBets(match_id)
             for(let i = 0; i<results.length;i++)
             {
                 //win home team
-                if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal)
-                {
+                if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal) {
                     pay(results.userID,(results.Payout * results.value));
                 }
                 //draw
-                if (results.heim_points == results.gast_points && results.homegoal = results.guestGoal)
+                if (results.heim_points === results.gast_points && results.homegoal === results.guestGoal)
                 {
                     pay(results.userID,(results.Payout * results.value));
                 }
@@ -627,10 +626,10 @@ function payoutBets(match_id)
                 const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id+";";
                 connection.query(sql, function (err, results, fields) {
 
-                }
+                })
             }
         }
-    }
+    })
     //payout winning bets
     //update each bet to closed
 }
