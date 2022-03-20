@@ -135,4 +135,17 @@ export class GetDataService {
       })
     )
   }
+  getAllBets(userId:string):Observable<Bet[]|null> {
+    return this.http.get(this.url+'getBets/'+userId).pipe(
+      map(res=>{
+        if (res) {
+          return res as Bet[];
+        }
+        return null;
+      }),
+      catchError(()=>{
+        return new Observable().pipe(map(()=>null));
+      })
+    )
+  }
 }

@@ -1,4 +1,5 @@
 @import "src/assets/theme/dark-theme.scss";
+
 .base {
   color: $font-color;
   margin-top: 8rem;
@@ -8,60 +9,51 @@
   flex-direction: column;
   justify-content: left;
 }
+
 hr {
   width: 100%;
 
+}
+.block {
+  margin-bottom: 3rem;
 }
 .line {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1rem;
+
   .text {
     display: flex;
     flex-direction: column;
   }
+
   .email {
     font-size: 10px;
     color: $font-color-b25;
     margin-left: 10px;
   }
+
   button {
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 }
-mat-card {
-  background: $background-w50;
-  color: $font-color;
-  position: absolute;
-  top: 15rem;
-  z-index: 5;
-  left: 25%;
-  width: 50%;
-  mat-card-content {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
 
+table {
+  background: $background-w50;
+  border-radius: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  td,th {
+    color: $font-color;
   }
-  .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    button {
-      margin: 20px;
-    }
+  th {
+    padding-left: 10px;
+    padding-right: 10px;
   }
-  .passwort {
-    display: flex;
-    flex-direction: column;
-    mat-form-field {
-      width: 80%;
-    }
+  td {
+    text-align: center;
   }
-}
-.background {
-  opacity: 10%;
 }

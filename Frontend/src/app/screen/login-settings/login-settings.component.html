@@ -1,42 +1,36 @@
-<div class="base" [class]="change.show?'background':''">
+<div class="base">
+  <h2>Alle vergangenen Wetten</h2>
+  <hr>
+  <div class="block">
+    <table mat-table [dataSource]="bets">
+      <ng-container matColumnDef="spiel_id">
+        <th mat-header-cell *matHeaderCellDef>Spiel ID</th>
+        <td mat-cell *matCellDef="let bet">{{bet.spiel_id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="home">
+        <th mat-header-cell *matHeaderCellDef>Schätzung Heim:</th>
+        <td mat-cell *matCellDef="let bet">{{bet.homegoal}}</td>
+      </ng-container>
+      <ng-container matColumnDef="guest">
+        <th mat-header-cell *matHeaderCellDef>Schätzung Gast:</th>
+        <td mat-cell *matCellDef="let bet">{{bet.guestGoal}}</td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Gewettet</th>
+        <td mat-cell *matCellDef="let bet">{{bet.value}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
   <h2>Account Einstellungen</h2>
   <hr>
   <div class="block">
     <div class="line">
       <div class="text">
         <span>E-Mail Adresse</span>
-        <span class="email">{{accountData?accountData.email:'test@mail.com'}}</span>
+        <span class="email">{{accountData ? accountData.email : 'test@mail.com'}}</span>
       </div>
-    </div>
-    <div class="line">
-      <div class="text">
-        <span>Passwort</span>
-        <span class="email">Password muss mindestens 8 Zeichen lang sein</span>
-      </div>
-      <button mat-button [disabled]="change.show" (click)="change.show=true">Ändern
-      </button>
     </div>
   </div>
 </div>
-
-<mat-card *ngIf="change.show">
-  <mat-card-title>Passwort ändern</mat-card-title>
-  <mat-card-content>
-      <mat-form-field>
-        <mat-label>Altes Passwort</mat-label>
-        <input #oldPassword matInput type="password">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Neues Passwort</mat-label>
-        <input #newPassord matInput type="password">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Neues Passwort erneut eingebn</mat-label>
-        <input #newPasswordRetype matInput type="password">
-      </mat-form-field>
-    <div class="buttons">
-      <button mat-button (click)="change.show=false">Abbrechen</button>
-      <button mat-button (click)="changePassword(oldPassword.value,newPassord.value,newPasswordRetype.value)">Änderungen speichern</button>
-    </div>
-  </mat-card-content>
-</mat-card>

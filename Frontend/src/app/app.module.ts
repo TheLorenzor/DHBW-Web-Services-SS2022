@@ -29,6 +29,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {accounts} from "./reducer/login.reducer";
 import {LoginEffects} from "./effect/login.effects";
 import { ClubComponent } from './screen/club/club.component';
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ClubComponent } from './screen/club/club.component';
     EffectsModule.forRoot([LoginEffects]),
     MatProgressBarModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
