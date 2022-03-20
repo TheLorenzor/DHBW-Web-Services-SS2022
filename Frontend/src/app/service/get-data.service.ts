@@ -100,10 +100,6 @@ export class GetDataService {
     )
   }
 
-  updateBet() {
-
-  }
-
   getCoins(amount: number, apikey: string): Observable<any> {
     return this.http.get(this.url + 'sendMoney/' + apikey + '/' + amount).pipe(
       map(res => {

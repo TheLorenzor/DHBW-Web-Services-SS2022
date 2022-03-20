@@ -16,6 +16,7 @@ import {GetDataService} from "../../service/get-data.service";
 export class MatchDetailScreenComponent implements OnInit {
   match: number = -1;
   betEnable = false;
+  disabled = false;
   alreadyBetted: number | null = null;
   betting = {
     home: '',
@@ -41,6 +42,13 @@ export class MatchDetailScreenComponent implements OnInit {
   ngOnInit(): void {
     this.service.getMatchDetails(this.match).subscribe(val => {
       this.data = val;
+      if (val) {
+        const gameDate = new Date(val.start);
+        const current = new Date();
+        if (current.getTime()>gameDate.getTime()) {
+          this.disabled=true;
+        }
+      }
     });
 
     this.accountSubscription.subscribe(res => {

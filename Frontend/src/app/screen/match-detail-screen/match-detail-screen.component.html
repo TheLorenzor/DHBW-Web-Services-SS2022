@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div class="better" *ngIf="account">
+  <div class="better" *ngIf="account&&!disabled">
     <mat-card>
       <mat-card-title>Wetten</mat-card-title>
       <mat-card-content *ngIf="!betEnable">
