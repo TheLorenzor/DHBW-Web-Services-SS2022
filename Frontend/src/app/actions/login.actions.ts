@@ -32,3 +32,7 @@ export const changeLoginDataSuccess=createAction(
 export const logout=createAction(
   "[app component] logout"
 )
+export const changeMoneyValue = createAction(
+  "[misc] changeValue",
+  props<{newValue:number}>()
+)

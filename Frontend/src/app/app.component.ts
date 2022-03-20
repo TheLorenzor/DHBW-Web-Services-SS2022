@@ -48,7 +48,6 @@ export class AppComponent implements OnInit{
 
   }
   logoutButton() {
-    //TODO: logout finishing
     this.store.dispatch(logout())
     this.accountInfo.showScreen=false;
     this.route.navigateByUrl('');

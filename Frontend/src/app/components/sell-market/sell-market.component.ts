@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormControl, Validators} from "@angular/forms";
+import { FormControl, Validators} from "@angular/forms";
+import {GetDataService} from "../../service/get-data.service";
+import {Login} from "../../../assets/Interface/state";
+import {select, Store} from "@ngrx/store";
+import {changeMoneyValue} from "../../actions/login.actions";
 
 @Component({
   selector: 'app-sell-market',
@@ -13,8 +17,12 @@ export class SellMarketComponent implements OnInit {
      Validators.required,
      Validators.pattern("^[0-9]*$")
    ])
+  accountData:Login|null = null;
+  accountSubscription =this.store.pipe(select(state => {
+    return state
+  }));
 
-  constructor() {
+  constructor(private service:GetDataService,private store:Store) {
   }
 
   ngOnInit(): void {
@@ -25,6 +33,20 @@ export class SellMarketComponent implements OnInit {
          this.inEuros = null;
        }
      })
+    this.accountSubscription.subscribe(res=>{
+      // @ts-ignore
+      this.accountData = res['accounts']['loginUser']
+    })
+  }
+  payOut() {
+    if (this.inEuros&&this.inEuros>250) {
+      if (this.accountData&& this.accountData.coins>=this.inEuros*2) {
+        this.euroForm.reset();
+        this.service.getRealMoney(this.inEuros,this.accountData.backendAPI);
+      }
+
+
+    }
   }
 
 

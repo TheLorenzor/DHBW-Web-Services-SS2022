@@ -1,6 +1,6 @@
-import { StoreState} from "../../assets/Interface/state";
+import {Login, StoreState} from "../../assets/Interface/state";
 import {createReducer, on} from "@ngrx/store";
-import {logout, registerFailure, registerSuccess} from "../actions/login.actions";
+import {changeMoneyValue, logout, registerFailure, registerSuccess} from "../actions/login.actions";
 
 
 export const initialState:StoreState = {
@@ -15,5 +15,10 @@ export const accounts = createReducer(
     {loginUser: action.loginData,error: state.error})),
   on(registerFailure,(state)=>(
     {loginUser: state.loginUser,error: 1})),
-  on(logout,()=>({loginUser: null,error: null}))
+  on(logout,()=>({loginUser: null,error: null})),
+  on(changeMoneyValue, (state,action) => {
+    let login:Login = state.loginUser as Login;
+    login.coins = action.newValue;
+    return {loginUser: login ,error: null};
+  })
 );

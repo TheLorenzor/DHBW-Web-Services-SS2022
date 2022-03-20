@@ -26,3 +26,6 @@ export interface ExtLoginUser {
   id: number,
   bankaccount:number
 }
+export interface ExtGetMoney {
+  bankaccount:number
+}

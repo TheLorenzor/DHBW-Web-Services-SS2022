@@ -1,6 +1,7 @@
 @import "src/assets/theme/dark-theme.scss";
 .base {
   color: $font-color;
+  margin-top: 4rem;
 }
 mat-toolbar {
   background: $background-w75;

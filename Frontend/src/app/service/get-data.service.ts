@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable} from 'rxjs';
-import {ExtLogin, ExtRegister, LoginRegisterData} from "../../assets/Interface/login";
+import {ExtGetMoney, ExtLogin, ExtRegister, LoginRegisterData} from "../../assets/Interface/login";
 import {HttpClient} from "@angular/common/http";
 import {Login} from "../../assets/Interface/state";
-import {renderFlagCheckIfStmt} from "@angular/compiler/src/render3/view/template";
+import {Store} from "@ngrx/store";
+import {changeMoneyValue} from "../actions/login.actions";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class GetDataService {
 
   url = 'http://localhost:8080/';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private store:Store) {
   }
 
   registerLogin(data: LoginRegisterData, type: string): Observable<Login | null> {
@@ -61,10 +62,30 @@ export class GetDataService {
     return new Observable<boolean>();
   }
 
-  getCoins(amount:number,apikey:string) {
-
+  getCoins(amount:number,apikey:string):Observable<any> {
+    return this.http.get(this.url+'sendMoney/'+apikey+'/'+amount).pipe(
+      map(res=>{
+        const money:ExtGetMoney[] = res as ExtGetMoney[];
+        this.store.dispatch(changeMoneyValue({newValue:money[0].bankaccount}));
+        return true;
+      },catchError((err) => {
+        return new Observable<boolean>().pipe(map(res=> {
+          return false;
+        }));
+      }))
+    )
   }
   getRealMoney(amount:number,apiKey:string) {
-
+    return this.http.get(this.url+'sendMoney/'+apiKey+'/'+amount).pipe(
+      map(res=>{
+        const money:ExtGetMoney[] = res as ExtGetMoney[];
+        this.store.dispatch(changeMoneyValue({newValue:money[0].bankaccount}));
+        return true;
+      },catchError((err) => {
+        return new Observable<boolean>().pipe(map(res=> {
+          return false;
+        }));
+      }))
+    )
   }
 }

@@ -470,7 +470,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
 //18:BPMS coins zu echtgeld
 app.get('/receiveMoney/:userID/:value', (req, res) => {
     try{
-      const sql = "UPDATE `users` SET `bankaccount` = `bankaccount`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `bankaccount` >= '"+req.params.value+"'; ";
+      const sql = "UPDATE `users` SET `bankaccount` = `bankaccount`-'"+req.params.value+"' WHERE users.id ="+req.params.userID+" AND `bankaccount` >= '"+req.params.value+"'; ";
         connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
