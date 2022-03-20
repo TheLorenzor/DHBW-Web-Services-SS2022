@@ -311,8 +311,8 @@ function payoutBets(match_id)
 
 function pay(userID,value)
 {
-                 const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
-                 connection.query(payout, function (err, results, fields) {
-                    if (err) throw err;
-                 })
+    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
+    connection.query(payout, function (err, results, fields) {
+        if (err) throw err;
+    })
 }
