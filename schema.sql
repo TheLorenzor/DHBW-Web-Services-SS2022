@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server Version:               10.4.18-MariaDB - mariadb.org binary distribution
+-- Server Version:               10.4.22-MariaDB - mariadb.org binary distribution
 -- Server Betriebssystem:        Win64
 -- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
@@ -14,12 +14,10 @@
 
 
 -- Exportiere Datenbank Struktur für liga_db
-DROP DATABASE IF EXISTS `liga_db`;
 CREATE DATABASE IF NOT EXISTS `liga_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `liga_db`;
 
 -- Exportiere Struktur von Tabelle liga_db.land
-DROP TABLE IF EXISTS `land`;
 CREATE TABLE IF NOT EXISTS `land` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -34,7 +32,6 @@ INSERT INTO `land` (`id`, `name`) VALUES
 /*!40000 ALTER TABLE `land` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.liga
-DROP TABLE IF EXISTS `liga`;
 CREATE TABLE IF NOT EXISTS `liga` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `land_id` int(11) DEFAULT NULL,
@@ -52,7 +49,6 @@ INSERT INTO `liga` (`id`, `land_id`, `name`) VALUES
 /*!40000 ALTER TABLE `liga` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.matchodds
-DROP TABLE IF EXISTS `matchodds`;
 CREATE TABLE IF NOT EXISTS `matchodds` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `hometeam_altName` text NOT NULL,
@@ -72,7 +68,6 @@ INSERT INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome
 /*!40000 ALTER TABLE `matchodds` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.spiel
-DROP TABLE IF EXISTS `spiel`;
 CREATE TABLE IF NOT EXISTS `spiel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `liga_id` int(11) DEFAULT NULL,
@@ -94,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `spiel` (
   CONSTRAINT `FK_ligaid` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=61151 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.spiel: ~2.038 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.spiel: ~2.142 rows (ungefähr)
 DELETE FROM `spiel`;
 /*!40000 ALTER TABLE `spiel` DISABLE KEYS */;
 INSERT INTO `spiel` (`id`, `liga_id`, `saison`, `heimverein_id`, `gastverein_id`, `ergebnis`, `zustand`, `spieltag`, `startzeitpunkt`, `heim_points`, `gast_points`) VALUES
@@ -2243,7 +2238,6 @@ INSERT INTO `spiel` (`id`, `liga_id`, `saison`, `heimverein_id`, `gastverein_id`
 /*!40000 ALTER TABLE `spiel` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.tore
-DROP TABLE IF EXISTS `tore`;
 CREATE TABLE IF NOT EXISTS `tore` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spiel_id` int(11) NOT NULL DEFAULT 0,
@@ -2261,7 +2255,7 @@ CREATE TABLE IF NOT EXISTS `tore` (
   CONSTRAINT `FKtorschuetzeid` FOREIGN KEY (`torschuetze_id`) REFERENCES `torschuetze` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=93787 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.tore: ~8 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.tore: ~6.258 rows (ungefähr)
 DELETE FROM `tore`;
 /*!40000 ALTER TABLE `tore` DISABLE KEYS */;
 INSERT INTO `tore` (`id`, `spiel_id`, `torschuetze_id`, `minuteanzahl`, `isPenalty`, `isOvertime`, `isOwnGoal`, `heimpoints`, `gastpoints`) VALUES
@@ -8465,7 +8459,6 @@ INSERT INTO `tore` (`id`, `spiel_id`, `torschuetze_id`, `minuteanzahl`, `isPenal
 /*!40000 ALTER TABLE `tore` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.torschuetze
-DROP TABLE IF EXISTS `torschuetze`;
 CREATE TABLE IF NOT EXISTS `torschuetze` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -9789,7 +9782,6 @@ INSERT INTO `torschuetze` (`id`, `name`) VALUES
 /*!40000 ALTER TABLE `torschuetze` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.users
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -9803,7 +9795,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Exportiere Daten aus Tabelle liga_db.users: ~1 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.users: ~0 rows (ungefähr)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES
@@ -9811,7 +9803,6 @@ INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.verein
-DROP TABLE IF EXISTS `verein`;
 CREATE TABLE IF NOT EXISTS `verein` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `liga_id` int(11) NOT NULL DEFAULT 0,
@@ -9858,7 +9849,6 @@ INSERT INTO `verein` (`id`, `liga_id`, `name`, `altName`, `logourl`, `isErsteBun
 /*!40000 ALTER TABLE `verein` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.wetten
-DROP TABLE IF EXISTS `wetten`;
 CREATE TABLE IF NOT EXISTS `wetten` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spiel_id` int(11) DEFAULT NULL,
@@ -9866,6 +9856,7 @@ CREATE TABLE IF NOT EXISTS `wetten` (
   `homegoal` int(11) DEFAULT NULL,
   `guestGoal` int(11) DEFAULT NULL,
   `value` varchar(50) DEFAULT NULL,
+  `open` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_spiel_id` (`spiel_id`),
   KEY `FK_user_id` (`user_id`),
@@ -9876,9 +9867,9 @@ CREATE TABLE IF NOT EXISTS `wetten` (
 -- Exportiere Daten aus Tabelle liga_db.wetten: ~2 rows (ungefähr)
 DELETE FROM `wetten`;
 /*!40000 ALTER TABLE `wetten` DISABLE KEYS */;
-INSERT INTO `wetten` (`id`, `spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES
-	(1, 61070, 1, 3, 0, '100'),
-	(2, 61070, 1, 2, 2, '50');
+INSERT INTO `wetten` (`id`, `spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`, `open`) VALUES
+	(1, 61070, 1, 3, 0, '100', 0),
+	(2, 61070, 1, 2, 2, '50', 0);
 /*!40000 ALTER TABLE `wetten` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

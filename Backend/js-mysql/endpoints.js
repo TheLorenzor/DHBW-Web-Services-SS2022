@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: "liga_db",
-  PORT: 3308
+  PORT: 3306
 });
 
 // Make the connection
@@ -613,8 +613,6 @@ function payoutBets(match_id){
             }
         }
     })
-    //payout winning bets
-    //update each bet to closed
 }
 
 function pay(userID,value)
