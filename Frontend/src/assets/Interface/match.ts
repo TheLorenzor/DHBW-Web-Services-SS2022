@@ -24,17 +24,18 @@ export interface Goaler {
   points:number|null;
 }
 
-export interface externMatch {
+export interface ExternMatch {
   heimverein_id:number,
   gastverein_id:number,
   heimverein:string,
   gastverein:string,
   id:number;
-  heim_points:number,
-  gast_points:number,
+  heim_points:number|null,
+  gast_points:number|null,
   gastlogo:string,
   heimlogo:string,
   saison:string,
+  ergebnis:string|null,
   spieltag:number,
   startzeitpunkt:Date
 }

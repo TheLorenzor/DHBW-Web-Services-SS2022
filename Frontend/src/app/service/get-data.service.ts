@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {catchError, map, Observable} from 'rxjs';
-import {ExtLoginRegister, LoginRegisterData} from "../../assets/Interface/login";
+import {ExtLogin, ExtRegister, LoginRegisterData} from "../../assets/Interface/login";
 import {HttpClient} from "@angular/common/http";
 import {Login} from "../../assets/Interface/state";
+import {renderFlagCheckIfStmt} from "@angular/compiler/src/render3/view/template";
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,8 @@ export class GetDataService {
         .get(this.url + 'register/email=' + data.eMail + '/passwordHash=' + data.password)
         .pipe(
           map(res => {
-            console.log(res )
             if ('insertId' in res) {
-              const extData: ExtLoginRegister = res as ExtLoginRegister
+              const extData: ExtRegister = res as ExtRegister
               const t: Login = {
                 passwordLength: data.password?.length ? data.password?.length : -1,
                 backendAPI: extData.insertId.toString(),
@@ -41,7 +41,17 @@ export class GetDataService {
           }));
     } else {
       return this.http.get(this.url + 'Vlogin/email=' + data.eMail + '/passwordHash=' + data.password).pipe(map(res => {
-        return {} as Login;
+        if ('results' in res) {
+          const dat:ExtLogin = res as ExtLogin;
+          return {
+            passwordLength: data.password.length,
+            email:data.eMail,
+            coins:dat.results[0].bankaccount,
+            backendAPI:dat.results[0].id.toString()
+          } as Login
+        } else {
+          return null;
+        }
       }));
     }
 

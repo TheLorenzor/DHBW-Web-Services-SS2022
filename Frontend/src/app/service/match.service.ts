@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {filter, map, Observable} from "rxjs";
-import {externMatch, Liga, LigaExtern, MatchOverview} from "../../assets/Interface/match";
+import {ExternMatch, Liga, LigaExtern, MatchOverview} from "../../assets/Interface/match";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class MatchService {
     }
     return this.http.get(url,{headers:this.header}).pipe(map(res=>{
       // @ts-ignore
-      const arr = res['results'] as externMatch[];
+      const arr = res['results'] as ExternMatch[];
       let finalArray:MatchOverview[] = [];
       for (let i=0;i<arr.length;++i) {
         finalArray.push({

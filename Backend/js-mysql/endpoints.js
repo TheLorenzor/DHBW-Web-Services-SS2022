@@ -351,7 +351,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
                    connection.query(sql, function (err, results, fields) {
                    if (err) throw err;
                    if(results.length === 0) {
-                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
+                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `bankaccount`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
                                     connection.query(sql, function (err, results, fields) {
                                     if (err) throw err;
                                     res.status(200).send(results)
@@ -376,7 +376,7 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
           if(results.length === 0) {
              res.status(204).send({ message: 'kein User mit dieser Email' })
           } else {
-                const sql = " SELECT id,Kontostand  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
+                const sql = " SELECT id,bankaccount  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
                 connection.query(sql, function (err, results, fields) {
                 if (err) throw err;
                 if(results.length === 0) {
@@ -451,7 +451,7 @@ app.get('/odds/:match_id', (req, res) => {
 app.get('/sendMoney/:userID/:value', (req, res) => {
     try {
     pay(req.params.userID,req.params.value)
-    const sql = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+    const sql = "Select bankaccount From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
         connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -470,7 +470,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
 //18:BPMS coins zu echtgeld
 app.get('/receiveMoney/:userID/:value', (req, res) => {
     try{
-      const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
+      const sql = "UPDATE `users` SET `bankaccount` = `bankaccount`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `bankaccount` >= '"+req.params.value+"'; ";
         connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -479,7 +479,7 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
                 //res.status(200).send(results)
             }
         })
-        const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+        const sql2 = "Select bankaccount From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
         connection.query(sql2, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -636,7 +636,7 @@ function payoutBets(match_id)
 
 function pay(userID,value)
 {
-    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
+    const payout = "UPDATE `users` SET `bankaccount` = `bankaccount` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
     connection.query(payout, function (err, results, fields) {
         if (err) throw err;
     })

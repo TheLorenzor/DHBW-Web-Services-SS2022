@@ -7,7 +7,7 @@ export interface LoginDataInter {
   name:string|null,
   coins:number|null
 }
-export interface ExtLoginRegister {
+export interface ExtRegister {
   fieldCount: number;
   affectedRows: number,
   insertId: number,
@@ -18,3 +18,11 @@ export interface ExtLoginRegister {
   changedRows: number
 }
 
+export interface ExtLogin {
+  results: ExtLoginUser[]
+}
+
+export interface ExtLoginUser {
+  id: number,
+  bankaccount:number
+}

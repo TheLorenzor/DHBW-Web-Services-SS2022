@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginRegisterData } from 'src/assets/Interface/login';
 import {Store} from "@ngrx/store";
-import {register} from "../../actions/login.actions";
+import {login, register} from "../../actions/login.actions";
 
 @Component({
   selector: 'app-login-register',
@@ -30,6 +30,8 @@ export class LoginRegisterComponent implements OnInit {
   }
   login():void {
     if (this.dataLogin.eMail.length>0 &&this.dataLogin.password.length>0) {
+      this.store.dispatch(login({logindata:this.dataLogin}))
+      this.route.navigateByUrl('');
     }
 
   }

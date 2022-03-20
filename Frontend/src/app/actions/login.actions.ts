@@ -15,7 +15,10 @@ export const registerFailure = createAction(
   "[app component] registerFailure",
 );
 
-
+export const login = createAction(
+  "[login-register] login",
+  props<{logindata:LoginRegisterData}>()
+)
 
 export const changeLoginData=createAction(
   "[settings] changeLoginData",
