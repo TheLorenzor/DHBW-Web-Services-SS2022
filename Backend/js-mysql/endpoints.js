@@ -336,6 +336,7 @@ function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
           if (err) throw err;
             console.log("here are your results", results);
           })
+  payoutBets(matchId);
   const updateHeimpoints = "UPDATE spiel s SET s.heim_points = " + heimpoints + " WHERE s.id = " + matchId;
           connection.query(updateHeimpoints, function (err, results, fields) {
             if (err) throw err;
