@@ -201,7 +201,7 @@ res.status(204).send({ message: 'error!' })
 //7. BPMN: Ansehen der Mannschaften der Bundesliga
 app.get('/contenders', (req, res) => {
   try{
-    const sql = "SELECT v.id, v.logo, v.name FROM verein v WHERE v.isErsteBundesliga = 'true'";
+    const sql = "SELECT v.id, v.logourl, v.name FROM verein v WHERE v.isErsteBundesliga = 'true'";
         connection.query(sql, function (err, results, fields) {
         if (err) throw err;
         console.log("here are your results", results);
