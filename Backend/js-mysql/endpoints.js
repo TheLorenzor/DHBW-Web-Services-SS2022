@@ -188,23 +188,36 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
 
 //19: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
-         try{
-            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',false)";
-                        connection.query(sql, function (err, results, fields) {
-                        if (err) throw err;
-                        if(results.length === 0) {
-                           res.status(204).send({ message: 'error!' })
-                           } else {
-                           res.status(200).send({
-                             message: 'new bet created'
-                             })
-                           }
-                      })
-         }
-         catch
-         {
-              res.status(204).send({ message: 'error!' })
-         }
+          const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND `wetten`.`spiel_id` = '"+req.params.spielID+"';";
+                                 connection.query(sql, function (err, results, fields) {
+                                     if (err) throw err;
+                                     if(results.length === 0) {
+                                                try{
+                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','3',true)";
+                                                               connection.query(sql, function (err, results, fields) {
+                                                               if (err) throw err;
+                                                               if(results.length === 0) {
+                                                                  res.status(204).send({ message: 'error!' })
+                                                                  } else {
+                                                                  res.status(200).send({
+                                                                    message: 'new bet created'
+                                                                    })
+                                                                  }
+                                                             })
+                                                }
+                                                catch
+                                                {
+                                                     res.status(204).send({ message: 'error!' })
+                                                }
+                                     } else {
+                                        const sql = "Update `wetten`(`homegoal`, `guestGoal`, `value`,`open`) VALUES ('"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',true)";
+                                        connection.query(sql, function (err, results, fields) {
+                                        if (err) throw err;
+                                        }
+                                     }
+                                 }
+         })
+
 });
 
 //20: BPMS Wette löschen
