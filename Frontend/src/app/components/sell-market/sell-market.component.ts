@@ -12,6 +12,8 @@ import {changeMoneyValue} from "../../actions/login.actions";
 })
 export class SellMarketComponent implements OnInit {
   inEuros: number | null=null;
+  showMessage = false;
+
 
    euroForm = new FormControl('',[
      Validators.required,
@@ -41,8 +43,8 @@ export class SellMarketComponent implements OnInit {
   payOut() {
     if (this.inEuros&&this.inEuros>250) {
       if (this.accountData&& this.accountData.coins>=this.inEuros*2) {
+        this.service.getRealMoney(this.inEuros,this.accountData.backendAPI).subscribe();
         this.euroForm.reset();
-        this.service.getRealMoney(this.inEuros,this.accountData.backendAPI);
       }
 
 

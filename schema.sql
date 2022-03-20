@@ -54,7 +54,7 @@ INSERT INTO `liga` (`id`, `land_id`, `name`) VALUES
 -- Exportiere Struktur von Tabelle liga_db.matchodds
 DROP TABLE IF EXISTS `matchodds`;
 CREATE TABLE IF NOT EXISTS `matchodds` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,spielliga
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Spiel_Id` int(11) NOT NULL,
   `oddhome` float NOT NULL,
   `oddsDraw` float NOT NULL,

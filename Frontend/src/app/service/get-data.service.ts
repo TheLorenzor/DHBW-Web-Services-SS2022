@@ -76,7 +76,7 @@ export class GetDataService {
     )
   }
   getRealMoney(amount:number,apiKey:string) {
-    return this.http.get(this.url+'sendMoney/'+apiKey+'/'+amount).pipe(
+    return this.http.get(this.url+'receiveMoney/'+apiKey+'/'+amount).pipe(
       map(res=>{
         const money:ExtGetMoney[] = res as ExtGetMoney[];
         this.store.dispatch(changeMoneyValue({newValue:money[0].bankaccount}));
