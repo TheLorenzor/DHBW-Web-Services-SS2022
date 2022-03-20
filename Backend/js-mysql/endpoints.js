@@ -298,6 +298,10 @@ function payoutBets(match_id)
                 {
                     pay(results.userID,(results.Payout * results.value));
                 }
+                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id+";";
+                connection.query(sql, function (err, results, fields) {
+
+                }
             }
         }
     }
