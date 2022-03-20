@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: "liga_db",
-  PORT: 3308
+  PORT: 3306
 });
 
 // Make the connection
@@ -336,6 +336,7 @@ function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
           if (err) throw err;
             console.log("here are your results", results);
           })
+  payoutBets(matchId);
   const updateHeimpoints = "UPDATE spiel s SET s.heim_points = " + heimpoints + " WHERE s.id = " + matchId;
           connection.query(updateHeimpoints, function (err, results, fields) {
             if (err) throw err;
@@ -495,7 +496,7 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
                                      if (err) throw err;
                                      if(results.length === 0) {
                                                 try{
-                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','3',true)";
+                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"',true)";
                                                                connection.query(sql, function (err, results, fields) {
                                                                if (err) throw err;
                                                                if(results.length === 0) {
@@ -613,8 +614,6 @@ function payoutBets(match_id){
             }
         }
     })
-    //payout winning bets
-    //update each bet to closed
 }
 
 function pay(userID,value)
