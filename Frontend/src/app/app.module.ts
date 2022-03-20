@@ -28,6 +28,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
 import {accounts} from "./reducer/login.reducer";
 import {LoginEffects} from "./effect/login.effects";
+import { ClubComponent } from './screen/club/club.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {LoginEffects} from "./effect/login.effects";
     ExchangePurseComponent,
     SellMarketComponent,
     LoginSettingsComponent,
+    ClubComponent,
 
   ],
   imports: [

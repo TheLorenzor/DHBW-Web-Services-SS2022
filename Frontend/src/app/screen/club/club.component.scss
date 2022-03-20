@@ -1,0 +1,31 @@
+@import "src/assets/theme/dark-theme.scss";
+.base {
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  color: $font-color;
+}
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
+  h2 {
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  img {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+hr {
+  width: 100%;
+}

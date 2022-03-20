@@ -50,10 +50,4 @@ export class AllMatchesComponent implements OnInit {
     return ''
   }
 
-  changeDate(test:string) {
-    const date = new Date(test);
-    console.log(JSON.stringify(date));
-
-  }
-
 }

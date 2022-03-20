@@ -4,6 +4,7 @@ import {MatchService} from "../../service/match.service";
 import {MatchOverview} from "../../../assets/Interface/match";
 import {Login} from "../../../assets/Interface/state";
 import {select, Store} from "@ngrx/store";
+import {RouterMatchDetail} from "../../../assets/Interface/Router";
 
 @Component({
   selector: 'app-match-detail-screen',
@@ -43,11 +44,31 @@ export class MatchDetailScreenComponent implements OnInit {
       this.account = res['accounts']['loginUser']
     })
   }
+  getStartDate():string {
+    if (this.data) {
+      const date = new Date(this.data.start);
+      return date.getDate()+'.'+date.getMonth()+'.'+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes()+' Uhr';
+    }
+    return ''
+  }
   bet() {
 
   }
   deleteBet() {
 
+  }
+  goToClub(club:number) {
+    if (this.data) {
+      let id:RouterMatchDetail = {
+        data:-1
+      }
+      if (club>0) {
+        id.data=this.data.club1.id
+      } else {
+        id.data=this.data.club2.id
+      }
+      this.router.navigateByUrl('club',{state:id});
+    }
   }
 
 }

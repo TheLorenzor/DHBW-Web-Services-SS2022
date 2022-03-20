@@ -2,8 +2,8 @@
   <div class="results">
     <div class="card-overview">
       <div class="club">
-        <span>{{data.club2.name}}</span>
-        <img src="{{data.club1.logoURL}}" alt="{{data.club1.name}}">
+        <span>{{data.club1.name}}</span>
+        <img (click)="goToClub(-1)" src="{{data.club1.logoURL}}" alt="{{data.club1.name}}">
       </div>
       <div class="main">
         <div>Results</div>
@@ -12,16 +12,17 @@
           <span>:</span>
           <span>{{data.club2.points ? data.club2.points : '--'}}</span>
         </div>
+        <div class="date">{{getStartDate()}}</div>
       </div>
 
       <div class="club">
         <span>{{data.club2.name}}</span>
-        <img src="{{data.club2.logoURL}}" alt="{{data.club2.name}}">
+        <img (click)="goToClub(1)" src="{{data.club2.logoURL}}" alt="{{data.club2.name}}">
       </div>
     </div>
   </div>
 
-  <div class="better">
+  <div class="better" *ngIf="account">
     <mat-card>
       <mat-card-title>Wetten</mat-card-title>
       <mat-card-content *ngIf="!betEnable">

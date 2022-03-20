@@ -71,11 +71,11 @@ export class MatchService {
           const data: ExterMatchDetail = res as ExterMatchDetail;
           return {
             id: data.results[0].id,
-            start:data.results[0].startzeitpunkt,
+            start: data.results[0].startzeitpunkt,
             inorderId: -1,
             spieltag: data.results[0].spieltag,
             club1: {
-              name:data.results[0].heimverein,
+              name: data.results[0].heimverein,
               id: data.results[0].heimverein_id,
               logoURL: data.results[0].heimlogo,
               points: data.results[0].heim_points
@@ -87,12 +87,39 @@ export class MatchService {
               points: data.results[0].gast_points
             }
           } as MatchOverview;
-      }
-    return null;
+        }
+        return null;
+      }));
   }
+  getClub(club:number): Observable<MatchOverview[]|null> {
+    return this.http.get(this.url+'football/club/'+club).pipe(
+      map(res=>{
+        // @ts-ignore
+        const arr = res['results'] as ExternMatch[];
+        let finalArray: MatchOverview[] = [];
+        for (let i = 0; i < arr.length; ++i) {
+          finalArray.push({
+            id: arr[i].id,
+            start: arr[i].startzeitpunkt,
+            inorderId: i,
+            spieltag: arr[i].spieltag,
+            club1: {
+              name: arr[i].heimverein,
+              id: arr[i].heimverein_id,
+              logoURL: arr[i].heimlogo,
+              points: arr[i].heim_points
+            },
+            club2: {
+              id: arr[i].gastverein_id,
+              name: arr[i].gastverein,
+              logoURL: arr[i].gastlogo,
+              points: arr[i].gast_points
+            }
+          } as MatchOverview);
+        }
+        return finalArray;
 
-)
-);
-}
+      }));
+  }
 
 }
