@@ -1,12 +1,38 @@
 import {createAction, props} from "@ngrx/store";
-import {LoginDataInter, LoginRegisterData} from "../../assets/Interface/login";
+import { LoginRegisterData} from "../../assets/Interface/login";
+import {Login} from "../../assets/Interface/state";
 
 
-export const loadLoginData=createAction(
-  "[app Compomnent] loadLoginData",
+export const register=createAction(
+  "[app Compomnent] register",
   props<{sentData:LoginRegisterData}>()
 );
-export const loadLoginDataSuccess = createAction(
-  "[app component] loadLoginDataSuccess",
-  props<{loginData:LoginDataInter}>()
+export const registerSuccess = createAction(
+  "[app component] registerSuccess",
+  props<{loginData:Login}>()
 );
+export const registerFailure = createAction(
+  "[app component] registerFailure",
+);
+
+export const login = createAction(
+  "[login-register] login",
+  props<{logindata:LoginRegisterData}>()
+)
+
+export const changeLoginData=createAction(
+  "[settings] changeLoginData",
+  props<{newLogin:LoginRegisterData}>()
+);
+
+export const changeLoginDataSuccess=createAction(
+  "[settings] changeLoginDataSuccess",
+  props<{loginData:Login}>()
+);
+export const logout=createAction(
+  "[app component] logout"
+)
+export const changeMoneyValue = createAction(
+  "[misc] changeValue",
+  props<{newValue:number}>()
+)

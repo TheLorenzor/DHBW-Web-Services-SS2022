@@ -1,3 +1,3 @@
 export interface RouterMatchDetail {
-  data:string;
+  data:number;
 }

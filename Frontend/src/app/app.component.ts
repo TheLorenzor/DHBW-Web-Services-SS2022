@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
+import {select, Store} from "@ngrx/store";
+import {Login} from "../assets/Interface/state";
+import {logout} from "./actions/login.actions";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'Frontend';
   coins:number|undefined = undefined;
   accountInfo = {
@@ -14,30 +17,43 @@ export class AppComponent {
     name:"Test"
 
   }
-  constructor(private route:Router) {
+  accountData:Login|null = null;
+  accountSubscription =this.store.pipe(select(state => {
+    return state
+  }));
 
+  constructor(private route:Router,private store:Store) {
   }
+
+
+  ngOnInit(): void {
+    this.accountSubscription.subscribe(res=>{
+      // @ts-ignore
+      this.accountData = res['accounts']['loginUser']
+    })
+  }
+
+
   navigateToPerson() {
-    if(localStorage.getItem('backendAPI')) {
-      console.log(localStorage.getItem('backendAPI'))
+    if(this.accountData) {
       this.accountInfo.showScreen = !this.accountInfo.showScreen
     } else {
       this.route.navigateByUrl('login')
     }
   }
   changeCoins() {
-    if (localStorage.getItem('backendAPI')) {
+    if (this.accountData) {
       this.route.navigateByUrl('coin-market')
     }
 
   }
-  logout() {
-    localStorage.removeItem('backendAPI');
+  logoutButton() {
+    this.store.dispatch(logout())
     this.accountInfo.showScreen=false;
-    this.coins=undefined;
     this.route.navigateByUrl('');
   }
   navigateSettings(){
       this.route.navigateByUrl('settings');
   }
+
 }

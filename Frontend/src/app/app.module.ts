@@ -22,9 +22,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { ExchangePurseComponent } from './components/exchange-purse/exchange-purse.component';
 import {HttpClientModule} from "@angular/common/http";
 import { SellMarketComponent } from './components/sell-market/sell-market.component';
-import { LoginHomeComponent } from './screen/login-home/login-home.component';
 import { LoginSettingsComponent } from './screen/login-settings/login-settings.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import { MatNativeDateModule } from '@angular/material/core';
+import {accounts} from "./reducer/login.reducer";
+import {LoginEffects} from "./effect/login.effects";
 
 @NgModule({
   declarations: [
@@ -37,7 +40,6 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     CoinMarketComponent,
     ExchangePurseComponent,
     SellMarketComponent,
-    LoginHomeComponent,
     LoginSettingsComponent,
 
   ],
@@ -55,9 +57,11 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     FormsModule,
     MatInputModule,
     RouterModule,
-    StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([]),
-    MatProgressBarModule
+    StoreModule.forRoot({accounts}, {}),
+    EffectsModule.forRoot([LoginEffects]),
+    MatProgressBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
