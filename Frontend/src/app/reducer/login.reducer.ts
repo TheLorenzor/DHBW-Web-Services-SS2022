@@ -17,8 +17,13 @@ export const accounts = createReducer(
     {loginUser: state.loginUser,error: 1})),
   on(logout,()=>({loginUser: null,error: null})),
   on(changeMoneyValue, (state,action) => {
-    let login:Login = state.loginUser as Login;
-    login.coins = action.newValue;
-    return {loginUser: login ,error: null};
+    const login:Login = state.loginUser as Login;
+    const data:Login = {
+      coins:action.newValue,
+      passwordLength:login.passwordLength,
+      backendAPI:login.backendAPI,
+      email:login.email
+    }
+    return {loginUser: data ,error: null};
   })
 );

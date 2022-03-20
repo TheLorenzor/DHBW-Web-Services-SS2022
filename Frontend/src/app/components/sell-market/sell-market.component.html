@@ -3,9 +3,9 @@
     <mat-card>
       <mat-card-title>Auszahlung</mat-card-title>
       <mat-card-content>
-        <p>minimaler Auszahlungsbetrag 250</p>
+        <p>minimaler Auszahlungsbetrag: 250€ ~ 500 Coins</p>
         <mat-form-field>
-          <mat-label>Auszuzahlen</mat-label>
+          <mat-label>Auszahlung</mat-label>
           <input  matInput #output [formControl]="euroForm" type="number">
           <mat-icon matSuffix>paid</mat-icon>
 
@@ -14,7 +14,7 @@
           <input matInput disabled value="{{inEuros}}">
           <mat-icon matSuffix>euro_symbol</mat-icon>
         </mat-form-field>
-        <button mat-button>Auszahlen</button>
+        <button mat-button (click)="payOut()">Auszahlen</button>
       </mat-card-content>
     </mat-card>
   </div>

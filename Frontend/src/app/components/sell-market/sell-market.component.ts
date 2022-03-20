@@ -3,7 +3,6 @@ import { FormControl, Validators} from "@angular/forms";
 import {GetDataService} from "../../service/get-data.service";
 import {Login} from "../../../assets/Interface/state";
 import {select, Store} from "@ngrx/store";
-import {changeMoneyValue} from "../../actions/login.actions";
 
 @Component({
   selector: 'app-sell-market',
@@ -41,9 +40,9 @@ export class SellMarketComponent implements OnInit {
     })
   }
   payOut() {
-    if (this.inEuros&&this.inEuros>250) {
+    if (this.inEuros&&this.inEuros>=250) {
       if (this.accountData&& this.accountData.coins>=this.inEuros*2) {
-        this.service.getRealMoney(this.inEuros,this.accountData.backendAPI).subscribe();
+        this.service.getRealMoney(this.inEuros*2,this.accountData.backendAPI).subscribe();
         this.euroForm.reset();
       }
 

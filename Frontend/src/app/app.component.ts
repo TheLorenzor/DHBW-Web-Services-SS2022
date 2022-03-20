@@ -12,11 +12,8 @@ import {logout} from "./actions/login.actions";
 export class AppComponent implements OnInit{
   title = 'Frontend';
   coins:number|undefined = undefined;
-  accountInfo = {
-    showScreen: false,
-    name:"Test"
+  showScreen= false;
 
-  }
   accountData:Login|null = null;
   accountSubscription =this.store.pipe(select(state => {
     return state
@@ -36,7 +33,7 @@ export class AppComponent implements OnInit{
 
   navigateToPerson() {
     if(this.accountData) {
-      this.accountInfo.showScreen = !this.accountInfo.showScreen
+      this.showScreen = !this.showScreen
     } else {
       this.route.navigateByUrl('login')
     }
@@ -49,7 +46,7 @@ export class AppComponent implements OnInit{
   }
   logoutButton() {
     this.store.dispatch(logout())
-    this.accountInfo.showScreen=false;
+    this.showScreen=false;
     this.route.navigateByUrl('');
   }
   navigateSettings(){

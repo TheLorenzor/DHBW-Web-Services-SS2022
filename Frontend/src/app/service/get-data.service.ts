@@ -81,8 +81,8 @@ export class GetDataService {
         const money:ExtGetMoney[] = res as ExtGetMoney[];
         this.store.dispatch(changeMoneyValue({newValue:money[0].bankaccount}));
         return true;
-      },catchError((err) => {
-        return new Observable<boolean>().pipe(map(res=> {
+      },catchError(() => {
+        return new Observable<boolean>().pipe(map(()=> {
           return false;
         }));
       }))

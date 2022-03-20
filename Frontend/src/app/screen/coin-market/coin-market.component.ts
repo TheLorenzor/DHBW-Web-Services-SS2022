@@ -20,9 +20,9 @@ export class CoinMarketComponent implements OnInit {
     this.accountSubscription.subscribe(res=>{
       // @ts-ignore
       this.accountData = res['accounts']['loginUser'];
-      /*if (!this.accountData) {
+      if (!this.accountData) {
         this.router.navigateByUrl('');
-      }*/
+      }
     })
   }
 
