@@ -8,22 +8,18 @@ export interface MatchOverview {
     name:string;
     id:number;
     logoURL:string|null;
-    goals:Goaler[]|null;
   };
   club2: {
     points:number|null;
     name:string;
     id:number;
     logoURL:string|null;
-    goals:Goaler[]|null;
   };
 }
-export interface Goaler {
-  name:string;
-  minute:number;
-  points:number|null;
-}
 
+export interface ExterMatchDetail {
+  results: ExternMatch[]
+}
 export interface ExternMatch {
   heimverein_id:number,
   gastverein_id:number,

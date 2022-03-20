@@ -26,12 +26,14 @@ export class MatchComponent implements OnInit {
     this.subscription?.unsubscribe();
   }
 
-  moveTo(matchId:string) {
-    const t:RouterMatchDetail = {
-      data:matchId
-    }
+  moveTo() {
+    if (this.matchData) {
+      const id:RouterMatchDetail = {
+        data:this.matchData?.id
+      }
 
-    this.router.navigateByUrl('match',{state:t});
+      this.router.navigateByUrl('match',{state:id});
+    }
 
   }
   getPercent() {

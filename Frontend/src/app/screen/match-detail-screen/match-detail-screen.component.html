@@ -1,27 +1,49 @@
-<div class="match-detail">
+<div class="match-detail" *ngIf="data">
   <div class="results">
     <div class="card-overview">
-      <span>
-
-      </span>
-      <div>
-        <div>Final Result</div>
-        <span>2</span>
-        <span>:</span>
-        <span>3</span>
-        <div class="add-info">
-          test<br>
-          test
+      <div class="club">
+        <span>{{data.club2.name}}</span>
+        <img src="{{data.club1.logoURL}}" alt="{{data.club1.name}}">
+      </div>
+      <div class="main">
+        <div>Results</div>
+        <div class="results">
+          <span>{{data.club1.points ? data.club1.points : '--'}}</span>
+          <span>:</span>
+          <span>{{data.club2.points ? data.club2.points : '--'}}</span>
         </div>
       </div>
 
-      <span class="i"></span>
+      <div class="club">
+        <span>{{data.club2.name}}</span>
+        <img src="{{data.club2.logoURL}}" alt="{{data.club2.name}}">
+      </div>
     </div>
   </div>
-  <div class="details">
-    <div class="event">
-      <span>45. Minute:</span>
-    <mat-card></mat-card>
-    </div>
+
+  <div class="better">
+    <mat-card>
+      <mat-card-title>Wetten</mat-card-title>
+      <mat-card-content *ngIf="!betEnable">
+        <button mat-button (click)="betEnable=true">Jetzt abstimmen</button>
+      </mat-card-content>
+      <mat-card-content class="betting" *ngIf="betEnable">
+        <div class="choose">
+          <mat-form-field>
+            <mat-label>Heim</mat-label>
+            <input matInput type="number" #heim (keyup)="betting.home=heim.value">
+          </mat-form-field>
+          <span>:</span>
+          <mat-form-field>
+            <mat-label>Gast</mat-label>
+            <input matInput type="number" #gast (keyup)="betting.guest=gast.value">
+          </mat-form-field>
+        </div>
+        <div class="input">
+          <button mat-button>Abgeben</button>
+          <button mat-button>Wette annulieren</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

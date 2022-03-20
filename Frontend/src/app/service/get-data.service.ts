@@ -56,4 +56,15 @@ export class GetDataService {
     }
 
   }
+
+  placeBet(home:number,guest:number,apiKey:string,idGame:number,bettingValue:number):Observable<boolean> {
+    return new Observable<boolean>();
+  }
+
+  getCoins(amount:number,apikey:string) {
+
+  }
+  getRealMoney(amount:number,apiKey:string) {
+
+  }
 }

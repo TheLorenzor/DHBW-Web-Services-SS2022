@@ -1,16 +1,8 @@
 <div *ngIf="matchData">
-  <div  class="match" (click)="moveTo('test')">
+  <div  class="match" (click)="moveTo()">
     <div class="match-box">
       <div class="match-detail">
         <span class="club-name">{{matchData.club1.name}}</span>
-        <ul *ngIf="matchData.club1.goals">
-          <li>
-            <span>Müller </span><span>62.</span>
-          </li>
-          <li>
-            <span>Neuer </span><span>62.</span>
-          </li>
-        </ul>
       </div>
       <div *ngIf="matchData.club1.logoURL">
         <img
@@ -32,14 +24,6 @@
       </div>
       <div class="match-detail right">
         <span class="club-name">{{matchData.club2.name}}</span>
-        <ul *ngIf="matchData.club2.goals" class="right">
-          <li>
-            <span>Müller </span><span>62.</span>
-          </li>
-          <li>
-            <span>Neuer </span><span>62.</span>
-          </li>
-        </ul>
       </div>
 
 
