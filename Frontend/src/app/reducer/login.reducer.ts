@@ -20,7 +20,7 @@ export const accounts = createReducer(
     const login:Login = state.loginUser as Login;
     const data:Login = {
       coins:action.newValue,
-      passwordLength:login.passwordLength,
+      password:login.password,
       backendAPI:login.backendAPI,
       email:login.email
     }

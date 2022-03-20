@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {GetDataService} from "../service/get-data.service";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {login, register, registerFailure, registerSuccess} from "../actions/login.actions";
+import {changePassword, login, register, registerFailure, registerSuccess} from "../actions/login.actions";
 import {map, mergeMap} from "rxjs";
 
 @Injectable()
@@ -33,4 +33,17 @@ export class LoginEffects {
           }
         }));
     })));
+  updatePassword$ =createEffect(()=>this.$actions.pipe(
+    ofType(changePassword),
+    mergeMap((action)=> {
+      return this.service.updatePassword(action.password,action.login).pipe(
+        map((loginData)=>{
+          if (loginData) {
+            return registerSuccess({loginData:loginData})
+          }
+          return registerFailure();
+        })
+      )
+    })
+  ))
 }

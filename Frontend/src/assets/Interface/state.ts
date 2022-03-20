@@ -7,5 +7,5 @@ export interface Login {
   backendAPI:string;
   coins:number;
   email:string;
-  passwordLength:number;
+  password:string;
 }

@@ -32,3 +32,36 @@ hr {
     justify-content: center;
   }
 }
+mat-card {
+  background: $background-w50;
+  color: $font-color;
+  position: absolute;
+  top: 15rem;
+  z-index: 5;
+  left: 25%;
+  width: 50%;
+  mat-card-content {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+
+  }
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    button {
+      margin: 20px;
+    }
+  }
+  .passwort {
+    display: flex;
+    flex-direction: column;
+    mat-form-field {
+      width: 80%;
+    }
+  }
+}
+.background {
+  opacity: 10%;
+}

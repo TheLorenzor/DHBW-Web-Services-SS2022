@@ -1,21 +1,42 @@
-<div class="base">
+<div class="base" [class]="change.show?'background':''">
   <h2>Account Einstellungen</h2>
   <hr>
   <div class="block">
     <div class="line">
       <div class="text">
         <span>E-Mail Adresse</span>
-        <span class="email">test@mail.com</span>
+        <span class="email">{{accountData?accountData.email:'test@mail.com'}}</span>
       </div>
-      <button mat-button>Ändern</button>
     </div>
     <div class="line">
       <div class="text">
         <span>Passwort</span>
         <span class="email">Password muss mindestens 8 Zeichen lang sein</span>
       </div>
-      <button mat-button>Ändern</button>
+      <button mat-button [disabled]="change.show" (click)="change.show=true">Ändern
+      </button>
     </div>
   </div>
 </div>
 
+<mat-card *ngIf="change.show">
+  <mat-card-title>Passwort ändern</mat-card-title>
+  <mat-card-content>
+      <mat-form-field>
+        <mat-label>Altes Passwort</mat-label>
+        <input #oldPassword matInput type="password">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Neues Passwort</mat-label>
+        <input #newPassord matInput type="password">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Neues Passwort erneut eingebn</mat-label>
+        <input #newPasswordRetype matInput type="password">
+      </mat-form-field>
+    <div class="buttons">
+      <button mat-button (click)="change.show=false">Abbrechen</button>
+      <button mat-button (click)="changePassword(oldPassword.value,newPassord.value,newPasswordRetype.value)">Änderungen speichern</button>
+    </div>
+  </mat-card-content>
+</mat-card>

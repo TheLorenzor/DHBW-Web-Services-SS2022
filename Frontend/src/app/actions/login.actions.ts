@@ -25,14 +25,14 @@ export const changeLoginData=createAction(
   props<{newLogin:LoginRegisterData}>()
 );
 
-export const changeLoginDataSuccess=createAction(
-  "[settings] changeLoginDataSuccess",
-  props<{loginData:Login}>()
-);
 export const logout=createAction(
   "[app component] logout"
 )
 export const changeMoneyValue = createAction(
   "[misc] changeValue",
   props<{newValue:number}>()
+)
+export const changePassword = createAction(
+  "[settings] changePassword",
+  props<{password:string,login:Login}>()
 )

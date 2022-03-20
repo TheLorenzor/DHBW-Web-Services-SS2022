@@ -25,7 +25,7 @@ export class GetDataService {
             if ('insertId' in res) {
               const extData: ExtRegister = res as ExtRegister
               const t: Login = {
-                passwordLength: data.password?.length ? data.password?.length : -1,
+                password: data.password,
                 backendAPI: extData.insertId.toString(),
                 email: data.eMail,
                 coins: 0
@@ -45,7 +45,7 @@ export class GetDataService {
         if ('results' in res) {
           const dat:ExtLogin = res as ExtLogin;
           return {
-            passwordLength: data.password.length,
+            password: data.password,
             email:data.eMail,
             coins:dat.results[0].bankaccount,
             backendAPI:dat.results[0].id.toString()
@@ -86,6 +86,14 @@ export class GetDataService {
           return false;
         }));
       }))
+    )
+  }
+
+  updatePassword(newP:string,login:Login):Observable<null|Login> {
+    return this.http.get(this.url+'').pipe(
+      map( (res)=> {
+        return null;
+      })
     )
   }
 }
