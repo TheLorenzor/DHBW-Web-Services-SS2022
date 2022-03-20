@@ -134,7 +134,7 @@ app.get('/odds/:match_id', (req, res) => {
     }
     catch
     {
-    res.status(204).send({ message: 'error!' })
+        res.status(204).send({ message: 'error!' })
     }
 });
 
@@ -186,10 +186,10 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
     }
 });
 
-//19: BPMS Wetten eintragen
-app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
+//19: BPMS Wetten eintragen oder Updaten
+app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value', (req, res) => {
          try{
-            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',false)";
+            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"',false)";
                         connection.query(sql, function (err, results, fields) {
                         if (err) throw err;
                         if(results.length === 0) {
@@ -248,6 +248,8 @@ app.get('/getBets/:userID', (req, res) => {
          }
 });
 
+//22:BPMS Wetten für einzelne Spiele
+
 cron.schedule("58 23 * * *", function() {
   fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27)
         .then(res => res.json())
@@ -286,17 +288,17 @@ function payoutBets(match_id)
                 //win home team
                 if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal)
                 {
-                    pay(results.userID,(results.Payout * results.value));
+                    pay(results.userID,(3 * results.value));
                 }
                 //draw
                 if (results.heim_points == results.gast_points && results.homegoal = results.guestGoal)
                 {
-                    pay(results.userID,(results.Payout * results.value));
+                    pay(results.userID,(3 * results.value));
                 }
                 //win guest team
                 if(results.heim_points < results.gast_points && results.homegoal < results.guestGoal)
                 {
-                    pay(results.userID,(results.Payout * results.value));
+                    pay(results.userID,(3 * results.value));
                 }
                 const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id+";";
                 connection.query(sql, function (err, results, fields) {
