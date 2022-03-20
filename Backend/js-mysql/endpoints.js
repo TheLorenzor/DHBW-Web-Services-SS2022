@@ -10,8 +10,6 @@ const PORT = process.env.PORT
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
-const SQL_PORT = process.env.MYSQL_PORT;
-const DB = process.env.MYSQL_DB;
 
 
 // Prepare to connect to MySQL with your secret environment variables
@@ -19,8 +17,8 @@ const connection = mysql.createConnection({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: DB,
-  port: SQL_PORT
+  database: "liga_db",
+  PORT: 3308
 });
 
 // Make the connection
@@ -37,8 +35,7 @@ connection.connect(function (err) {
 
 app.use(cors());
 app.listen(
-  PORT,
-  () => console.log("its alive on http://localhost:"+PORT)
+  8080,
 )
 
 //1. BPMN: Übersicht bekommen
@@ -83,7 +80,7 @@ app.get('/football/match/:id', (req, res) => {
           res.status(204).send({ message: 'Something went wrong. Do you have the right ID? Maybe try again.' })
         } else {
           res.status(200).send({
-            results: results
+            results: results 
           })
         }
       })
@@ -144,12 +141,15 @@ app.get('/football/:liga_id', (req, res) => {
 //5. BPMN: Liga vergangene Matches im Zeitraum sehen
 app.post('/football/:liga_id/:start/:end', (req, res) => {
   try{
-    //stuff
+    const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.name AS heimverein, v2.name AS gastverein, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.liga_id = " + liga_id + " AND ";
+    connection.query(sqlElfer, function (err, results, fields) {
+      if (err) throw err;
+    })
   }
   catch{
   res.status(204).send({ message: 'error!' })
   }
-
+  
 })
 
 //6. BPMN: Verschiedene Torstatistiken sehen
@@ -160,7 +160,7 @@ app.get('/goalstatistics', (req, res) => {
     const sqlEigentor = "SELECT COUNT(isOwnGoal) AS Eigentore FROM tore WHERE isOwnGoal = 'true'";
     const toreInHz1 = "SELECT COUNT(minuteanzahl) AS ToreHz1 FROM tore WHERE minuteanzahl < 45";
     const toreInHz2 = "SELECT COUNT(minuteanzahl) AS ToreHz2 FROM tore WHERE minuteanzahl > 45";
-    const top10scorer = "SELECT ts.name, COUNT(t.torschuetze_id) AS AnzahlTore FROM torschuetze ts JOIN tore t ON ts.id = t.torschuetze_id ORDER BY AnzahlTore DESC LIMIT 10";
+    //const top10scorer = "SELECT ts.name, COUNT(t.torschuetze_id) AS AnzahlTore FROM torschuetze ts JOIN tore t ON ts.id = t.torschuetze_id ORDER BY AnzahlTore DESC LIMIT 10";
     connection.query(sqlElfer, function (err, results, fields) {
     if (err) throw err;
       connection.query(sqlNachspielzeit, function (err, results2, fields) {
@@ -171,25 +171,25 @@ app.get('/goalstatistics', (req, res) => {
             if (err) throw err;
             connection.query(toreInHz2, function (err, results5, fields) {
               if (err) throw err;
-              connection.query(top10scorer, function (err, results6, fields) {
-                if (err) throw err;
+              //connection.query(top10scorer, function (err, results6, fields) {
+                //if (err) throw err;
               if(results.length === 0 || results2.length === 0 || results3.length === 0 || results4.length === 0 || results5.length === 0) {
                 res.status(204).send({ message: 'There was an error retrieving the data.' })
               } else {
                 res.status(200).send({
-                  Elfer: results,
+                  Elfer: results, 
                   Nachspielzeit:  results2,
                   Eigentore:  results3,
                   ToreHz1: results4,
                   ToreHz2: results5,
-                  Top10: results6
+                  //Top10: results6
                 })
               }
             })
           })
         })
       })
-    })
+    //})
     }
   )
 }
@@ -221,9 +221,28 @@ app.get('/contenders', (req, res) => {
 
 //8. BPMN: aktualisieren der Datensätze
 //Aktualisieren der Wetten
-/*cron.schedule("58 23 * * *", function() {
-  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58')
-})*/
+cron.schedule("58 23 * * *", function() {
+  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27')
+        .then(res => res.json())
+        .then(res => {
+            for(let i=0; i<1; i++) {
+                let heimverein_altName = res[i].home_team;
+                let gastverein_altName = res[i].away_team;
+                let oddGuest = res[i].bookmakers[1].markets[0].outcomes[0].price;
+                let oddhome = res[i].bookmakers[1].markets[0].outcomes[1].price;
+                let oddsDraw = res[i].bookmakers[1].markets[0].outcomes[2].price;
+                updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName);
+            }
+        })
+})
+
+function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName) {
+  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES (NULL, '"+heimverein_altName+"', '"+gastverein_altName+"', '"+oddhome+"', '"+oddsDraw+"', '"+oddGuest+"');";
+  connection.query(newMatchodds, function (err, results, fields) {
+  if (err) throw err;
+    console.log("new odds arrived", results);
+  })
+}
 
 //Aktualisieren der Torschützen
 cron.schedule("58 23 * * *", function() {
@@ -273,7 +292,7 @@ cron.schedule("59 23 * * *", function() {
             let isOvertime = res[i].Goals[k].IsOvertime;
             let isPenalty = res[i].Goals[k].IsPenalty;
             let isOwnGoal = res[i].Goals[k].IsOwnGoal;
-            let heimpoints =  res[i].Goals[k].ScoreTeam1;
+            let heimpoints =  res[i].Goals[k].ScoreTeam1; 
             let gastpoints =  res[i].Goals[k].ScoreTeam2;
             updateGoals(matchId, goalId, goalGetterId, minuteanzahl, isOvertime, isPenalty, isOwnGoal, heimpoints, gastpoints);
           }
@@ -351,7 +370,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
                    connection.query(sql, function (err, results, fields) {
                    if (err) throw err;
                    if(results.length === 0) {
-                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `bankaccount`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
+                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
                                     connection.query(sql, function (err, results, fields) {
                                     if (err) throw err;
                                     res.status(200).send(results)
@@ -367,6 +386,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
      }
 });
 
+
 //12: BPMN Verify Login
 //noch nicht richtige funktion
 app.get('/Vlogin/:email/:passwordHash', (req, res) => {
@@ -376,7 +396,7 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
           if(results.length === 0) {
              res.status(204).send({ message: 'kein User mit dieser Email' })
           } else {
-                const sql = " SELECT id,bankaccount  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
+                const sql = " SELECT id,Kontostand  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
                 connection.query(sql, function (err, results, fields) {
                 if (err) throw err;
                 if(results.length === 0) {
@@ -421,7 +441,6 @@ app.get('/homescreen/:userID', (req, res) => {
     catch(e){
     res.status(204).send({ message: 'error!' })
     }
-
 });
 
 //16: BPMN: Odds für ein kommendes Spiel
@@ -444,14 +463,13 @@ app.get('/odds/:match_id', (req, res) => {
     {
     res.status(204).send({ message: 'error!' })
     }
-
 });
 
 //17:BPMS echtgeld zu Coins
 app.get('/sendMoney/:userID/:value', (req, res) => {
     try {
     pay(req.params.userID,req.params.value)
-    const sql = "Select bankaccount From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+    const sql = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
         connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -470,7 +488,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
 //18:BPMS coins zu echtgeld
 app.get('/receiveMoney/:userID/:value', (req, res) => {
     try{
-      const sql = "UPDATE `users` SET `bankaccount` = `bankaccount`-'"+req.params.value+"' WHERE users.id ="+req.params.userID+" AND `bankaccount` >= '"+req.params.value+"'; ";
+      const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
         connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -479,7 +497,7 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
                 //res.status(200).send(results)
             }
         })
-        const sql2 = "Select bankaccount From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+        const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
         connection.query(sql2, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
@@ -497,24 +515,35 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
 
 //19: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
-         try{
-            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',false)";
-                        connection.query(sql, function (err, results, fields) {
-                        if (err) throw err;
-                        if(results.length === 0) {
-                           res.status(204).send({ message: 'error!' })
-                           } else {
-                           res.status(200).send({
-                             message: 'new bet created'
-                             })
-                           }
-                      })
-         }
-         catch
-         {
-              res.status(204).send({ message: 'error!' })
-         }
-});
+          const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND `wetten`.`spiel_id` = '"+req.params.spielID+"';";
+                                 connection.query(sql, function (err, results, fields) {
+                                     if (err) throw err;
+                                     if(results.length === 0) {
+                                                try{
+                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','3',true)";
+                                                               connection.query(sql, function (err, results, fields) {
+                                                               if (err) throw err;
+                                                               if(results.length === 0) {
+                                                                  res.status(204).send({ message: 'error!' })
+                                                                  } else {
+                                                                  res.status(200).send({
+                                                                    message: 'new bet created'
+                                                                    })
+                                                                  }
+                                                             })
+                                                }
+                                                catch
+                                                {
+                                                     res.status(204).send({ message: 'error!' })
+                                                }
+                                     } else {
+                                        const sql = "Update `wetten`(`homegoal`, `guestGoal`, `value`,`open`) VALUES ('"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',true)";
+                                        connection.query(sql, function (err, results, fields) {
+                                        if (err) throw err;
+                                        })
+                                     }
+                                 })
+         })
 
 //20: BPMS Wette löschen
 app.get('/deleteBet/:betID', (req, res) => {
@@ -538,24 +567,7 @@ app.get('/deleteBet/:betID', (req, res) => {
          }
 });
 
-//21: Alle Spiele einer Mannschaft
-app.get('/football/club/:id', (req, res) => {
-  let clubid = req.params.id;
-  const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = " + clubid + " OR s.gastverein_id = " + clubid;
-  connection.query(sql, function (err, results, fields) {
-    if (err) throw err;
-    console.log("here are your results", results);
-    if(results.length === 0) {
-      res.status(204).send({ message: 'Something went wrong. is there a problem with the club id?' })
-    } else {
-      res.status(200).send({
-         results
-      })
-    }
-  })
-})
-
-//22: BPMS Wetten einsehen
+//21: BPMS Wetten einsehen
 app.get('/getBets/:userID', (req, res) => {
          try{
             const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"';";
@@ -574,34 +586,29 @@ app.get('/getBets/:userID', (req, res) => {
          }
 });
 
-cron.schedule("58 23 * * *", function() {
-  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27')
-        .then(res => res.json())
-        .then(res => {
-            for(let i=0; i<1; i++) {
-                let heimverein_altName = res[i].home_team;
-                let gastverein_altName = res[i].away_team;
-                let oddGuest = res[i].bookmakers[1].markets[0].outcomes[0].price;
-                let oddhome = res[i].bookmakers[1].markets[0].outcomes[1].price;
-                let oddsDraw = res[i].bookmakers[1].markets[0].outcomes[2].price;
-                updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName);
-            }
-        })
-})
+//22: BPMS einzelne Matchwetten
+app.get('/getSingleBet/:userID/:matchID', (req, res) => {
+         try{
+            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND wetten.spiel_id = '"+req.params.matchID+"';";
+                        connection.query(sql, function (err, results, fields) {
+                        if (err) throw err;
+                        if(results.length === 0) {
+                           res.status(204).send({ message: 'error!' })
+                           } else {
+                           res.status(200).send(results)
+                           }
+                      })
+         }
+         catch
+         {
+              res.status(204).send({ message: 'error!' })
+         }
+});
 
-function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName) {
-  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES (NULL, '"+heimverein_altName+"', '"+gastverein_altName+"', '"+oddhome+"', '"+oddsDraw+"', '"+oddGuest+"');";
-  connection.query(newMatchodds, function (err, results, fields) {
-  if (err) throw err;
-    console.log("new odds arrived", results);
-  })
-}
-
-function payoutBets(match_id)
-{
+function payoutBets(match_id){
     //get all bets for the match
-    const sql = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = `"+match_id+"` AND s.id = "+match_id+";";
-    connection.query(sql, function (err, results, fields) {
+    const sqlpay = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = `"+match_id+"` AND s.id = "+match_id+";";
+    connection.query(sqlpay, function (err, results, fields) {
         if (err) throw err;
         if(results.length === 0) {
             //no bets for the Game
@@ -610,34 +617,52 @@ function payoutBets(match_id)
             for(let i = 0; i<results.length;i++)
             {
                 //win home team
-                if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal) {
-                    pay(results.userID,(results.Payout * results.value));
+                if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal)
+                {
+                    pay(results.userID,(3 * results.value));
                 }
                 //draw
-                if (results.heim_points === results.gast_points && results.homegoal === results.guestGoal)
+                if (results.heim_points == results.gast_points && results.homegoal === results.guestGoal)
                 {
-                    pay(results.userID,(results.Payout * results.value));
+                    pay(results.userID,(3 * results.value));
                 }
                 //win guest team
                 if(results.heim_points < results.gast_points && results.homegoal < results.guestGoal)
                 {
-                    pay(results.userID,(results.Payout * results.value));
+                    pay(results.userID,(3 * results.value));
                 }
-                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id+";";
+                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id;
                 connection.query(sql, function (err, results, fields) {
 
-                })
+                },
             }
         }
-    })
+    }
     //payout winning bets
     //update each bet to closed
 }
 
 function pay(userID,value)
 {
-    const payout = "UPDATE `users` SET `bankaccount` = `bankaccount` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
+    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
     connection.query(payout, function (err, results, fields) {
         if (err) throw err;
     })
 }
+
+//23: Alle Spiele einer Mannschaft
+app.get('/football/club/:id', (req, res) => {
+  let clubid = req.params.id;
+  const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = " + clubid + " OR s.gastverein_id = " + clubid;
+  connection.query(sql, function (err, results, fields) {
+    if (err) throw err;
+    console.log("here are your results", results);
+    if(results.length === 0) {
+      res.status(204).send({ message: 'Something went wrong. is there a problem with the club id?' })
+    } else {
+      res.status(200).send({
+         results
+      })
+    }
+  })
+})
