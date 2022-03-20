@@ -4,7 +4,7 @@ import {MatchService} from "../../service/match.service";
 import {MatchOverview} from "../../../assets/Interface/match";
 import {Login} from "../../../assets/Interface/state";
 import {select, Store} from "@ngrx/store";
-import {RouterMatchDetail} from "../../../assets/Interface/Router";
+import {ClubDetail, RouterMatchDetail} from "../../../assets/Interface/Router";
 
 @Component({
   selector: 'app-match-detail-screen',
@@ -59,14 +59,21 @@ export class MatchDetailScreenComponent implements OnInit {
   }
   goToClub(club:number) {
     if (this.data) {
-      let id:RouterMatchDetail = {
-        data:-1
+      let id:ClubDetail = {
+        id:-1,
+        logoUrl:'',
+        name:''
       }
-      if (club>0) {
-        id.data=this.data.club1.id
+      if (club<0) {
+        id.id = this.data.club1.id;
+        id.logoUrl = this.data.club1.logoURL;
+        id.name = this.data.club1.name
       } else {
-        id.data=this.data.club2.id
+        id.id = this.data.club2.id;
+        id.logoUrl = this.data.club2.logoURL;
+        id.name = this.data.club2.name
       }
+
       this.router.navigateByUrl('club',{state:id});
     }
   }
