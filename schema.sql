@@ -55,18 +55,20 @@ INSERT INTO `liga` (`id`, `land_id`, `name`) VALUES
 DROP TABLE IF EXISTS `matchodds`;
 CREATE TABLE IF NOT EXISTS `matchodds` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Spiel_Id` int(11) NOT NULL,
+  `hometeam_altName` text NOT NULL,
+  `guestteam_altName` text NOT NULL,
   `oddhome` float NOT NULL,
   `oddsDraw` float NOT NULL,
   `oddGuest` float NOT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `FK_spiel_id` (`Spiel_Id`) USING BTREE,
-  CONSTRAINT `FKspielidd` FOREIGN KEY (`Spiel_Id`) REFERENCES `spiel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle liga_db.matchodds: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.matchodds: ~2 rows (ungefähr)
 DELETE FROM `matchodds`;
 /*!40000 ALTER TABLE `matchodds` DISABLE KEYS */;
+INSERT INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES
+	(1, 'Augsburg', 'FSV Mainz 05', 3, 2, 1),
+	(2, 'Greuther Fürth', 'SC Freiburg', 4, 4, 4);
 /*!40000 ALTER TABLE `matchodds` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.spiel
@@ -9796,14 +9798,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `nachname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `bankaccount` int(11) DEFAULT NULL,
+  `Kontostand` float NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Exportiere Daten aus Tabelle liga_db.users: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle liga_db.users: ~1 rows (ungefähr)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` (`id`, `email`, `passwort`, `vorname`, `nachname`, `created_at`, `updated_at`, `Kontostand`) VALUES
+	(1, '', '1', 'tim', 'schweitzer', '2022-03-16 15:28:07', '2022-03-17 12:39:03', 1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle liga_db.verein
@@ -9814,6 +9818,7 @@ CREATE TABLE IF NOT EXISTS `verein` (
   `name` varchar(50) NOT NULL DEFAULT '0',
   `altName` varchar(50) DEFAULT NULL,
   `logourl` varchar(1000) DEFAULT NULL,
+  `isErsteBundesliga` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_liga_id-` (`liga_id`),
   CONSTRAINT `FK_liga_id-` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -9822,35 +9827,59 @@ CREATE TABLE IF NOT EXISTS `verein` (
 -- Exportiere Daten aus Tabelle liga_db.verein: ~27 rows (ungefähr)
 DELETE FROM `verein`;
 /*!40000 ALTER TABLE `verein` DISABLE KEYS */;
-INSERT INTO `verein` (`id`, `liga_id`, `name`, `altName`, `logourl`) VALUES
-	(6, 1, 'Bayer Leverkusen', 'Bayer Leverkusen', 'https://upload.wikimedia.org/wikipedia/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/1200px-Bayer_Leverkusen_Logo.svg.png'),
-	(7, 1, 'Borussia Dortmund', 'Borussia Dortmund', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png'),
-	(9, 1, 'FC Schalke 04', NULL, 'https://upload.wikimedia.org/wikipedia/commons/6/6d/FC_Schalke_04_Logo.svg'),
-	(16, 1, 'VfB Stuttgart', 'VfB Stuttgart', 'https://i.imgur.com/v0tkpNx.png'),
-	(31, 1, 'SC Paderborn 07', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e3/SC_Paderborn_07_Logo.svg'),
-	(40, 1, 'FC Bayern München', 'Bayern Munich', 'https://i.imgur.com/jJEsJrj.png'),
-	(54, 1, 'Hertha BSC', 'Hertha Berlin', 'https://i.imgur.com/apFwbYZ.png'),
-	(55, 1, 'Hannover 96', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Hannover_96_Logo.svg'),
-	(65, 1, '1. FC Köln', 'FC Koln', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/FC_Cologne_logo.svg/1200px-FC_Cologne_logo.svg.png'),
-	(79, 1, '1. FC Nürnberg', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/fa/1._FC_Nürnberg_logo.svg'),
-	(80, 1, '1. FC Union Berlin', 'Union Berlin', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/FCU_Standard_Logo.png/240px-FCU_Standard_Logo.png'),
-	(81, 1, '1. FSV Mainz 05', 'FSV Mainz 05', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/1200px-Logo_Mainz_05.svg.png'),
-	(83, 1, 'Arminia Bielefeld', 'Arminia Bielefeld', 'https://upload.wikimedia.org/wikipedia/de/thumb/e/e5/Logo_Arminia_Bielefeld.svg/2000px-Logo_Arminia_Bielefeld.svg.png'),
-	(87, 1, 'Borussia Mönchengladbach', 'Borussia Monchengladbach', 'https://i.imgur.com/KSIk0Eu.png'),
-	(91, 1, 'Eintracht Frankfurt', 'Eintracht Frankfurt', 'https://i.imgur.com/X8NFkOb.png'),
-	(95, 1, 'FC Augsburg', 'Augsburg', 'https://i.imgur.com/sdE62e2.png'),
-	(100, 1, 'Hamburger SV', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Hamburger_SV_logo.svg'),
-	(112, 1, 'SC Freiburg', 'SC Freiburg', 'https://i.imgur.com/r3mvi0h.png'),
-	(115, 1, 'SpVgg Greuther Fürth', 'Greuther Fürth', 'https://i.imgur.com/pwuVbKr.png'),
-	(118, 1, 'SV Darmstadt 98', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e5/SV_Darmstadt_98_Logo.svg'),
-	(129, 1, 'VfL Bochum', 'VfL Bochum', 'https://i.imgur.com/5jy3Gfr.png'),
-	(131, 1, 'VfL Wolfsburg', 'VfL Wolfsburg', 'https://i.imgur.com/ucqKV4B.png'),
-	(134, 1, 'Werder Bremen', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png'),
-	(171, 1, 'FC Ingolstadt 04', NULL, 'https://upload.wikimedia.org/wikipedia/de/thumb/5/55/FC-Ingolstadt_logo.svg/125px-FC-Ingolstadt_logo.svg.png'),
-	(175, 1, 'TSG 1899 Hoffenheim', 'TSG Hoffenheim', 'https://i.imgur.com/gF0PfEl.png'),
-	(185, 1, 'Fortuna Düsseldorf', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Fortuna_D%C3%BCsseldorf.svg/150px-Fortuna_D%C3%BCsseldorf.svg.png'),
-	(1635, 1, 'RB Leipzig', 'RB Leipzig', 'https://i.imgur.com/Rpwsjz1.png');
+INSERT INTO `verein` (`id`, `liga_id`, `name`, `altName`, `logourl`, `isErsteBundesliga`) VALUES
+	(6, 1, 'Bayer Leverkusen', 'Bayer Leverkusen', 'https://upload.wikimedia.org/wikipedia/de/thumb/f/f7/Bayer_Leverkusen_Logo.svg/1200px-Bayer_Leverkusen_Logo.svg.png', 'true'),
+	(7, 1, 'Borussia Dortmund', 'Borussia Dortmund', 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/560px-Borussia_Dortmund_logo.svg.png', 'true'),
+	(9, 1, 'FC Schalke 04', NULL, 'https://upload.wikimedia.org/wikipedia/commons/6/6d/FC_Schalke_04_Logo.svg', NULL),
+	(16, 1, 'VfB Stuttgart', 'VfB Stuttgart', 'https://i.imgur.com/v0tkpNx.png', 'true'),
+	(31, 1, 'SC Paderborn 07', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e3/SC_Paderborn_07_Logo.svg', NULL),
+	(40, 1, 'FC Bayern München', 'Bayern Munich', 'https://i.imgur.com/jJEsJrj.png', 'true'),
+	(54, 1, 'Hertha BSC', 'Hertha Berlin', 'https://i.imgur.com/apFwbYZ.png', 'true'),
+	(55, 1, 'Hannover 96', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Hannover_96_Logo.svg', NULL),
+	(65, 1, '1. FC Köln', 'FC Koln', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/53/FC_Cologne_logo.svg/1200px-FC_Cologne_logo.svg.png', 'true'),
+	(79, 1, '1. FC Nürnberg', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/fa/1._FC_Nürnberg_logo.svg', NULL),
+	(80, 1, '1. FC Union Berlin', 'Union Berlin', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/FCU_Standard_Logo.png/240px-FCU_Standard_Logo.png', 'true'),
+	(81, 1, '1. FSV Mainz 05', 'FSV Mainz 05', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Logo_Mainz_05.svg/1200px-Logo_Mainz_05.svg.png', 'true'),
+	(83, 1, 'Arminia Bielefeld', 'Arminia Bielefeld', 'https://upload.wikimedia.org/wikipedia/de/thumb/e/e5/Logo_Arminia_Bielefeld.svg/2000px-Logo_Arminia_Bielefeld.svg.png', 'true'),
+	(87, 1, 'Borussia Mönchengladbach', 'Borussia Monchengladbach', 'https://i.imgur.com/KSIk0Eu.png', 'true'),
+	(91, 1, 'Eintracht Frankfurt', 'Eintracht Frankfurt', 'https://i.imgur.com/X8NFkOb.png', 'true'),
+	(95, 1, 'FC Augsburg', 'Augsburg', 'https://i.imgur.com/sdE62e2.png', 'true'),
+	(100, 1, 'Hamburger SV', NULL, 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Hamburger_SV_logo.svg', NULL),
+	(112, 1, 'SC Freiburg', 'SC Freiburg', 'https://i.imgur.com/r3mvi0h.png', 'true'),
+	(115, 1, 'SpVgg Greuther Fürth', 'Greuther Fürth', 'https://i.imgur.com/pwuVbKr.png', 'true'),
+	(118, 1, 'SV Darmstadt 98', NULL, 'https://upload.wikimedia.org/wikipedia/commons/e/e5/SV_Darmstadt_98_Logo.svg', NULL),
+	(129, 1, 'VfL Bochum', 'VfL Bochum', 'https://i.imgur.com/5jy3Gfr.png', 'true'),
+	(131, 1, 'VfL Wolfsburg', 'VfL Wolfsburg', 'https://i.imgur.com/ucqKV4B.png', 'true'),
+	(134, 1, 'Werder Bremen', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/681px-SV-Werder-Bremen-Logo.svg.png', NULL),
+	(171, 1, 'FC Ingolstadt 04', NULL, 'https://upload.wikimedia.org/wikipedia/de/thumb/5/55/FC-Ingolstadt_logo.svg/125px-FC-Ingolstadt_logo.svg.png', NULL),
+	(175, 1, 'TSG 1899 Hoffenheim', 'TSG Hoffenheim', 'https://i.imgur.com/gF0PfEl.png', 'true'),
+	(185, 1, 'Fortuna Düsseldorf', NULL, 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Fortuna_D%C3%BCsseldorf.svg/150px-Fortuna_D%C3%BCsseldorf.svg.png', NULL),
+	(1635, 1, 'RB Leipzig', 'RB Leipzig', 'https://i.imgur.com/Rpwsjz1.png', 'true');
 /*!40000 ALTER TABLE `verein` ENABLE KEYS */;
+
+-- Exportiere Struktur von Tabelle liga_db.wetten
+DROP TABLE IF EXISTS `wetten`;
+CREATE TABLE IF NOT EXISTS `wetten` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `spiel_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `homegoal` int(11) DEFAULT NULL,
+  `guestGoal` int(11) DEFAULT NULL,
+  `value` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_spiel_id` (`spiel_id`),
+  KEY `FK_user_id` (`user_id`),
+  CONSTRAINT `FK_spiel_id2` FOREIGN KEY (`spiel_id`) REFERENCES `spiel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_user_id2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- Exportiere Daten aus Tabelle liga_db.wetten: ~2 rows (ungefähr)
+DELETE FROM `wetten`;
+/*!40000 ALTER TABLE `wetten` DISABLE KEYS */;
+INSERT INTO `wetten` (`id`, `spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES
+	(1, 61070, 1, 3, 0, '100'),
+	(2, 61070, 1, 2, 2, '50');
+/*!40000 ALTER TABLE `wetten` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
