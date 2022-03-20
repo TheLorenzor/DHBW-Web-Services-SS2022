@@ -6,7 +6,6 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 
 const app = express();
-const PORT = process.env.PORT
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
@@ -138,21 +137,7 @@ app.get('/football/:liga_id', (req, res) => {
   }
 })
 
-//5. BPMN: Liga vergangene Matches im Zeitraum sehen
-app.post('/football/:liga_id/:start/:end', (req, res) => {
-  try{
-    const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.name AS heimverein, v2.name AS gastverein, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.liga_id = " + liga_id + " AND ";
-    connection.query(sqlElfer, function (err, results, fields) {
-      if (err) throw err;
-    })
-  }
-  catch{
-  res.status(204).send({ message: 'error!' })
-  }
-
-})
-
-//6. BPMN: Verschiedene Torstatistiken sehen
+//5. BPMN: Verschiedene Torstatistiken sehen
 app.get('/goalstatistics', (req, res) => {
   try{
     const sqlElfer = "SELECT COUNT(isPenalty) AS Elfmetertore FROM tore WHERE isPenalty = 'true'";
@@ -198,7 +183,7 @@ res.status(204).send({ message: 'error!' })
 }
 })
 
-//7. BPMN: Ansehen der Mannschaften der Bundesliga
+//6. BPMN: Ansehen der Mannschaften der Bundesliga
 app.get('/contenders', (req, res) => {
   try{
     const sql = "SELECT v.id, v.logourl, v.name FROM verein v WHERE v.isErsteBundesliga = 'true'";
@@ -219,7 +204,7 @@ app.get('/contenders', (req, res) => {
     }
 })
 
-//8. BPMN: aktualisieren der Datensätze
+//7. BPMN: aktualisieren der Datensätze
 //Aktualisieren der Wetten
 cron.schedule("58 23 * * *", function() {
   fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27')
@@ -363,7 +348,7 @@ function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
             })
 }
 
-//9: BPMN registrieren
+//8: BPMN registrieren
 app.get('/register/:email/:passwordHash', (req, res) => {
      try {
           const sql = " SELECT * FROM `users` WHERE email = '"+req.params.email+"';";
@@ -387,7 +372,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
 });
 
 
-//12: BPMN Verify Login
+//9: BPMN Verify Login
 //noch nicht richtige funktion
 app.get('/Vlogin/:email/:passwordHash', (req, res) => {
     const sql = " SELECT email FROM `users` WHERE email = '"+req.params.email+"';";
@@ -412,7 +397,7 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
     })
 });
 
-//14: BPMN: change Logindata
+//10: BPMN: change Logindata
 app.get('/changeLoginData/:newPwHash/:userID', (req, res) => {
     try{
         const sql = "UPDATE `users` SET passwort = "+newPwHash+" WHERE users.id = "+userID+";";
@@ -431,20 +416,9 @@ app.get('/changeLoginData/:newPwHash/:userID', (req, res) => {
 
     res.status(204).send({ message: 'error!' })
     }
-
 });
 
-//15: BPMN Data for Homescreen
-app.get('/homescreen/:userID', (req, res) => {
-    try {
-
-    }
-    catch(e){
-    res.status(204).send({ message: 'error!' })
-    }
-});
-
-//16: BPMN: Odds für ein kommendes Spiel
+//11: BPMN: Odds für ein kommendes Spiel
 app.get('/odds/:match_id', (req, res) => {
     try{
         const sql = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
@@ -466,7 +440,7 @@ app.get('/odds/:match_id', (req, res) => {
     }
 });
 
-//17:BPMS echtgeld zu Coins
+//12:BPMS echtgeld zu Coins
 app.get('/sendMoney/:userID/:value', (req, res) => {
     try {
     pay(req.params.userID,req.params.value)
@@ -486,7 +460,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
 
 });
 
-//18:BPMS coins zu echtgeld
+//13:BPMS coins zu echtgeld
 app.get('/receiveMoney/:userID/:value', (req, res) => {
     try{
       const sql = "UPDATE `users` SET `bankaccount` = `bankaccount`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
@@ -514,7 +488,7 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
     }
 });
 
-//19: BPMS Wetten eintragen
+//14: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
           const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND `wetten`.`spiel_id` = '"+req.params.spielID+"';";
                                  connection.query(sql, function (err, results, fields) {
@@ -546,7 +520,7 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
                                  })
          })
 
-//20: BPMS Wette löschen
+//15: BPMS Wette löschen
 app.get('/deleteBet/:betID', (req, res) => {
          try{
             const sql = "DELETE FROM `wetten` WHERE `wetten`.`id` = '"+req.params.betID+"';";
@@ -568,7 +542,7 @@ app.get('/deleteBet/:betID', (req, res) => {
          }
 });
 
-//21: BPMS Wetten einsehen
+//16: BPMS Wetten einsehen
 app.get('/getBets/:userID', (req, res) => {
          try{
             const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"';";
@@ -587,7 +561,7 @@ app.get('/getBets/:userID', (req, res) => {
          }
 });
 
-//22: BPMS einzelne Matchwetten
+//17: BPMS einzelne Matchwetten
 app.get('/getSingleBet/:userID/:matchID', (req, res) => {
          try{
             const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND wetten.spiel_id = '"+req.params.matchID+"';";
@@ -651,7 +625,7 @@ function pay(userID,value)
     })
 }
 
-//23: Alle Spiele einer Mannschaft
+//18: Alle Spiele einer Mannschaft
 app.get('/football/club/:id', (req, res) => {
   let clubid = req.params.id;
   const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = " + clubid + " OR s.gastverein_id = " + clubid;
