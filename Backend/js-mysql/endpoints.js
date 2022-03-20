@@ -248,6 +248,26 @@ app.get('/getBets/:userID', (req, res) => {
          }
 });
 
+//22: BPMS einzelne Matchwetten
+app.get('/getSingleBet/:userID/:matchID', (req, res) => {
+         try{
+            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND wetten.spiel_id = '"+req.params.matchID+"';";
+                        connection.query(sql, function (err, results, fields) {
+                        if (err) throw err;
+                        if(results.length === 0) {
+                           res.status(204).send({ message: 'error!' })
+                           } else {
+                           res.status(200).send(results)
+                           }
+                      })
+         }
+         catch
+         {
+              res.status(204).send({ message: 'error!' })
+         }
+});
+
+
 cron.schedule("58 23 * * *", function() {
   fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27)
         .then(res => res.json())
@@ -271,8 +291,7 @@ function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_al
   })
 }
 
-function payoutBets(match_id)
-{
+function payoutBets(match_id){
     //get all bets for the match
     const sql = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = `"+match_id+"` AND s.id = "+match_id+";";
     connection.query(sql, function (err, results, fields) {
