@@ -38,6 +38,7 @@ connection.connect(function (err) {
 app.use(cors());
 app.listen(
   PORT,
+  () => console.log("its alive on http://localhost:"+PORT)
 )
 
 //1. BPMN: Übersicht bekommen
@@ -218,7 +219,7 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
                 } else {
                     console.log("login erfolg");
                     res.status(200).send({
-                    results: results
+                        results: results
                     })
                     }
                 })
@@ -284,17 +285,9 @@ app.get('/odds/:match_id', (req, res) => {
 //17:BPMS echtgeld zu Coins
 app.get('/sendMoney/:userID/:value', (req, res) => {
     try {
-    const sql = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+req.params.value+" WHERE `users`.`id` = '"+req.params.userID+"';";
-                      connection.query(sql, function (err, results, fields) {
-                      if (err) throw err;
-                      if(results.length === 0) {
-                         //res.status(204).send({ message: 'error!' })
-                         } else {
-                         //res.status(200).send(results)
-                         }
-                    })
-        const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
-        connection.query(sql2, function (err, results, fields) {
+    pay(req.params.userID,req.params.value)
+    const sql = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
+        connection.query(sql, function (err, results, fields) {
             if (err) throw err;
             if(results.length === 0) {
             res.status(204).send({ message: 'error!' })
@@ -304,7 +297,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
         })
     }
     catch(e){
-    res.status(204).send({ message: 'error!' })
+        res.status(204).send({ message: 'error!' })
     }
 
 });
@@ -338,9 +331,9 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
 });
 
 //19: BPMS Wetten eintragen
-app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value', (req, res) => {
+app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
          try{
-            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"')";
+            const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`,`Payout`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',false)";
                         connection.query(sql, function (err, results, fields) {
                         if (err) throw err;
                         if(results.length === 0) {
@@ -398,3 +391,72 @@ app.get('/getBets/:userID', (req, res) => {
               res.status(204).send({ message: 'error!' })
          }
 });
+
+cron.schedule("58 23 * * *", function() {
+  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27)
+        .then(res => res.json())
+        .then(res => {
+            for(let i=0; i<1; i++) {
+                let heimverein_altName = res[i].home_team;
+                let gastverein_altName = res[i].away_team;
+                let oddGuest = res[i].bookmakers[1].markets[0].outcomes[0].price;
+                let oddhome = res[i].bookmakers[1].markets[0].outcomes[1].price;
+                let oddsDraw = res[i].bookmakers[1].markets[0].outcomes[2].price;
+                updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName);
+            }
+        })
+})
+
+function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName) {
+  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES (NULL, '"+heimverein_altName+"', '"+gastverein_altName+"', '"+oddhome+"', '"+oddsDraw+"', '"+oddGuest+"');";
+  connection.query(newMatchodds, function (err, results, fields) {
+  if (err) throw err;
+    console.log("new odds arrived", results);
+  })
+}
+
+function payoutBets(match_id)
+{
+    //get all bets for the match
+    const sql = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = `"+match_id+"` AND s.id = "+match_id+";";
+    connection.query(sql, function (err, results, fields) {
+        if (err) throw err;
+        if(results.length === 0) {
+            //no bets for the Game
+        } else {
+            //check each bet for the result
+            for(let i = 0; i<results.length;i++)
+            {
+                //win home team
+                if(results.heim_points > results.gast_points && results.homegoal > results.guestGoal)
+                {
+                    pay(results.userID,(results.Payout * results.value));
+                }
+                //draw
+                if (results.heim_points == results.gast_points && results.homegoal = results.guestGoal)
+                {
+                    pay(results.userID,(results.Payout * results.value));
+                }
+                //win guest team
+                if(results.heim_points < results.gast_points && results.homegoal < results.guestGoal)
+                {
+                    pay(results.userID,(results.Payout * results.value));
+                }
+                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id+";";
+                connection.query(sql, function (err, results, fields) {
+
+                }
+            }
+        }
+    }
+    //payout winning bets
+    //update each bet to closed
+}
+
+function pay(userID,value)
+{
+    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
+    connection.query(payout, function (err, results, fields) {
+        if (err) throw err;
+    })
+}
