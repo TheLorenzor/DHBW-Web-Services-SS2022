@@ -1,8 +1,17 @@
 import {Injectable} from "@angular/core";
 import {GetDataService} from "../service/get-data.service";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
-import {changePassword, login, register, registerFailure, registerSuccess} from "../actions/login.actions";
+import {
+  betOnMatch, betOnMatchFailure,
+  changeMoneyValue,
+  changePassword,
+  login,
+  register,
+  registerFailure,
+  registerSuccess
+} from "../actions/login.actions";
 import {map, mergeMap} from "rxjs";
+import {MatchBet} from "../../assets/Interface/match";
 
 @Injectable()
 export class LoginEffects {
@@ -42,6 +51,20 @@ export class LoginEffects {
             return registerSuccess({loginData:loginData})
           }
           return registerFailure();
+        })
+      )
+    })
+  ))
+  placeBet$ = createEffect(()=>this.$actions.pipe(
+    ofType(betOnMatch),
+    mergeMap((action)=>{
+      const bett:MatchBet = action.bet;
+      return this.service.placeBet(bett.home,bett.guest,bett.apiKey,bett.match,bett.value).pipe(
+        map(res=>{
+          if (res) {
+            return changeMoneyValue({newValue:bett.oldValue-bett.value});
+          }
+          return betOnMatchFailure();
         })
       )
     })
