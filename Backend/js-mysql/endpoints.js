@@ -274,8 +274,7 @@ function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_al
 function payoutBets(match_id)
 {
     //get all bets for the match
-    const sql = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.`"+match_id+"` = 61070 AND s."+match_id+" = 61070;";
-
+    const sql = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = `"+match_id+"` AND s.id = "+match_id+";";
     connection.query(sql, function (err, results, fields) {
         if (err) throw err;
         if(results.length === 0) {
