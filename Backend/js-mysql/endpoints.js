@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: "liga_db",
-  port: 3308
+  port: SQL_PORT
 });
 
 // Make the connection
@@ -500,7 +500,7 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
                                                 try{
                                                    const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`) VALUES (?, ?, ?, ?, ?,true)";
                                                                connection.query(sql, ["'"+req.params.spielID+"'", req.params.userID, "'"+req.params.hgoal+"'", "'"+req.params.ggoals+"'", "'"+req.params.value+"'"], (err, results, fields) => {
-                                                            
+
                                                                if (err) throw err;
                                                                if(results.length === 0) {
                                                                   res.status(204).send({ message: 'error!' })
@@ -574,7 +574,7 @@ app.get('/getSingleBet/:userID/:matchID', (req, res) => {
          try{
             const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = ? AND wetten.spiel_id = ?;";
                         connection.query(sql, [req.params.userID, req.params.matchID], (err, results, fields) => {
-                  
+
                         if (err) throw err;
                         if(results.length === 0) {
                            res.status(204).send({ message: 'error!' })
@@ -626,7 +626,7 @@ function payoutBets(match_id){
 function pay(userID,value)
 {
     const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + ? WHERE `users`.`id` = ?;";
-    connection.query(payout, [value, userID], (err, results, fields) => { 
+    connection.query(payout, [value, userID], (err, results, fields) => {
         if (err) throw err;
     })
 }

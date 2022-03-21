@@ -1,0 +1,14 @@
+
+services:
+  sql-database:
+    image: "mysql:8.0"
+    container_name: sql-database
+    volumes:
+      - sql-data:/var/lib/mysql/data
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD:""
+  sports-wg-backemd:
+
+
