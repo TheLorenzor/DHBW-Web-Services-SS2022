@@ -13,11 +13,11 @@ const PASSWORD = process.env.MYSQL_PASSWORD;
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
-  host: HOST,
-  user: USER,
-  password: PASSWORD,
+  host: "localhost",
+  user: "root",
+  password: "",
   database: "liga_db",
-  PORT: 3306
+  port: 3308
 });
 
 // Make the connection
@@ -207,10 +207,12 @@ app.get('/contenders', (req, res) => {
 //7. BPMN: aktualisieren der Datensätze
 //Aktualisieren der Wetten
 cron.schedule("58 23 * * *", function() {
-  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58%27')
+  fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58')
         .then(res => res.json())
         .then(res => {
-            for(let i=0; i<1; i++) {
+          
+            for(let i=0; i<res.length; i++) {
+            
                 let heimverein_altName = res[i].home_team;
                 let gastverein_altName = res[i].away_team;
                 let oddGuest = res[i].bookmakers[1].markets[0].outcomes[0].price;
@@ -222,7 +224,7 @@ cron.schedule("58 23 * * *", function() {
 })
 
 function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName) {
-  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`ID`, `hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES (NULL, '"+heimverein_altName+"', '"+gastverein_altName+"', '"+oddhome+"', '"+oddsDraw+"', '"+oddGuest+"');";
+  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES ('"+heimverein_altName+"', '"+gastverein_altName+"', "+oddhome+", "+oddsDraw+", "+oddGuest+");";
   connection.query(newMatchodds, function (err, results, fields) {
   if (err) throw err;
     console.log("new odds arrived", results);
