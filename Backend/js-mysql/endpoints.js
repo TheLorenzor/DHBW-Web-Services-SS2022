@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
   user: "root",
   password: "",
   database: "liga_db",
-  port: 3308
+  port: 3306
 });
 
 // Make the connection
@@ -210,9 +210,9 @@ cron.schedule("58 23 * * *", function() {
   fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58')
         .then(res => res.json())
         .then(res => {
-          
+
             for(let i=0; i<res.length; i++) {
-            
+
                 let heimverein_altName = res[i].home_team;
                 let gastverein_altName = res[i].away_team;
                 let oddGuest = res[i].bookmakers[1].markets[0].outcomes[0].price;
