@@ -69,6 +69,7 @@ export class MatchService {
       map(res => {
         if (res.hasOwnProperty('results')) {
           const data: ExterMatchDetail = res as ExterMatchDetail;
+          console.log(data)
           return {
             id: data.results[0].id,
             start: data.results[0].startzeitpunkt,

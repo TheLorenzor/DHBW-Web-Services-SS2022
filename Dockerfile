@@ -1,23 +1,23 @@
-FROM node:latest as build
+FROM node:16.14-alpine as node
+
+EXPOSE 4200
 
 WORKDIR /usr/local/Frontend
 
-COPY ./Frontend /usr/local/Frontend
+COPY ./Frontend .
 
 RUN npm install
 
 RUN npm run build --prod
 
-FROM nginx:latest
 
-COPY --from=build /usr/local/Frontend/dist/Frontend /usr/share/nginx/html
+FROM nginx:alpine
 
-EXPOSE 4200
+COPY --from=node /usr/local/Frontend/dist/Frontend /usr/share/nginx/html
 
-
-FROM node:latest as build
-
-WORKDIR /usr/local/Backend
+FROM node:16.14-alpine as build
+EXPOSE 8080
+WORKDIR /usr/local/Backend/
 
 COPY ./Backend/js-mysql/package*.json ./
 
@@ -25,7 +25,6 @@ RUN npm install
 
 COPY ./Backend/js-mysql/ ./
 
-EXPOSE 8080
 CMD ["node","endpoint.js"]
 
 

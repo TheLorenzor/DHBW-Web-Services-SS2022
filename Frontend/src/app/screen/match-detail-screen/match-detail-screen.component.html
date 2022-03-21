@@ -8,9 +8,9 @@
       <div class="main">
         <div>Results</div>
         <div class="results">
-          <span>{{data.club1.points ? data.club1.points : '--'}}</span>
+          <span>{{data.club1.points!=null ? data.club1.points : '--'}}</span>
           <span>:</span>
-          <span>{{data.club2.points ? data.club2.points : '--'}}</span>
+          <span>{{data.club2.points!=null ? data.club2.points : '--'}}</span>
         </div>
         <div class="date">{{getStartDate()}}</div>
       </div>
