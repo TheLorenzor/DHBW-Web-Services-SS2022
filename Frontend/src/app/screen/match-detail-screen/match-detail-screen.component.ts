@@ -4,7 +4,7 @@ import {MatchService} from "../../service/match.service";
 import {MatchBet, MatchOverview} from "../../../assets/Interface/match";
 import {Login} from "../../../assets/Interface/state";
 import {select, Store} from "@ngrx/store";
-import {ClubDetail, RouterMatchDetail} from "../../../assets/Interface/Router";
+import {ClubDetail} from "../../../assets/Interface/Router";
 import {betOnMatch} from "../../actions/login.actions";
 import {GetDataService} from "../../service/get-data.service";
 
