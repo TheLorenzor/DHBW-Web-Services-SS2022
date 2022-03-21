@@ -1,0 +1,370 @@
+swagger: "2.0"
+info:
+  description: "Diese API beschreibt den Bundesligaticker mit integrierter Wettfunktion, ein Webservice-Projekt von den Studierenden Tillmann Lorenz, Tim Schweitzer und Felix Schieferdecker an der DHBW Mosbach."
+  version: "1.0.0"
+  title: "Bundesligaticker"
+host: "localhost:8080"
+tags:
+- name: "football"
+  description: "Alle möglichen Statistiken"
+- name: "user"
+  description: "Benutzerkontenverwaltung"
+- name: "bet"
+  description: "Tipico 2.0"
+schemes:
+- "http"
+paths:
+  /home:
+    get:
+      tags:
+      - "football"
+      summary: "Übersicht bekommen"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /football/match/{id}:
+    get:
+      tags:
+      - "football"
+      summary: "Ein Match per ID anschauen"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Match ID that you want infos about"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Results"
+        "400":
+          description: "Match ID is not viable!"
+        "204":
+          description: "Error"
+  /football:
+    get:
+      tags:
+      - "football"
+      summary: "Fußball-Übersicht"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /football/{Id}:
+    get:
+      tags:
+      - "football"
+      summary: "Find league by ID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Id"
+        in: "path"
+        description: "ID of the League you want to see"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Results"
+        "400":
+          description: "League ID is not viable"
+        "204":
+          description: "Error"
+  /goalstatistics:
+    get:
+      tags:
+      - "football"
+      summary: "show diverse goal statistics"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /contenders:
+    get:
+      tags:
+      - "football"
+      summary: "Show the teams of the Bundesliga"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+      security:
+      - api_key: []
+  /football/club/{id}:
+    get:
+      tags:
+      - "football"
+      summary: "get all games of a club since 2015 per ID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        type: "integer"
+        description: "ID of the club"
+        required: true
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /register/{email}/{password}:
+    get:
+      tags:
+      - "user"
+      summary: "Registriere Benutzer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the user"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "path"
+        description: "Password of the user"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /login/{email}/{password}:
+    get:
+      tags:
+      - "user"
+      summary: "Einloggen"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "Email of the user"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "path"
+        description: "Password of the user"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /changeLoginData/{newpw}/{userID}:
+    get:
+      tags:
+      - "user"
+      summary: "Logindaten ändern"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "newpw"
+        in: "path"
+        description: "new Password of the user"
+        required: true
+        type: "string"
+      - name: "userID"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /odds/{matchID}:
+    get:
+      tags:
+      - "bet"
+      summary: "Zeige Odds für ein kommendes Spiel"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "matchID"
+        in: "path"
+        description: "matchID of the bet"
+        required: true
+        type: "integer"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+  /sendMoney/{userID}/{value}:
+    get:
+      tags:
+      - "bet"
+      summary: "Echtgeld zu Coins"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userID"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      - name: "value"
+        in: "path"
+        description: "value that you want to exchange"
+        required: true
+        type: "integer"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+  /receiveMoney/{userID}/{value}:
+    get:
+      tags:
+      - "bet"
+      summary: "Coins zu Echtgeld"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userID"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      - name: "value"
+        in: "path"
+        description: "value that you want to exchange"
+        required: true
+        type: "integer"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+  /placeBet/{hgoal}/{ggoal}/{userID}/{spielID}/{value}/{odd}:
+    get:
+      tags:
+      - "bet"
+      summary: "Wetten eintragen"
+      produces:
+      - "application/json"
+      parameters:
+       - name: "hgoal"
+         in: "path"
+         description: "expected home goals"
+         required: true
+         type: "integer"
+       - name: "ggoal"
+         in: "path"
+         description: "expected guest goals"
+         required: true
+         type: "integer"
+       - name: "userID"
+         in: "path"
+         description: "ID of the user"
+         required: true
+         type: "integer"
+       - name: "spielID"
+         in: "path"
+         description: "ID of the match"
+         required: true
+         type: "integer"  
+       - name: "value"
+         in: "path"
+         description: "value that you want to exchange"
+         required: true
+         type: "integer"
+       - name: "odd"
+         in: "path"
+         description: "the odd"
+         required: true
+         type: "string"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+  /deleteBet/{betID}:
+    get:
+      tags:
+      - "bet"
+      summary: "Wetten löschen"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "betID"
+        in: "path"
+        description: "The ID of the bet to delete."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Results"
+        "204":
+          description: "Error"
+  /getBets/{userID}:
+    get:
+      tags:
+      - "bet"
+      summary: "Wetten einsehen by UserID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userID"
+        in: "path"
+        description: "ID of the User"
+        required: true
+        type: "integer"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+  /getSingleBet/{userID}/{matchID}:
+    get:
+      tags:
+      - "bet"
+      summary: "Einzelne Matchwetten"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userID"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      - name: "matchID"
+        in: "path"
+        description: "ID of the match"
+        required: true
+        type: "integer"
+      responses:
+         "200":
+          description: "Results"
+         "204":
+          description: "Error"
+    
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
