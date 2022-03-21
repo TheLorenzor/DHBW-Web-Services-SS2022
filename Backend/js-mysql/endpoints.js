@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
   user: USER,
   password: PASSWORD,
   database: "liga_db",
-  port: SQL_PORT
+  port: 3308
 });
 
 // Make the connection
@@ -72,8 +72,8 @@ app.get('/football/match/:id', (req, res) => {
     if(isNaN(req.params.id)) {
       res.status(400).send({ message: 'Match ID is not viable!' })
     } else {
-      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.id = " + req.params.id;
-      connection.query(sql, function (err, results, fields) {
+      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.id = ?";
+      connection.query(sql, [req.params.id], (err, results, fields) => {
         if (err) throw err;
         console.log("here are your results", results);
         if(results.length === 0) {
@@ -115,12 +115,11 @@ app.get('/football', (req, res) => {
 //4. BPMN: Liga Matches sehen
 app.get('/football/:liga_id', (req, res) => {
   try{
-    const ligaid = req.params.liga_id;
-    if(isNaN(ligaid)) {
+    if(isNaN(req.params.liga_id)) {
       res.status(400).send({ message: 'League ID is not viable!' })
     } else {
-      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.name AS heimverein, v2.name AS gastverein, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.zustand = 'Steht noch an' AND s.liga_id = " + ligaid + " ORDER BY s.startzeitpunkt";
-      connection.query(sql, function (err, results, fields) {
+      const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.name AS heimverein, v2.name AS gastverein, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.zustand = 'Steht noch an' AND s.liga_id = ? ORDER BY s.startzeitpunkt";
+      connection.query(sql, [req.params.liga_id], (err, results, fields) => {
       if (err) throw err;
       console.log("here are your results", results);
       if(results.length === 0) {
@@ -355,12 +354,12 @@ function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
 //8: BPMN registrieren
 app.get('/register/:email/:passwordHash', (req, res) => {
      try {
-          const sql = " SELECT * FROM `users` WHERE email = '"+req.params.email+"';";
-                   connection.query(sql, function (err, results, fields) {
+          const sql = " SELECT * FROM `users` WHERE email = ?;";
+                   connection.query(sql, ["'" + req.params.email + "'"], (err, results, fields) => {
                    if (err) throw err;
                    if(results.length === 0) {
-                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, '"+req.params.email+"', '"+req.params.passwordHash+"', current_timestamp(), current_timestamp(), '0');";
-                                    connection.query(sql, function (err, results, fields) {
+                       const sql = " INSERT INTO `users` (`id`, `email`, `passwort`, `created_at`, `updated_at`, `Kontostand`) VALUES (NULL, ?, ?, current_timestamp(), current_timestamp(), '0');";
+                                    connection.query(sql, ["'" + req.params.email + "'", "'" + req.params.passwordHash + "'"], (err, results, fields) => {
                                     if (err) throw err;
                                     res.status(200).send(results)
                                     //die id des neuen Users ist in insertId gespeichert
@@ -379,14 +378,14 @@ app.get('/register/:email/:passwordHash', (req, res) => {
 //9: BPMN Verify Login
 //noch nicht richtige funktion
 app.get('/Vlogin/:email/:passwordHash', (req, res) => {
-    const sql = " SELECT email FROM `users` WHERE email = '"+req.params.email+"';";
-          connection.query(sql, function (err, results, fields) {
+    const sql = " SELECT email FROM `users` WHERE email = ?;";
+          connection.query(sql, ["'" + req.params.email + "'"], (err, results, fields) => {
           if (err) throw err;
           if(results.length === 0) {
              res.status(204).send({ message: 'kein User mit dieser Email' })
           } else {
-                const sql = " SELECT id,Kontostand  FROM `users` WHERE email = '"+req.params.email+"' AND passwort ='" +req.params.passwordHash+"';  ";
-                connection.query(sql, function (err, results, fields) {
+                const sql = " SELECT id,Kontostand  FROM `users` WHERE email = ? AND passwort = ?;  ";
+                connection.query(sql, ["'" + req.params.email + "'", "'" + req.params.passwordHash + "'"], (err, results, fields) => {
                 if (err) throw err;
                 if(results.length === 0) {
                    res.status(204).send({ message: 'falsches Passwort' })
@@ -404,8 +403,8 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
 //10: BPMN: change Logindata
 app.get('/changeLoginData/:newPwHash/:userID', (req, res) => {
     try{
-        const sql = "UPDATE `users` SET passwort = "+newPwHash+" WHERE users.id = "+userID+";";
-                      connection.query(sql, function (err, results, fields) {
+        const sql = "UPDATE `users` SET passwort = ? WHERE users.id = ?;";
+                      connection.query(sql, ["'" + req.params.passwordHash + "'",  req.params.userID], (err, results, fields) => {
                       if (err) throw err;
                       if(results.length === 0) {
                          res.status(204).send({ message: 'error!' })
@@ -425,8 +424,8 @@ app.get('/changeLoginData/:newPwHash/:userID', (req, res) => {
 //11: BPMN: Odds für ein kommendes Spiel
 app.get('/odds/:match_id', (req, res) => {
     try{
-        const sql = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id ="+req.params.match_id+" AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
-              connection.query(sql, function (err, results, fields) {
+        const sql = "SELECT oddhome,oddsDraw,oddGuest FROM `matchodds` m, `spiel` s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id where s.id = ? AND v1.altName = m.hometeam_altName AND v2.altName = m.guestteam_altName; ";
+              connection.query(sql, [req.params.match_id], (err, results, fields) => {
               if (err) throw err;
               console.log("these are youre Odds", results);
               if(results.length === 0) {
@@ -448,8 +447,8 @@ app.get('/odds/:match_id', (req, res) => {
 app.get('/sendMoney/:userID/:value', (req, res) => {
     try {
     pay(req.params.userID,req.params.value)
-    const sql = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
-        connection.query(sql, function (err, results, fields) {
+    const sql = "Select Kontostand From `users` WHERE `users`.`id` = ?;";
+        connection.query(sql, [req.params.userID], (err, results, fields) => {
             if (err) throw err;
             if(results.length === 0) {
             res.status(204).send({ message: 'error!' })
@@ -467,8 +466,8 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
 //13:BPMS coins zu echtgeld
 app.get('/receiveMoney/:userID/:value', (req, res) => {
     try{
-      const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`-'"+req.params.value+"' WHERE `users`.`id` ="+req.params.userID+" AND `Kontostand` >= '"+req.params.value+"'; ";
-        connection.query(sql, function (err, results, fields) {
+      const sql = "UPDATE `users` SET `Kontostand` = `Kontostand`- ? WHERE `users`.`id` = ? AND `Kontostand` >= ?; ";
+        connection.query(sql, ["'" +req.params.value+ "'", req.params.userID, "'" +req.params.value+ "'"], (err, results, fields) => {
             if (err) throw err;
             if(results.length === 0) {
                 //res.status(204).send({ message: 'error!' })
@@ -476,8 +475,8 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
                 //res.status(200).send(results)
             }
         })
-        const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = '"+req.params.userID+"';";
-        connection.query(sql2, function (err, results, fields) {
+        const sql2 = "Select Kontostand From `users` WHERE `users`.`id` = ?;";
+        connection.query(sql2, [req.params.userID], (err, results, fields) => {
             if (err) throw err;
             if(results.length === 0) {
                 res.status(204).send({ message: 'error!' })
@@ -494,13 +493,14 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
 
 //14: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
-          const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND `wetten`.`spiel_id` = '"+req.params.spielID+"';";
-                                 connection.query(sql, function (err, results, fields) {
+          const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = ? AND `wetten`.`spiel_id` = ?;";
+                                 connection.query(sql, [req.params.userID, req.params.spielID], (err, results, fields) => {
                                      if (err) throw err;
                                      if(results.length === 0) {
                                                 try{
-                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`) VALUES ('"+req.params.spielID+"','"+req.params.userID+"','"+req.params.hgoal+"','"+req.params.ggoals+"','"+req.params.value+"',true)";
-                                                               connection.query(sql, function (err, results, fields) {
+                                                   const sql = "INSERT INTO `wetten`(`spiel_id`, `user_id`, `homegoal`, `guestGoal`, `value`,`open`) VALUES (?, ?, ?, ?, ?,true)";
+                                                               connection.query(sql, ["'"+req.params.spielID+"'", req.params.userID, "'"+req.params.hgoal+"'", "'"+req.params.ggoals+"'", "'"+req.params.value+"'"], (err, results, fields) => {
+                                                            
                                                                if (err) throw err;
                                                                if(results.length === 0) {
                                                                   res.status(204).send({ message: 'error!' })
@@ -516,8 +516,12 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
                                                      res.status(204).send({ message: 'error!' })
                                                 }
                                      } else {
-                                        const sql = "Update `wetten`(`homegoal`, `guestGoal`, `value`,`open`) VALUES ('"+req.params.hgoal+"','"+req.params.ggoal+"','"+req.params.value+"','"+req.params.odd+"',true)";
-                                        connection.query(sql, function (err, results, fields) {
+                                        const sql = "Update `wetten`(`homegoal`, `guestGoal`, `value`,`open`) VALUES (?, ?, ?, ?,true)";
+                                        connection.query(sql, ["'"+req.params.hgoal+"'", "'"+req.params.ggoals+"'", "'"+req.params.value+"'", "'"+req.params.odd+"'"], (err, results, fields) => {
+                                          reqhgoal = "'"+req.params.hgoal+"'",
+                                          reqggoal = "'"+req.params.ggoals+"'",
+                                          reqvalue = "'"+req.params.value+"'",
+                                          reqodd = "'"+req.params.odd+"'"
                                         if (err) throw err;
                                         })
                                      }
@@ -527,8 +531,8 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
 //15: BPMS Wette löschen
 app.get('/deleteBet/:betID', (req, res) => {
          try{
-            const sql = "DELETE FROM `wetten` WHERE `wetten`.`id` = '"+req.params.betID+"';";
-                        connection.query(sql, function (err, results, fields) {
+            const sql = "DELETE FROM `wetten` WHERE `wetten`.`id` = ?;";
+                        connection.query(sql, [req.params.betID], (err, results, fields) => {
                         if (err) throw err;
                         console.log("new bet created", results);
                         if(results.length === 0) {
@@ -549,8 +553,8 @@ app.get('/deleteBet/:betID', (req, res) => {
 //16: BPMS Wetten einsehen
 app.get('/getBets/:userID', (req, res) => {
          try{
-            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"';";
-                        connection.query(sql, function (err, results, fields) {
+            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = ?;";
+                        connection.query(sql, [req.params.userID], (err, results, fields) => {
                         if (err) throw err;
                         if(results.length === 0) {
                            res.status(204).send({ message: 'error!' })
@@ -568,8 +572,9 @@ app.get('/getBets/:userID', (req, res) => {
 //17: BPMS einzelne Matchwetten
 app.get('/getSingleBet/:userID/:matchID', (req, res) => {
          try{
-            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = '"+req.params.userID+"' AND wetten.spiel_id = '"+req.params.matchID+"';";
-                        connection.query(sql, function (err, results, fields) {
+            const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = ? AND wetten.spiel_id = ?;";
+                        connection.query(sql, [req.params.userID, req.params.matchID], (err, results, fields) => {
+                  
                         if (err) throw err;
                         if(results.length === 0) {
                            res.status(204).send({ message: 'error!' })
@@ -586,8 +591,8 @@ app.get('/getSingleBet/:userID/:matchID', (req, res) => {
 
 function payoutBets(match_id){
     //get all bets for the match
-    const sqlpay = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = "+match_id+" AND s.id = "+match_id+";";
-    connection.query(sqlpay, function (err, results, fields) {
+    const sqlpay = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = ? AND s.id = ?";
+    connection.query(sqlpay, [match_id, match_id], (err, results, fields) => {
         if (err) throw err;
         if(results.length === 0) {
             //no bets for the Game
@@ -610,9 +615,8 @@ function payoutBets(match_id){
                 {
                     pay(results.userID,(3 * results.value));
                 }
-                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = "+results.id;
-                connection.query(sql, function (err, results, fields) {
-
+                const sql = "UPDATE `wetten` SET `open`='false' WHERE id = ?";
+                connection.query(sql, [results.id], (err, results, fields) => {
                 })
             }
         }
@@ -621,17 +625,16 @@ function payoutBets(match_id){
 
 function pay(userID,value)
 {
-    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + "+(value)+" WHERE `users`.`id` = '"+userID+"';";
-    connection.query(payout, function (err, results, fields) {
+    const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + ? WHERE `users`.`id` = ?;";
+    connection.query(payout, [value, userID], (err, results, fields) => { 
         if (err) throw err;
     })
 }
 
 //18: Alle Spiele einer Mannschaft
 app.get('/football/club/:id', (req, res) => {
-  let clubid = req.params.id;
-  const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = " + clubid + " OR s.gastverein_id = " + clubid;
-  connection.query(sql, function (err, results, fields) {
+  const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = ? OR s.gastverein_id = ?";
+  connection.query(sql, [req.params.id, req.params.id], (err, results, fields) => {
     if (err) throw err;
     console.log("here are your results", results);
     if(results.length === 0) {
