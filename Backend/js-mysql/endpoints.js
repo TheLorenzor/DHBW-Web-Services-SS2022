@@ -9,15 +9,16 @@ const app = express();
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
+const SQL_PORT = process.env.MYSQL_PORT;
 
 
 // Prepare to connect to MySQL with your secret environment variables
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
+  host: HOST,
+  user: USER,
+  password: PASSWORD,
   database: "liga_db",
-  port: 3306
+  port: SQL_PORT
 });
 
 // Make the connection
