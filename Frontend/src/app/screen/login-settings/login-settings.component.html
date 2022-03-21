@@ -20,7 +20,7 @@
         <td mat-cell *matCellDef="let bet">{{bet.value}}</td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row (click)="navigateTo(row.spiel_id)" *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
   <h2>Account Einstellungen</h2>

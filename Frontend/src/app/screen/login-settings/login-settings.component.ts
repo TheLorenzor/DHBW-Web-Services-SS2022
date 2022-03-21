@@ -4,6 +4,7 @@ import {select, Store} from "@ngrx/store";
 import {Router} from "@angular/router";
 import {GetDataService} from "../../service/get-data.service";
 import {Bet} from "../../../assets/Interface/match";
+import {RouterMatchDetail} from "../../../assets/Interface/Router";
 
 @Component({
   selector: 'app-login-settings',
@@ -28,7 +29,7 @@ export class LoginSettingsComponent implements OnInit {
       if (this.accountData == null) {
         this.route.navigateByUrl('');
       } else {
-        this.service.getAllBets("1").subscribe(val => {
+        this.service.getAllBets(this.accountData.backendAPI).subscribe(val => {
           if (val) {
             this.bets = val;
           }
@@ -37,7 +38,13 @@ export class LoginSettingsComponent implements OnInit {
 
     })
   }
+  navigateTo(matchId:number) {
+    const id:RouterMatchDetail = {
+      data:matchId
+    }
 
+    this.route.navigateByUrl('match',{state:id});
+  }
   changePassword(old: string, newP: string, retnew: string) {
     if (this.accountData) {
       if (old === this.accountData.password && newP === retnew && newP != old) {
