@@ -44,3 +44,21 @@ export interface LigaExtern {
   name:string;
   id:number;
 }
+export interface MatchBet {
+  home:number,
+  guest:number,
+  match:number,
+  apiKey:string,
+  value:number,
+  oldValue:number,
+}
+
+export interface Bet {
+  id: number,
+  spiel_id:number,
+  user_id:number,
+  homegoal:number,
+  guestGoal:number,
+  value:number,
+  open:boolean
+}

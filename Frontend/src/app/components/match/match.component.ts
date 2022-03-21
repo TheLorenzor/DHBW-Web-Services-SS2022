@@ -39,7 +39,7 @@ export class MatchComponent implements OnInit {
   getPercent() {
     if (this.matchData) {
       const current = new Date();
-      const matchDate = new Date()
+      const matchDate = new Date(this.matchData.start)
       if (matchDate.getTime()>current.getTime()) {
         this.progress = undefined;
       } else {

@@ -2,8 +2,8 @@
   <div class="results">
     <div class="card-overview">
       <div class="club">
-        <span>{{data.club2.name}}</span>
-        <img src="{{data.club1.logoURL}}" alt="{{data.club1.name}}">
+        <span>{{data.club1.name}}</span>
+        <img (click)="goToClub(-1)" src="{{data.club1.logoURL}}" alt="{{data.club1.name}}">
       </div>
       <div class="main">
         <div>Results</div>
@@ -12,16 +12,17 @@
           <span>:</span>
           <span>{{data.club2.points ? data.club2.points : '--'}}</span>
         </div>
+        <div class="date">{{getStartDate()}}</div>
       </div>
 
       <div class="club">
         <span>{{data.club2.name}}</span>
-        <img src="{{data.club2.logoURL}}" alt="{{data.club2.name}}">
+        <img (click)="goToClub(1)" src="{{data.club2.logoURL}}" alt="{{data.club2.name}}">
       </div>
     </div>
   </div>
 
-  <div class="better">
+  <div class="better" *ngIf="account&&!disabled">
     <mat-card>
       <mat-card-title>Wetten</mat-card-title>
       <mat-card-content *ngIf="!betEnable">
@@ -31,17 +32,21 @@
         <div class="choose">
           <mat-form-field>
             <mat-label>Heim</mat-label>
-            <input matInput type="number" #heim (keyup)="betting.home=heim.value">
+            <input matInput type="number" #heim [disabled]="alreadyBetted!=null"  value="{{betting.home}}" (keyup)="betting.home=heim.value">
           </mat-form-field>
           <span>:</span>
           <mat-form-field>
             <mat-label>Gast</mat-label>
-            <input matInput type="number" #gast (keyup)="betting.guest=gast.value">
+            <input matInput type="number" [disabled]="alreadyBetted!=null" value="{{betting.guest}}" #gast (keyup)="betting.guest=gast.value">
           </mat-form-field>
         </div>
+        <mat-form-field>
+          <mat-label>Coins</mat-label>
+          <input matInput [disabled]="alreadyBetted!=null" type="number" value="{{betting.coins}}" #coins (keyup)="betting.coins=coins.value">
+        </mat-form-field>
         <div class="input">
-          <button mat-button>Abgeben</button>
-          <button mat-button>Wette annulieren</button>
+          <button mat-button [disabled]="alreadyBetted!=null" (click)="bet()">Abgeben</button>
+          <button mat-button [disabled]="alreadyBetted==null" (click)="deleteBet()">Wette annulieren</button>
         </div>
       </mat-card-content>
     </mat-card>

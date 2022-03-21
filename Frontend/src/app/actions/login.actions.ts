@@ -1,6 +1,7 @@
 import {createAction, props} from "@ngrx/store";
 import { LoginRegisterData} from "../../assets/Interface/login";
 import {Login} from "../../assets/Interface/state";
+import {MatchBet} from "../../assets/Interface/match";
 
 
 export const register=createAction(
@@ -35,4 +36,11 @@ export const changeMoneyValue = createAction(
 export const changePassword = createAction(
   "[settings] changePassword",
   props<{password:string,login:Login}>()
+)
+export const betOnMatch = createAction(
+  "[match details] betOnMatch",
+  props<{bet:MatchBet}>()
+)
+export const betOnMatchFailure = createAction(
+  "[match details] betOnMatchSuccess",
 )

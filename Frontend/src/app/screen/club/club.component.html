@@ -1,0 +1,18 @@
+<div class="base">
+  <div class="header" *ngIf="club">
+    <h2>Alle Spiele von: {{club.name}}</h2>
+    <img src="{{club.logoUrl}}" alt="{{club.name}}">
+  </div>
+  <hr>
+  <div *ngFor="let mat of matches" class="list">
+    <div class="block">
+      <div>
+        <div *ngIf="getYear(mat.inorderId)>-1" class="year">
+          <h5>{{getYear(mat.inorderId)}}</h5>
+          <hr>
+        </div>
+        <app-match [matchData]="mat"></app-match>
+      </div>
+    </div>
+  </div>
+</div>
