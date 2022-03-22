@@ -4,6 +4,7 @@ import mysql from "mysql";
 import cron from "node-cron";
 import fetch from 'node-fetch';
 import cors from 'cors';
+import Importer from "mysql-import";
 
 const app = express();
 const HOST = process.env.MYSQL_HOST;
@@ -31,6 +32,23 @@ connection.connect(function (err) {
 
   // If there was no error, print this message
   console.log(`connected to database`);
+});
+
+const database = "liga_db";
+const port = 3308;
+
+const importer = new Importer({HOST, USER, PASSWORD, database, port});
+
+importer.onProgress(progress=>{
+  var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
+  console.log(`${percent}% Completed`);
+});
+
+importer.import('schema.sql').then(()=>{
+  var files_imported = importer.getImported();
+  console.log(`${files_imported.length} SQL file(s) imported.`);
+}).catch(err=>{
+  console.error(err);
 });
 
 app.use(cors());
