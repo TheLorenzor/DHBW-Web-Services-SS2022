@@ -11,6 +11,7 @@ const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
 const PASSWORD = process.env.MYSQL_PASSWORD;
 const SQL_PORT = process.env.MYSQL_PORT;
+const MYSQL_DB = process.env.MYSQL_DB;
 
 
 // Prepare to connect to MySQL with your secret environment variables
@@ -18,7 +19,7 @@ const connection = mysql.createConnection({
   host: HOST,
   user: USER,
   password: PASSWORD,
-  database: "liga_db",
+  database: MYSQL_DB,
   port: SQL_PORT
 });
 
@@ -34,10 +35,7 @@ connection.connect(function (err) {
   console.log(`connected to database`);
 });
 
-const database = "liga_db";
-const port = 3308;
-
-const importer = new Importer({HOST, USER, PASSWORD, database, port});
+const importer = new Importer({HOST, USER, PASSWORD, MYSQL_DB});
 
 importer.onProgress(progress=>{
   var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;

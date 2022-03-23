@@ -10,6 +10,6 @@ COPY ./js-mysql/* ./
 
 RUN npm install
 
+EXPOSE 8080
+
 CMD ["node","./endpoints.js"]
-
-

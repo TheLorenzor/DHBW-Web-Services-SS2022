@@ -15,6 +15,7 @@
     "dotenv": "^16.0.0",
     "mariadb": "^3.0.0",
     "mysql": "^2.18.1",
+    "mysql-import": "^5.0.21",
     "node-cron": "^3.0.0",
     "node-fetch": "^3.2.3"
   },
