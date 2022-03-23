@@ -7,7 +7,7 @@ import {ExterMatchDetail, ExternMatch, Liga, LigaExtern, MatchOverview} from "..
   providedIn: 'root'
 })
 export class MatchService {
-  url = "http://localhost:8080/";
+  url = "http://10.50.15.51:8081/";
   header = {
     'Access-Control-Allow-Origin': ''
   }

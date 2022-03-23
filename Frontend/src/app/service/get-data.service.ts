@@ -12,7 +12,7 @@ import {Bet} from "../../assets/Interface/match";
 })
 export class GetDataService {
 
-  url = 'http://localhost:8080/';
+  url = 'http://10.50.15.51:8081/';
 
   constructor(private http: HttpClient, private store: Store) {
   }
@@ -64,7 +64,6 @@ export class GetDataService {
       .pipe(map(res => {
         // @ts-ignore
         if (res.hasOwnProperty('message') && res['message'] == "new bet created") {
-          console.log(res);
           return true;
         }
         return false;
