@@ -21,6 +21,22 @@ const config = {
     database: MYSQL_DB,
     port: SQL_PORT
 }
+
+const connection = mysql.createConnection(config);
+
+
+// Make the connection
+connection.connect(function (err) {
+    // Check if there is a connection error
+    if (err) {
+        console.log("connection error", err.stack);
+        return;
+    }
+
+    // If there was no error, print this message
+    console.log(`connected to database`);
+});
+
 const importer = new Importer(config);
 
 importer.onProgress(progress=>{
@@ -37,20 +53,7 @@ importer.import('schema.sql').then(()=>{
 
 await importer.disconnect()
 
-const connection = mysql.createConnection(config);
 
-
-// Make the connection
-connection.connect(function (err) {
-  // Check if there is a connection error
-  if (err) {
-      console.log("connection error", err.stack);
-      return;
-  }
-
-  // If there was no error, print this message
-  console.log(`connected to database`);
-});
 
 
 
