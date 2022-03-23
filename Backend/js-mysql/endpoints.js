@@ -13,15 +13,32 @@ const PASSWORD = process.env.MYSQL_PASSWORD;
 const SQL_PORT = process.env.MYSQL_PORT;
 const MYSQL_DB = process.env.MYSQL_DB;
 
-
 // Prepare to connect to MySQL with your secret environment variables
-const connection = mysql.createConnection({
-  host: HOST,
-  user: USER,
-  password: PASSWORD,
-  database: MYSQL_DB,
-  port: SQL_PORT
+const config = {
+    host: HOST,
+    user: USER,
+    password: PASSWORD,
+    database: MYSQL_DB,
+    port: SQL_PORT
+}
+const importer = new Importer(config);
+
+importer.onProgress(progress=>{
+    var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
+    console.log(`${percent}% Completed`);
 });
+
+importer.import('schema.sql').then(()=>{
+    var files_imported = importer.getImported();
+    console.log(`${files_imported.length} SQL file(s) imported.`);
+}).catch(err=>{
+    console.error(err);
+});
+
+await importer.disconnect()
+
+const connection = mysql.createConnection(config);
+
 
 // Make the connection
 connection.connect(function (err) {
@@ -35,19 +52,7 @@ connection.connect(function (err) {
   console.log(`connected to database`);
 });
 
-const importer = new Importer({HOST, USER, PASSWORD, MYSQL_DB});
 
-importer.onProgress(progress=>{
-  var percent = Math.floor(progress.bytes_processed / progress.total_bytes * 10000) / 100;
-  console.log(`${percent}% Completed`);
-});
-
-importer.import('schema.sql').then(()=>{
-  var files_imported = importer.getImported();
-  console.log(`${files_imported.length} SQL file(s) imported.`);
-}).catch(err=>{
-  console.error(err);
-});
 
 app.use(cors());
 app.listen(
