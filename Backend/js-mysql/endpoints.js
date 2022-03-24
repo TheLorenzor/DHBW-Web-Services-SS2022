@@ -649,10 +649,12 @@ function payoutBets(match_id){
 
 function pay(userID,value)
 {
+  if(!isNaN(value)) {
     const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + ? WHERE `users`.`id` = ?;";
     connection.query(payout, [value, userID], (err, results, fields) => {
         if (err) throw err;
     })
+  }
 }
 
 //18: Alle Spiele einer Mannschaft
