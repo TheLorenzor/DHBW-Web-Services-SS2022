@@ -22,7 +22,9 @@ const config = {
     port: SQL_PORT
 }
 
-const connection = mysql.createPool(config);
+const pool = mysql.createPool(config);
+
+const connection = mysql.createConnection(config);
 
 
 // Make the connection
@@ -282,7 +284,7 @@ cron.schedule("58 23 * * *", function() {
 
 function updateGoalGetter(goalGetterId, goalGetterName) {
   const updateGoalGetterss = "INSERT IGNORE INTO torschuetze VALUES (" + goalGetterId + ", '" + goalGetterName + "')";
-  connection.query(updateGoalGetterss, function (err, results, fields) {
+  pool.query(updateGoalGetterss, function (err, results, fields) {
   if (err) throw err;
     console.log("here are your results", results);
   })
@@ -317,7 +319,7 @@ cron.schedule("59 23 * * *", function() {
 
 function updateGoals(matchId, goalId, goalGetterId, minuteanzahl, isOvertime, isPenalty, isOwnGoal, heimpoints, gastpoints) {
   const updateGoalGetterss = "INSERT IGNORE INTO tore VALUES (" + goalId + ", " + matchId + ", " + goalGetterId + ", " + minuteanzahl + ", '" + isPenalty + "', '" + isOvertime + "', '" + isOwnGoal + "', " + heimpoints + ", " + gastpoints + ")";
-  connection.query(updateGoalGetterss, function (err, results, fields) {
+  pool.query(updateGoalGetterss, function (err, results, fields) {
   if (err) throw err;
     console.log("here are your results", results);
   })
@@ -353,23 +355,23 @@ res.status(204).send({ message: 'error!' })
 
 function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
   const updateZustand = "UPDATE spiel s SET s.zustand = '" + zustand + "' WHERE s.id = " + matchId;
-          connection.query(updateZustand, function (err, results, fields) {
+          pool.query(updateZustand, function (err, results, fields) {
           if (err) throw err;
             console.log("here are your results", results);
           })
   const updateErgebnis = "UPDATE spiel s SET s.ergebnis = '" + ergebnis + "' WHERE s.id = " + matchId;
-          connection.query(updateErgebnis, function (err, results, fields) {
+          pool.query(updateErgebnis, function (err, results, fields) {
           if (err) throw err;
             console.log("here are your results", results);
           })
   payoutBets(matchId);
   const updateHeimpoints = "UPDATE spiel s SET s.heim_points = " + heimpoints + " WHERE s.id = " + matchId;
-          connection.query(updateHeimpoints, function (err, results, fields) {
+          pool.query(updateHeimpoints, function (err, results, fields) {
             if (err) throw err;
               console.log("here are your results", results);
             })
   const updateGastpoints = "UPDATE spiel s SET s.gast_points = " + gastpoints + " WHERE s.id = " + matchId;
-          connection.query(updateGastpoints, function (err, results, fields) {
+          pool.query(updateGastpoints, function (err, results, fields) {
             if (err) throw err;
               console.log("here are your results", results);
             })
@@ -616,7 +618,7 @@ app.get('/getSingleBet/:userID/:matchID', (req, res) => {
 function payoutBets(match_id){
     //get all bets for the match
     const sqlpay = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = ? AND s.id = ?";
-    connection.query(sqlpay, [match_id, match_id], (err, results, fields) => {
+    pool.query(sqlpay, [match_id, match_id], (err, results, fields) => {
         if (err) throw err;
         if(results.length === 0) {
             //no bets for the Game
@@ -640,7 +642,7 @@ function payoutBets(match_id){
                     pay(results.userID,(3 * results.value));
                 }
                 const sql = "UPDATE `wetten` SET `open`='false' WHERE id = ?";
-                connection.query(sql, [results.id], (err, results, fields) => {
+                pool.query(sql, [results.id], (err, results, fields) => {
                 })
             }
         }
@@ -651,7 +653,7 @@ function pay(userID,value)
 {
   if(!isNaN(value)) {
     const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + ? WHERE `users`.`id` = ?;";
-    connection.query(payout, [value, userID], (err, results, fields) => {
+    pool.query(payout, [value, userID], (err, results, fields) => {
         if (err) throw err;
     })
   }
