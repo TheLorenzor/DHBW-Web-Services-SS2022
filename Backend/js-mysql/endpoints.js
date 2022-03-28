@@ -22,7 +22,7 @@ const config = {
     port: SQL_PORT
 }
 
-const connection = mysql.createConnection(config);
+const connection = mysql.createPool(config);
 
 
 // Make the connection
