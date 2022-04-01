@@ -88,7 +88,7 @@ app.get('/home', (req, res) => {
   });
 }
 catch{
-res.status(204).send({ message: 'error!' })
+res.status(204).send({ message: 'homeError1!' })
 }
 });
 
@@ -113,7 +113,7 @@ app.get('/football/match/:id', (req, res) => {
     }
   }
   catch{
-  res.status(204).send({ message: 'error!' })
+  res.status(204).send({ message: 'footballMatchId2!' })
   }
 });
 
@@ -134,7 +134,7 @@ app.get('/football', (req, res) => {
     })
   }
   catch{
-  res.status(204).send({ message: 'error!' })
+  res.status(204).send({ message: 'footballError3!' })
   }
 })
 
@@ -159,7 +159,7 @@ app.get('/football/:liga_id', (req, res) => {
     }
   }
   catch{
-  res.status(204).send({ message: 'error!' })
+  res.status(204).send({ message: 'footballLigaIDError4!' })
   }
 })
 
@@ -205,7 +205,7 @@ app.get('/goalstatistics', (req, res) => {
   )
 }
 catch{
-res.status(204).send({ message: 'error!' })
+res.status(204).send({ message: 'goalStatisticsError!' })
 }
 })
 
@@ -226,13 +226,14 @@ app.get('/contenders', (req, res) => {
       })
     }
     catch{
-    res.status(204).send({ message: 'error!' })
+    res.status(204).send({ message: 'contenderError!' })
     }
 })
 
 //7. BPMN: aktualisieren der Datensätze
 //Aktualisieren der Wetten
 cron.schedule("58 23 * * *", function() {
+  try{
   fetch('https://api.the-odds-api.com/v4/sports/soccer_germany_bundesliga/odds/?regions=eu&markets=h2h&apiKey=aab6fa5774ec2af0b08b95eef17e9b58')
         .then(res => res.json())
         .then(res => {
@@ -247,14 +248,25 @@ cron.schedule("58 23 * * *", function() {
                 updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName);
             }
         })
+      }
+      catch
+      {
+           res.status(204).send({ message: 'cronWettenError!' })
+      }
 })
 
 function updateOdds(oddGuest, oddhome, oddsDraw,heimverein_altName,gastverein_altName) {
-  const newMatchodds = "INSERT IGNORE INTO `matchodds` (`hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES ('"+heimverein_altName+"', '"+gastverein_altName+"', "+oddhome+", "+oddsDraw+", "+oddGuest+");";
-  connection.query(newMatchodds, function (err, results, fields) {
-  if (err) throw err;
-    console.log("new odds arrived", results);
-  })
+  try{
+    const newMatchodds = "INSERT IGNORE INTO `matchodds` (`hometeam_altName`, `guestteam_altName`, `oddhome`, `oddsDraw`, `oddGuest`) VALUES ('"+heimverein_altName+"', '"+gastverein_altName+"', "+oddhome+", "+oddsDraw+", "+oddGuest+");";
+    connection.query(newMatchodds, function (err, results, fields) {
+    if (err) throw err;
+      console.log("new odds arrived", results);
+    })
+  }
+  catch
+  {
+      res.status(204).send({ message: 'updateOddsError!' })
+  }
 }
 
 //Aktualisieren der Torschützen
@@ -278,16 +290,22 @@ cron.schedule("58 23 * * *", function() {
     })
   }
   catch{
-  res.status(204).send({ message: 'error!' })
+  res.status(204).send({ message: 'cronTorschuetzenError!' })
   }
 })
 
 function updateGoalGetter(goalGetterId, goalGetterName) {
-  const updateGoalGetterss = "INSERT IGNORE INTO torschuetze VALUES (" + goalGetterId + ", '" + goalGetterName + "')";
-  pool.query(updateGoalGetterss, function (err, results, fields) {
-  if (err) throw err;
-    console.log("here are your results", results);
-  })
+  try{
+    const updateGoalGetterss = "INSERT IGNORE INTO torschuetze VALUES (" + goalGetterId + ", '" + goalGetterName + "')";
+    pool.query(updateGoalGetterss, function (err, results, fields) {
+    if (err) throw err;
+      console.log("here are your results", results);
+    })
+  }
+  catch
+  {
+      res.status(204).send({ message: 'updateGoalGetterError!' })
+  }
 }
 
 //Aktualisieren der Tore
@@ -313,16 +331,22 @@ cron.schedule("59 23 * * *", function() {
     })
   }
   catch{
-  res.status(204).send({ message: 'error!' })
+  res.status(204).send({ message: 'cronToreError!' })
   }
 })
 
 function updateGoals(matchId, goalId, goalGetterId, minuteanzahl, isOvertime, isPenalty, isOwnGoal, heimpoints, gastpoints) {
-  const updateGoalGetterss = "INSERT IGNORE INTO tore VALUES (" + goalId + ", " + matchId + ", " + goalGetterId + ", " + minuteanzahl + ", '" + isPenalty + "', '" + isOvertime + "', '" + isOwnGoal + "', " + heimpoints + ", " + gastpoints + ")";
-  pool.query(updateGoalGetterss, function (err, results, fields) {
-  if (err) throw err;
-    console.log("here are your results", results);
-  })
+  try{
+    const updateGoalGetterss = "INSERT IGNORE INTO tore VALUES (" + goalId + ", " + matchId + ", " + goalGetterId + ", " + minuteanzahl + ", '" + isPenalty + "', '" + isOvertime + "', '" + isOwnGoal + "', " + heimpoints + ", " + gastpoints + ")";
+    pool.query(updateGoalGetterss, function (err, results, fields) {
+    if (err) throw err;
+      console.log("here are your results", results);
+    })
+  }
+  catch
+  {
+       res.status(204).send({ message: 'updateGoalsError!' })
+  }
 }
 
 //Aktualisieren der Spiele (Ergebnisse / Tore)
@@ -349,11 +373,12 @@ cron.schedule("59 23 * * *", function() {
   })
 }
 catch{
-res.status(204).send({ message: 'error!' })
+res.status(204).send({ message: 'cronSpieleError!' })
 }
 });
 
 function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
+  try{
   const updateZustand = "UPDATE spiel s SET s.zustand = '" + zustand + "' WHERE s.id = " + matchId;
           pool.query(updateZustand, function (err, results, fields) {
           if (err) throw err;
@@ -375,6 +400,11 @@ function updateMatches(matchId, ergebnis, zustand, heimpoints, gastpoints) {
             if (err) throw err;
               console.log("here are your results", results);
             })
+  }
+  catch
+  {
+        res.status(204).send({ message: 'updateMatchesError!' })
+  }
 }
 
 //8: BPMN registrieren
@@ -396,7 +426,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
                    })
      }
      catch{
-      res.status(204).send({ message: 'error!' })
+      res.status(204).send({ message: 'registerError!' })
      }
 });
 
@@ -404,6 +434,7 @@ app.get('/register/:email/:passwordHash', (req, res) => {
 //9: BPMN Verify Login
 //noch nicht richtige funktion
 app.get('/Vlogin/:email/:passwordHash', (req, res) => {
+  try {
     const sql = " SELECT email FROM `users` WHERE email = ?;";
           connection.query(sql, ["'" + req.params.email + "'"], (err, results, fields) => {
           if (err) throw err;
@@ -424,6 +455,11 @@ app.get('/Vlogin/:email/:passwordHash', (req, res) => {
                 })
           }
     })
+  }
+  catch
+  {
+       res.status(204).send({ message: 'verifyLoginError!' })
+  }
 });
 
 //10: BPMN: change Logindata
@@ -442,8 +478,7 @@ app.get('/changeLoginData/:newPwHash/:userID', (req, res) => {
                     })
     }
     catch{
-
-    res.status(204).send({ message: 'error!' })
+    res.status(204).send({ message: 'changeLoginData/newPWHash/userIDError!' })
     }
 });
 
@@ -465,7 +500,7 @@ app.get('/odds/:match_id', (req, res) => {
     }
     catch
     {
-    res.status(204).send({ message: 'error!' })
+    res.status(204).send({ message: 'oddsMatchIDError!' })
     }
 });
 
@@ -484,7 +519,7 @@ app.get('/sendMoney/:userID/:value', (req, res) => {
         })
     }
     catch(e){
-        res.status(204).send({ message: 'error!' })
+        res.status(204).send({ message: 'RealToCoinsError!' })
     }
 
 });
@@ -513,12 +548,13 @@ app.get('/receiveMoney/:userID/:value', (req, res) => {
     }
     catch(e)
     {
-        res.status(204).send({ message: 'error!' })
+        res.status(204).send({ message: 'coinsToRealError!' })
     }
 });
 
 //14: BPMS Wetten eintragen
 app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
+  try{
           const sql = "Select * FROM `wetten` WHERE `wetten`.`user_id` = ? AND `wetten`.`spiel_id` = ?;";
                                  connection.query(sql, [req.params.userID, req.params.spielID], (err, results, fields) => {
                                      if (err) throw err;
@@ -552,6 +588,11 @@ app.get('/placeBet/:hgoal/:ggoals/:userID/:spielID/:value/:odd', (req, res) => {
                                         })
                                      }
                                  })
+                                }
+                                catch
+                                {
+                                     res.status(204).send({ message: 'placeBetsError!' })
+                                }
          })
 
 //15: BPMS Wette löschen
@@ -572,7 +613,7 @@ app.get('/deleteBet/:betID', (req, res) => {
          }
          catch
          {
-              res.status(204).send({ message: 'error!' })
+              res.status(204).send({ message: 'deleteBetError!' })
          }
 });
 
@@ -591,7 +632,7 @@ app.get('/getBets/:userID', (req, res) => {
          }
          catch
          {
-              res.status(204).send({ message: 'error!' })
+              res.status(204).send({ message: 'getBetsUserIdError!' })
          }
 });
 
@@ -611,11 +652,12 @@ app.get('/getSingleBet/:userID/:matchID', (req, res) => {
          }
          catch
          {
-              res.status(204).send({ message: 'error!' })
+              res.status(204).send({ message: 'getSingleBetError!' })
          }
 });
 
 function payoutBets(match_id){
+  try{
     //get all bets for the match
     const sqlpay = "SELECT w.*, s.heim_points,s.gast_points From `wetten` w, spiel s WHERE w.spiel_id = ? AND s.id = ?";
     pool.query(sqlpay, [match_id, match_id], (err, results, fields) => {
@@ -647,10 +689,16 @@ function payoutBets(match_id){
             }
         }
     })
+  }
+  catch
+  {
+       res.status(204).send({ message: 'payoutBetsError!' })
+  }
 }
 
 function pay(userID,value)
 {
+  try{
   if(!isNaN(value)) {
     const payout = "UPDATE `users` SET `Kontostand` = `Kontostand` + ? WHERE `users`.`id` = ?;";
     pool.query(payout, [value, userID], (err, results, fields) => {
@@ -658,19 +706,30 @@ function pay(userID,value)
     })
   }
 }
+catch
+{
+     res.status(204).send({ message: 'payError!' })
+}
+}
 
 //18: Alle Spiele einer Mannschaft
 app.get('/football/club/:id', (req, res) => {
-  const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = ? OR s.gastverein_id = ?";
-  connection.query(sql, [req.params.id, req.params.id], (err, results, fields) => {
-    if (err) throw err;
-    console.log("here are your results", results);
-    if(results.length === 0) {
-      res.status(204).send({ message: 'Something went wrong. is there a problem with the club id?' })
-    } else {
-      res.status(200).send({
-         results
-      })
-    }
-  })
+  try {
+    const sql = "SELECT s.id, s.heimverein_id, s.gastverein_id, v1.logourl AS heimlogo, v1.name AS heimverein, s.heim_points, v2.logourl AS gastlogo, v2.name AS gastverein, s.gast_points, s.ergebnis, s.saison, s.spieltag, s.startzeitpunkt FROM spiel s JOIN verein v1 ON s.heimverein_id = v1.id JOIN verein v2 ON s.gastverein_id = v2.id WHERE s.heimverein_id = ? OR s.gastverein_id = ?";
+    connection.query(sql, [req.params.id, req.params.id], (err, results, fields) => {
+      if (err) throw err;
+      console.log("here are your results", results);
+      if(results.length === 0) {
+        res.status(204).send({ message: 'Something went wrong. is there a problem with the club id?' })
+      } else {
+        res.status(200).send({
+          results
+        })
+      }
+    })
+  }
+  catch
+  {
+      res.status(204).send({ message: 'footballClubId18!' })
+  }
 })
